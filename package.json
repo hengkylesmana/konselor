@@ -1,0 +1,9 @@
+{
+  "name": "teman-curhat-rasa-netlify",
+  "version": "1.0.0",
+  "description": "Aplikasi Teman Curhat RASA dengan backend Netlify",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "node-fetch": "^2.6.9"
+  }
+}
