@@ -429,7 +429,6 @@
             <h2 class="start-title">Teman Curhat RASA</h2>
             <p class="start-subtitle">Ruang Asuh Sadar Asa</p>
             
-            <!-- KONTEN YANG DIPERBARUI -->
             <div class="info-box">
                 <p>Anda bisa curhat atau sekedar ngobrol berbagai hal dengan Teman Curhat online yang bernama RASA. Ceritakan saja isi hatimu, sukamu, dukamu, masalahmu atau apa harapanmu. RASA akan berusaha menjadi teman setiamu, pendengar setiamu, bahkan pembantu setiamu.</p>
                 <p><strong>Tenang saja, ini privat dan rahasia.</strong> Semua riwayat percakapan bersifat rahasia, dan tidak ada seorang lain pun yang bisa membacanya. Sistem AI otomatis akan menghapus semua riwayat percakapan pada saat sesi curhat berakhir.</p>
@@ -438,15 +437,34 @@
                 <p>Jangan kuatir, RASA akan menawarkan Tes Kepribadian dan Potensi Diri agar anda semakin mengenal karakter, watak dan potensi yang tersimpan dalam dirimu.</p>
                 <p><strong>Misal buat apa?</strong> Dari sesi CURHAT, saat anda ingin wisata kuliner, mintalah RASA melakukan tes kepribadian untukmu, maka anda akan diarahkan melakukan tes. Kemudian mintalah RASA untuk mencarikan wisata kuliner yang sesuai dengan karakter dan watakmu. RASA akan merekomendasikan tempat wisata kuliner yang pas buatmu.</p>
             </div>
-            <!-- Akhir dari Konten yang Diperbarui -->
             
             <!-- Grup Tombol yang Diperbarui -->
             <div class="start-button-group">
-                <button id="start-curhat-umum" class="modal-button start-curhat-action">Curhat Yuk - Aku sama Sepertimu</button>
-                <button id="start-curhat-dokter" class="modal-button start-curhat-action">Tanya ke Dokter AI – Bantu Pahami Gejala Lebih Cepat</button>
-                <button id="start-curhat-ngaji" class="modal-button start-curhat-action">Tanya ke Sahabat Ngaji – Bantu Temukan Rujukan Islami</button>
-                <button id="start-curhat-psikolog" class="modal-button start-curhat-action">Tanya ke Psikolog AI – Pahami Perasaanmu, Bantu Tenangkan</button>
-                <button id="start-curhat-insinyur" class="modal-button start-curhat-action">Tanya ke Insinyur AI – Ngobrol Ringan, Ngobrolin Solusi</button>
+                <button id="start-curhat-umum" class="modal-button start-curhat-action" 
+                        data-persona="Sahabat Umum" 
+                        data-greeting="Assalamualaikum, aku RASA, sahabatmu. Aku di sini untuk mendengarkan apa pun yang ingin kamu ceritakan. Mari kita ngobrol santai.">
+                    Curhat Yuk - Aku sama Sepertimu
+                </button>
+                <button id="start-curhat-dokter" class="modal-button start-curhat-action"
+                        data-persona="Dokter AI"
+                        data-greeting="Halo, saya Dokter AI dari tim RASA. Anda bisa menceritakan gejala atau keluhan kesehatan yang Anda rasakan. Saya akan bantu memahaminya. *Disclaimer: Saya adalah AI, bukan pengganti dokter sungguhan.*">
+                    Tanya ke Dokter AI – Bantu Pahami Gejala Lebih Cepat
+                </button>
+                <button id="start-curhat-ngaji" class="modal-button start-curhat-action"
+                        data-persona="Sahabat Ngaji"
+                        data-greeting="Assalamualaikum. Saya Sahabat Ngaji dari tim RASA. Mari kita berbincang tentang apa pun yang berkaitan dengan nilai-nilai spiritual dan keislaman. Insya Alloh, kita cari pencerahan bersama.">
+                    Tanya ke Sahabat Ngaji – Bantu Temukan Rujukan Islami
+                </button>
+                <button id="start-curhat-psikolog" class="modal-button start-curhat-action"
+                        data-persona="Psikolog AI"
+                        data-greeting="Selamat datang, saya Psikolog AI dari tim RASA. Ruang ini aman untuk Anda mengeksplorasi perasaan dan pikiran. Apa yang sedang Anda rasakan saat ini? *Disclaimer: Saya adalah AI, bukan pengganti psikolog profesional.*">
+                    Tanya ke Psikolog AI – Pahami Perasaanmu, Bantu Tenangkan
+                </button>
+                <button id="start-curhat-insinyur" class="modal-button start-curhat-action"
+                        data-persona="Insinyur AI"
+                        data-greeting="Halo! Saya Insinyur AI dari tim RASA. Ada ide, masalah teknis, atau sekadar ingin ngobrol tentang solusi dan inovasi? Mari kita diskusikan secara logis dan terstruktur.">
+                    Tanya ke Insinyur AI – Ngobrol Ringan, Ngobrolin Solusi
+                </button>
                 <button id="start-test-btn" class="modal-button secondary">Mulai Tes Kepribadian</button>
             </div>
         </div>
@@ -461,7 +479,7 @@
                     <path d="M50 75 C 40 65, 25 55, 25 42.5 C 25 32.5, 35 25, 50 35 C 65 25, 75 32.5, 75 42.5 C 75 55, 60 65, 50 75 Z" fill="#FFFFFF" fill-opacity="0.8"/>
                 </svg>
                 <div class="title-group">
-                    <h1>Teman Curhat RASA</h1>
+                    <h1 id="chat-title">Teman Curhat RASA</h1>
                     <p>Ruang Asuh Sadar Asa - Teman Curhat Psikis dan Spiritual Berbasis AI Terlatih</p>
                 </div>
             </div>
@@ -499,18 +517,21 @@
             const endChatBtn = document.getElementById('end-chat-btn');
             const statusDiv = document.getElementById('status');
             const startOverlay = document.getElementById('start-overlay');
+            const chatTitle = document.getElementById('chat-title');
+            
             // Mengambil semua tombol curhat
             const startCurhatBtns = document.querySelectorAll('.start-curhat-action');
             const startTestBtn = document.getElementById('start-test-btn');
             const header = document.querySelector('header');
             
-            // === APPLICATION STATE ===
+            // === APPLICATION STATE (DIPERBARUI) ===
             let conversationHistory = []; 
             let speechVoices = [];
             let abortController = null;
             let recognition = null;
             let isRecording = false;
             let audioContext = null;
+            let currentPersona = 'Sahabat Umum'; // Default persona
             let userName = '', userGender = 'Pria', userAge = '';
             let isOnboarding = false;
             let isTesting = false;
@@ -583,27 +604,26 @@
                 }
             };
 
-            // === INITIALIZATION & EVENT LISTENERS ===
+            // === INITIALIZATION & EVENT LISTENERS (DIPERBARUI) ===
             function init() {
-            // Tambahkan kode registrasi Service Worker di sini
-            if ('serviceWorker' in navigator) {
-              window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                  .then(registration => {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                  })
-                  .catch(err => {
-                    console.log('ServiceWorker registration failed: ', err);
+                if ('serviceWorker' in navigator) {
+                  window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                      .then(registration => console.log('ServiceWorker registration successful'))
+                      .catch(err => console.log('ServiceWorker registration failed: ', err));
                   });
-              });
-            }
+                }
                 loadVoices();
                 displayInitialMessage();
                 updateButtonVisibility();
                 
                 // Event listener untuk semua tombol curhat
                 startCurhatBtns.forEach(btn => {
-                    btn.addEventListener('click', () => initializeApp(false));
+                    btn.addEventListener('click', (e) => {
+                        const persona = e.currentTarget.dataset.persona;
+                        const greeting = e.currentTarget.dataset.greeting;
+                        initializeApp(false, persona, greeting);
+                    });
                 });
 
                 startTestBtn.addEventListener('click', () => initializeApp(true));
@@ -626,7 +646,7 @@
                 });
             }
             
-            function initializeApp(startWithTest = false) {
+            function initializeApp(startWithTest = false, persona = 'Sahabat Umum', greeting = "Assalamualaikum, apa yang ingin kamu ceritakan?") {
                 if (!audioContext) {
                     try {
                         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -638,52 +658,87 @@
                 if (startWithTest) {
                     isTesting = true;
                     currentTestType = 'selection';
-                    const introMessage = `Selamat datang di Tes Kepribadian dan Potensi Diri.\n\nTes ini menawarkan dua pendekatan untuk membantu Anda lebih mengenal diri:\n- **Pendekatan STIFIn:** Berbasis konsep kecerdasan genetik untuk menemukan "sistem operasi" otak Anda yang dominan, yang akan memandu cara belajar dan profesi yang paling alami bagi Anda.\n- **Pendekatan MBTI:** Salah satu tes kepribadian paling populer di dunia, yang akan mengidentifikasi preferensi Anda dalam melihat dunia dan mengambil keputusan.\n\n---\n\n***Disclaimer:*** *Tes ini adalah pengantar untuk mengenali kepribadian dan potensi diri. Untuk hasil yang lebih akurat dan komprehensif, disarankan untuk mengikuti tes di Layanan Psikologi Profesional.*\n\nSekarang, silakan pilih pendekatan yang ingin Anda gunakan:\n[PILIHAN:Pendekatan STIFIn|Pendekatan MBTI]`;
-                    
+                    chatTitle.textContent = "Tes Kepribadian RASA";
+                    const introMessage = `Selamat datang di Tes Kepribadian dan Potensi Diri.\n\nTes ini menawarkan dua pendekatan untuk membantu Anda lebih mengenal diri:\n- **Pendekatan STIFIn:** Berbasis konsep kecerdasan genetik untuk menemukan "sistem operasi" otak Anda yang dominan.\n- **Pendekatan MBTI:** Salah satu tes kepribadian paling populer di dunia, untuk mengidentifikasi preferensi Anda.\n\n---\n\n***Disclaimer:*** *Tes ini adalah pengantar. Untuk hasil lebih komprehensif, disarankan mengikuti tes di Layanan Psikologi Profesional.*\n\nSilakan pilih pendekatan yang ingin Anda gunakan:\n[PILIHAN:Pendekatan STIFIn|Pendekatan MBTI]`;
                     displayMessage(introMessage, 'ai');
-                    speakAsync("Selamat datang di tes kepribadian dan potensi diri. Silakan pilih pendekatan yang ingin Anda gunakan.", true);
+                    speakAsync("Selamat datang di tes kepribadian. Silakan pilih pendekatan yang ingin Anda gunakan.", true);
 
                 } else {
                     isTesting = false; 
-                    startOnboardingIfNeeded();
+                    currentPersona = persona;
+                    chatTitle.textContent = `Curhat dengan ${persona}`;
+                    displayMessage(greeting, 'ai');
+                    speakAsync(greeting, true);
                 }
             }
 
-            // === CURHAT-SPECIFIC LOGIC ===
-            async function startOnboardingIfNeeded() {
-                isOnboarding = true;
-                statusDiv.textContent = "Sesi perkenalan...";
+            // === CORE MESSAGE HANDLING (DIPERBARUI) ===
+            async function handleSendMessage() {
+                if (isRecording || isOnboarding || isTesting) return;
+                const userText = userInput.value.trim();
+                if (!userText) return;
+
+                displayMessage(userText, 'user');
+                userInput.value = '';
+                userInput.style.height = 'auto';
                 updateButtonVisibility();
-                try {
-                    // Poin 2: Hanya salam di awal
-                    const firstGreeting = "Assalamualaikum, namaku RASA, teman curhatmu. Boleh kutahu siapa namamu?";
-                    displayMessage(firstGreeting, 'ai');
-                    await speakAsync(firstGreeting, true);
-                    
-                    const nameAnswer = await listenOnce();
-                    displayMessage(nameAnswer, 'user');
-                    userName = nameAnswer.trim();
-                    
-                    const genderAnswer = await askAndListen("Boleh konfirmasi, apakah kamu seorang laki-laki atau wanita?");
-                    if (genderAnswer.toLowerCase().includes('wanita') || genderAnswer.toLowerCase().includes('perempuan')) {
-                        userGender = 'Wanita';
+                // Mengirim persona saat ini bersama dengan prompt
+                await getAIResponse(userText, userName, userGender, userAge, currentPersona);
+            }
+            
+            function handleSendMessageWithChoice(choice) {
+                displayMessage(choice, 'user');
+                if (isTesting) {
+                    if (currentTestType === 'selection') {
+                        const type = choice.toLowerCase().includes('stifin') ? 'stifin' : 'mbti';
+                        initiateTest(type);
+                    } else {
+                        processTestAnswer(choice);
                     }
-                    const ageAnswer = await askAndListen("Kalau usiamu berapa?");
-                    const ageMatch = ageAnswer.match(/\d+/);
-                    if (ageMatch) userAge = ageMatch[0];
+                } else {
+                    // Mengirim persona saat ini bersama dengan pilihan
+                    getAIResponse(choice, userName, userGender, userAge, currentPersona);
+                }
+            }
+
+            async function getAIResponse(prompt, name, gender, age, persona) {
+                abortController = new AbortController();
+                statusDiv.textContent = `${persona} sedang berpikir...`;
+                updateButtonVisibility();
+                
+                try {
+                    const apiResponse = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt, name, gender, age, history: conversationHistory, persona: persona }), // Menambahkan persona ke body request
+                        signal: abortController.signal
+                    });
+                    if (!apiResponse.ok) throw new Error(`Server merespon dengan status ${apiResponse.status}`);
+                    const result = await apiResponse.json();
+                    
+                    let responseText = result.aiText || `Terima kasih sudah berbagi, ${name || 'teman'}. Bisa ceritakan lebih lanjut?`;
+
+                    if (conversationHistory.filter(m => m.role === 'RASA').length > 0) {
+                        responseText = responseText.replace(/Assalamualaikum,?\s*/i, "").trim();
+                    }
+
+                    displayMessage(responseText, 'ai');
+                    const textToSpeak = responseText.replace(/\[.*?\]/g, "").replace(/[\*#\-]/g, "");
+                    await speakAsync(textToSpeak, true);
 
                 } catch (error) {
-                    console.log("Onboarding diabaikan:", error);
+                    if (error.name !== 'AbortError') {
+                        displayMessage(`Maaf, sepertinya ada sedikit gangguan koneksi. Bisa ceritakan kembali?`, 'ai-system');
+                    }
                 } finally {
-                    isOnboarding = false;
                     statusDiv.textContent = "";
                     updateButtonVisibility();
-                    const welcomeMessage = `Baik, ${userName || 'temanku'}, terima kasih sudah berkenalan. Sekarang, saya siap mendengarkan. Silakan ceritakan apa yang kamu rasakan.`;
-                    displayMessage(welcomeMessage, 'ai');
-                    speakAsync(welcomeMessage, true);
                 }
             }
 
+
+            // === FUNGSI-FUNGSI LAINNYA (TIDAK BERUBAH SECARA SIGNIFIKAN) ===
+            // ... (Semua fungsi lain seperti test logic, voice recognition, displayMessage, dll tetap di sini) ...
             function listenOnce() {
                 return new Promise((resolve, reject) => {
                     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -699,20 +754,6 @@
                 });
             }
 
-            async function askAndListen(question) {
-                displayMessage(question, 'ai');
-                await speakAsync(question, true);
-                try {
-                    const answer = await listenOnce();
-                    displayMessage(answer, 'user');
-                    return answer;
-                } catch (e) {
-                    displayMessage("Maaf, saya tidak dapat mendengar suaramu. Silakan coba lagi.", 'ai-system');
-                    return "";
-                }
-            }
-
-            // === TEST-SPECIFIC LOGIC ===
             function selectRandomQuestions(questionArray, count) {
                 const shuffled = [...questionArray].sort(() => 0.5 - Math.random());
                 return shuffled.slice(0, count);
@@ -830,33 +871,7 @@
                     displayMessage("Maaf, terjadi kesalahan dalam menampilkan hasil tes. Silakan mulai ulang dari header.", 'ai-system');
                 }
                 updateButtonVisibility();
-            }
-
-            // === CORE MESSAGE HANDLING & UI ===
-            async function handleSendMessage() {
-                if (isRecording || isOnboarding || isTesting) return;
-                const userText = userInput.value.trim();
-                if (!userText) return;
-
-                displayMessage(userText, 'user');
-                userInput.value = '';
-                userInput.style.height = 'auto';
-                updateButtonVisibility();
-                await getAIResponse(userText, userName, userGender, userAge);
-            }
-            
-            function handleSendMessageWithChoice(choice) {
-                displayMessage(choice, 'user');
-                if (isTesting) {
-                    if (currentTestType === 'selection') {
-                        const type = choice.toLowerCase().includes('stifin') ? 'stifin' : 'mbti';
-                        initiateTest(type);
-                    } else {
-                        processTestAnswer(choice);
-                    }
-                } else {
-                    getAIResponse(choice, userName, userGender, userAge);
-                }
+                chatTitle.textContent = "Teman Curhat RASA";
             }
 
             function updateButtonVisibility() {
@@ -936,68 +951,6 @@
                 if (statusDiv.textContent === "Mendengarkan...") statusDiv.textContent = "";
             }
             
-            async function getAIResponse(prompt, name, gender, age) {
-                abortController = new AbortController();
-                statusDiv.textContent = "RASA sedang berpikir...";
-                updateButtonVisibility();
-                
-                const linkKeywords = ['solusi', 'bantuan', 'cara mengatasi', 'psikolog', 'info', 'artikel', 'layanan', 'bingung cara'];
-                const isLinkRequest = linkKeywords.some(keyword => prompt.toLowerCase().includes(keyword));
-                let responseText = "";
-
-                if (isLinkRequest) {
-                    let topic = "kesehatan mental";
-                    let link = "https://www.halodoc.com/kesehatan/kesehatan-mental";
-                    let linkText = "Layanan Kesehatan Mental Halodoc";
-
-                    if (prompt.toLowerCase().includes('cemas') || prompt.toLowerCase().includes('anxiety')) {
-                        topic = "mengatasi kecemasan";
-                        link = "https://www.alodokter.com/berbagai-cara-menghilangkan-cemas-berlebihan-yang-bisa-anda-coba";
-                        linkText = "artikel cara mengatasi cemas dari Alodokter";
-                    } else if (prompt.toLowerCase().includes('depresi') || prompt.toLowerCase().includes('sedih')) {
-                        topic = "mengatasi depresi";
-                        link = "https://hellosehat.com/mental/depresi/cara-mengatasi-depresi/";
-                        linkText = "panduan mengatasi depresi dari Hello Sehat";
-                    } else if (prompt.toLowerCase().includes('belajar') || prompt.toLowerCase().includes('fokus')) {
-                        topic = "cara belajar efektif";
-                        link = "https://www.ruangguru.com/blog/cara-belajar-efektif";
-                        linkText = "tips belajar efektif dari Ruangguru";
-                    }
-                    
-                    responseText = `Saya mengerti Anda sedang mencari informasi atau solusi mengenai ${topic}. Selain berdiskusi, membaca dari sumber yang tepercaya bisa sangat membantu. Mungkin Anda bisa coba melihat [LINK:${link}]${linkText}[/LINK]. Semoga ini bisa memberikan pencerahan.`;
-                } else {
-                    try {
-                        const apiResponse = await fetch('/api/chat', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ prompt, name, gender, age, history: conversationHistory }),
-                            signal: abortController.signal
-                        });
-                        if (!apiResponse.ok) throw new Error(`Server merespon dengan status ${apiResponse.status}`);
-                        const result = await apiResponse.json();
-                        responseText = result.aiText || `Terima kasih sudah berbagi, ${name || 'teman'}. Bisa ceritakan lebih lanjut?`;
-                    } catch (error) {
-                        if (error.name !== 'AbortError') {
-                            responseText = `Maaf, sepertinya ada sedikit gangguan koneksi. Bisa ceritakan kembali?`;
-                        }
-                    }
-                }
-
-                if (responseText) {
-                     // Poin 2: Menghilangkan salam berulang dari AI
-                    if (conversationHistory.filter(m => m.role === 'RASA').length > 0) {
-                        responseText = responseText.replace(/Assalamualaikum,?\s*/i, "").trim();
-                    }
-
-                    displayMessage(responseText, 'ai');
-                    const textToSpeak = responseText.replace(/\[.*?\]/g, "").replace(/[\*#\-]/g, "");
-                    await speakAsync(textToSpeak, true);
-                }
-
-                statusDiv.textContent = "";
-                updateButtonVisibility();
-            }
-
             function loadVoices() {
                 if (!('speechSynthesis' in window)) return;
                 const setVoices = () => { speechVoices = window.speechSynthesis.getVoices(); };
