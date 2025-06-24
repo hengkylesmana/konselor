@@ -10,8 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* CSS Anda tidak berubah, jadi saya singkat untuk keringkasan */
+        /* Import font untuk tampilan yang lebih modern dan mudah dibaca */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
         :root {
             --bg-calm: linear-gradient(135deg, #b3e5a3 0%, #68b851 100%);
             --container-bg: rgba(255, 255, 255, 0.95);
@@ -24,57 +25,390 @@
             --shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.15);
             --danger-color: #d32f2f;
         }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg-calm); margin: 0; padding: 10px; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: var(--primary-text); }
-        .container { width: 100%; max-width: 700px; height: 95vh; background: var(--container-bg); border-radius: 20px; box-shadow: var(--shadow); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid #cccccc; display: flex; flex-direction: column; overflow: hidden; }
-        header { padding: 10px 15px; border-bottom: 1px solid var(--border-color); flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: background-color 0.2s; }
-        header:hover { background-color: rgba(0,0,0,0.03); }
-        .header-content { display: flex; align-items: center; gap: 12px; }
-        header .logo { display: none; }
-        .title-group { text-align: left; }
-        .title-group h1 { margin: 0; font-size: 1.2rem; color: var(--accent-color); font-weight: 600; }
-        .title-group p { margin: 1px 0 0 0; font-size: 0.65rem; color: var(--secondary-text); }
-        .chat-container { flex-grow: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .chat-message { padding: 10px 15px; border-radius: 18px; max-width: 80%; line-height: 1.5; word-wrap: break-word; font-size: 0.9rem; }
-        .ai-message h3 { margin-top: 0; margin-bottom: 8px; color: var(--accent-color); font-size: 1.1rem; }
-        .ai-message ul { padding-left: 20px; margin: 10px 0; }
-        .ai-message li { margin-bottom: 5px; }
-        .ai-message p { margin: 0 0 10px 0; }
-        .ai-message p:last-child { margin-bottom: 0; }
-        .ai-message hr { border: none; border-top: 1px solid var(--border-color); margin: 15px 0; }
-        .chat-link { color: var(--accent-color); text-decoration: underline; font-weight: 600; }
-        .choice-container { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
-        .choice-button { width: 100%; background-color: white; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 10px; border-radius: 8px; text-align: left; cursor: pointer; transition: background-color 0.2s, color 0.2s; font-weight: 500; font-size: 0.85rem; }
-        .choice-button:hover:not(:disabled) { background-color: var(--accent-color); color: white; }
-        .choice-button.selected { background-color: var(--accent-color); color: white; }
-        .choice-button:disabled { background-color: #e0e0e0; border-color: #bdbdbd; color: #9e9e9e; cursor: not-allowed; opacity: 0.7; }
-        .user-message { background-color: var(--user-msg-bg); align-self: flex-end; color: #3e612d; }
-        .ai-message, .ai-system-message { background-color: var(--ai-msg-bg); align-self: flex-start; }
-        .ai-system-message { font-style: italic; color: var(--secondary-text); width: 100%; text-align: center; max-width: 100%; background-color: transparent; padding: 0; }
-        .input-container { display: flex; padding: 10px; border-top: 1px solid var(--border-color); gap: 8px; align-items: center; flex-shrink: 0; }
-        #user-input { flex: 1; min-width: 0; padding: 10px 15px; border-radius: 20px; border: 1px solid var(--border-color); resize: none; font-family: 'Poppins', sans-serif; font-size: 0.9rem; line-height: 1.4; max-height: 100px; overflow-y: auto; }
-        #user-input:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 2px rgba(0, 105, 92, 0.2); }
-        #send-btn, #voice-btn, #end-chat-btn { flex-shrink: 0; width: 40px; height: 40px; border: none; border-radius: 50%; color: white; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.2s ease-in-out; }
-        #send-btn:hover, #voice-btn:hover { transform: scale(1.1); }
-        #send-btn, #voice-btn { background-color: var(--accent-color); }
-        #end-chat-btn { background-color: var(--secondary-text); font-weight: 600; font-size: 0.7rem; padding: 0; }
-        #voice-btn.recording { background-color: var(--danger-color); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 5px 10px rgba(211, 47, 47, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); } }
-        .status-info { padding: 0 20px 8px; font-size: 0.75rem; color: var(--secondary-text); text-align: center; min-height: 1rem; }
-        footer { padding: 8px 20px; text-align: center; color: var(--secondary-text); background-color: rgba(0,0,0,0.02); border-top: 1px solid var(--border-color); flex-shrink: 0; }
-        footer p { margin: 0; font-size: 0.6rem; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-calm); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 1; transition: opacity 0.5s ease, visibility 0.5s; visibility: visible; }
-        .modal-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        .start-content { text-align: center; padding: 24px; background-color: white; border-radius: 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; max-width: 90%; width: 400px; box-sizing: border-box; }
-        .start-content .logo { margin-bottom: 16px; }
-        .start-title { font-size: 1.8rem; color: #000000; margin: 8px 0; font-weight: 600; }
-        .start-subtitle { font-size: 0.8rem; color: #000000; font-weight: 400; margin-bottom: 16px; }
-        .info-box { max-height: 120px; overflow-y: auto; background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; text-align: left; font-size: 0.8rem; color: #333; margin-bottom: 20px; line-height: 1.6; }
-        .info-box p { margin: 0 0 10px 0; }
-        .info-box p:last-child { margin-bottom: 0; }
-        .start-button-group { display: flex; flex-direction: column; justify-content: center; gap: 10px; width: 100%; }
-        .start-content .modal-button { background-color: var(--accent-color); color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: transform 0.2s, background-color 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; box-sizing: border-box; line-height: 1.3; }
-        .start-content .modal-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-        .start-content .modal-button.secondary { background-color: transparent; color: var(--accent-color); border: 2px solid var(--accent-color); }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-calm);
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--primary-text);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            height: 95vh;
+            background: var(--container-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid #cccccc;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        header:hover {
+            background-color: rgba(0,0,0,0.03);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        header .logo {
+            display: none;
+        }
+
+        .title-group {
+            text-align: left;
+        }
+
+        .title-group h1 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .title-group p {
+            margin: 1px 0 0 0;
+            font-size: 0.65rem;
+            color: var(--secondary-text);
+        }
+
+        .chat-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-message {
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            line-height: 1.5;
+            word-wrap: break-word;
+            font-size: 0.9rem;
+        }
+
+        .ai-message h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+        }
+
+        .ai-message ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .ai-message li {
+            margin-bottom: 5px;
+        }
+
+        .ai-message p {
+            margin: 0 0 10px 0;
+        }
+        .ai-message p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .ai-message hr {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 15px 0;
+        }
+
+        .chat-link {
+            color: var(--accent-color);
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .choice-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .choice-button {
+            width: 100%;
+            background-color: white;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .choice-button:hover:not(:disabled) {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .choice-button.selected {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .choice-button:disabled {
+            background-color: #e0e0e0;
+            border-color: #bdbdbd;
+            color: #9e9e9e;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .user-message {
+            background-color: var(--user-msg-bg);
+            align-self: flex-end;
+            color: #3e612d;
+        }
+
+        .ai-message, .ai-system-message {
+            background-color: var(--ai-msg-bg);
+            align-self: flex-start;
+        }
+        
+        .ai-system-message {
+            font-style: italic;
+            color: var(--secondary-text);
+            width: 100%;
+            text-align: center;
+            max-width: 100%;
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid var(--border-color);
+            gap: 8px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        #user-input {
+            flex: 1;
+            min-width: 0;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            resize: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+        #user-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(0, 105, 92, 0.2);
+        }
+
+        #send-btn, #voice-btn, #end-chat-btn {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        #send-btn:hover, #voice-btn:hover {
+            transform: scale(1.1);
+        }
+
+        #send-btn, #voice-btn {
+            background-color: var(--accent-color);
+        }
+
+        #end-chat-btn {
+            background-color: var(--secondary-text);
+            font-weight: 600;
+            font-size: 0.7rem;
+            padding: 0;
+        }
+
+        #voice-btn.recording {
+            background-color: var(--danger-color);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 5px 10px rgba(211, 47, 47, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+        }
+
+        .status-info {
+            padding: 0 20px 8px;
+            font-size: 0.75rem;
+            color: var(--secondary-text);
+            text-align: center;
+            min-height: 1rem;
+        }
+
+        footer {
+            padding: 8px 20px;
+            text-align: center;
+            color: var(--secondary-text);
+            background-color: rgba(0,0,0,0.02);
+            border-top: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.6rem;
+        }
+
+        /* GAYA UNTUK LAYAR PEMBUKA */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-calm);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 0.5s ease, visibility 0.5s;
+            visibility: visible;
+        }
+
+        .modal-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .start-content {
+            text-align: center;
+            padding: 24px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 90%;
+            width: 400px;
+            box-sizing: border-box;
+        }
+
+        .start-content .logo {
+            margin-bottom: 16px;
+        }
+
+        .start-title {
+            font-size: 1.8rem;
+            color: #000000;
+            margin: 8px 0;
+            font-weight: 600;
+        }
+        .start-subtitle {
+            font-size: 0.8rem;
+            color: #000000;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+        
+        .info-box {
+            max-height: 120px; 
+            overflow-y: auto;   
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: left;
+            font-size: 0.8rem;
+            color: #333;
+            margin-bottom: 20px; 
+            line-height: 1.6;
+        }
+        
+        .info-box p {
+            margin: 0 0 10px 0;
+        }
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .start-button-group {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px; 
+            width: 100%;
+        }
+
+        .start-content .modal-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px; 
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.85rem; 
+            font-weight: 600;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            box-sizing: border-box;
+            line-height: 1.3; 
+        }
+        
+        .start-content .modal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .start-content .modal-button.secondary {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+        }
     </style>
 </head>
 <body>
@@ -95,11 +429,18 @@
             <h2 class="start-title">Teman Curhat RASA</h2>
             <p class="start-subtitle">Ruang Asuh Sadar Asa</p>
             
+            <!-- KONTEN YANG DIPERBARUI -->
             <div class="info-box">
                 <p>Anda bisa curhat atau sekedar ngobrol berbagai hal dengan Teman Curhat online yang bernama RASA. Ceritakan saja isi hatimu, sukamu, dukamu, masalahmu atau apa harapanmu. RASA akan berusaha menjadi teman setiamu, pendengar setiamu, bahkan pembantu setiamu.</p>
                 <p><strong>Tenang saja, ini privat dan rahasia.</strong> Semua riwayat percakapan bersifat rahasia, dan tidak ada seorang lain pun yang bisa membacanya. Sistem AI otomatis akan menghapus semua riwayat percakapan pada saat sesi curhat berakhir.</p>
+                <p><strong>Yuk, Curhat..</strong></p>
+                <p>Anda ingin wisata kuliner? Tapi gak tau apa yang cocok dengan dirimu, seleramu, dan mood-mu. RASA coba bantu memandumu menemukan wisata kuliner yang cocok berdasarkan karakter dan potensimu dari hasil tes kepribadian. </p>
+                <p>Jangan kuatir, RASA akan menawarkan Tes Kepribadian dan Potensi Diri agar anda semakin mengenal karakter, watak dan potensi yang tersimpan dalam dirimu.</p>
+                <p><strong>Misal buat apa?</strong> Dari sesi CURHAT, saat anda ingin wisata kuliner, mintalah RASA melakukan tes kepribadian untukmu, maka anda akan diarahkan melakukan tes. Kemudian mintalah RASA untuk mencarikan wisata kuliner yang sesuai dengan karakter dan watakmu. RASA akan merekomendasikan tempat wisata kuliner yang pas buatmu.</p>
             </div>
+            <!-- Akhir dari Konten yang Diperbarui -->
             
+            <!-- Grup Tombol yang Diperbarui -->
             <div class="start-button-group">
                 <button id="start-curhat-umum" class="modal-button start-curhat-action">Curhat Yuk - Aku sama Sepertimu</button>
                 <button id="start-curhat-dokter" class="modal-button start-curhat-action">Tanya ke Dokter AI – Bantu Pahami Gejala Lebih Cepat</button>
@@ -115,6 +456,10 @@
     <div class="container">
         <header>
             <div class="header-content">
+                <svg class="logo" width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="48" fill="url(#goldGradient)" stroke="#DAA520" stroke-width="2"/>
+                    <path d="M50 75 C 40 65, 25 55, 25 42.5 C 25 32.5, 35 25, 50 35 C 65 25, 75 32.5, 75 42.5 C 75 55, 60 65, 50 75 Z" fill="#FFFFFF" fill-opacity="0.8"/>
+                </svg>
                 <div class="title-group">
                     <h1>Teman Curhat RASA</h1>
                     <p>Ruang Asuh Sadar Asa - Teman Curhat Psikis dan Spiritual Berbasis AI Terlatih</p>
@@ -122,7 +467,9 @@
             </div>
         </header>
 
-        <div class="chat-container" id="chat-container"></div>
+        <div class="chat-container" id="chat-container">
+            <!-- Pesan akan ditambahkan di sini oleh JavaScript -->
+        </div>
 
         <div class="input-container">
             <textarea id="user-input" placeholder="Tulis curhatmu di sini..." rows="1"></textarea>
@@ -144,7 +491,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // === DOM ELEMENT SELECTION ===
+            // === DOM ELEMENT SELECTION (DIPERBARUI) ===
             const chatContainer = document.getElementById('chat-container');
             const userInput = document.getElementById('user-input');
             const sendBtn = document.getElementById('send-btn');
@@ -152,11 +499,10 @@
             const endChatBtn = document.getElementById('end-chat-btn');
             const statusDiv = document.getElementById('status');
             const startOverlay = document.getElementById('start-overlay');
+            // Mengambil semua tombol curhat
             const startCurhatBtns = document.querySelectorAll('.start-curhat-action');
             const startTestBtn = document.getElementById('start-test-btn');
             const header = document.querySelector('header');
-            const headerTitle = header.querySelector('.title-group h1');
-            const headerSubtitle = header.querySelector('.title-group p');
             
             // === APPLICATION STATE ===
             let conversationHistory = []; 
@@ -172,45 +518,8 @@
             let testData = {};
             let testScores = {};
             let currentTestQuestionIndex = 0;
-            let currentPersona = 'umum'; 
-
-            const personaConfig = {
-                'start-curhat-umum': {
-                    id: 'umum',
-                    title: 'Teman Curhat RASA',
-                    subtitle: 'Ruang Asuh Sadar Asa - Teman Curhat Psikis dan Spiritual Berbasis AI Terlatih',
-                    skipOnboarding: false
-                },
-                'start-curhat-dokter': {
-                    id: 'dokter',
-                    title: 'Tanya ke Dokter AI – Bantu Pahami Gejala Lebih Cepat',
-                    subtitle: 'Saya adalah AI yang dilatih dengan pengetahuan ilmu kedokteran.',
-                    welcomeMessage: 'Assalamualaikum. Silakan jelaskan gejala atau keluhan medis yang Anda rasakan. Saya akan coba bantu memahaminya. Disclaimer: Saya bukan dokter sungguhan, informasi ini hanya untuk edukasi.',
-                    skipOnboarding: true
-                },
-                'start-curhat-ngaji': {
-                    id: 'ngaji',
-                    title: 'Tanya ke Sahabat Ngaji',
-                    subtitle: 'Bantu Temukan Rujukan Islami',
-                    welcomeMessage: 'Assalamualaikum. Ada pertanyaan atau keresahan seputar keislaman yang bisa kita diskusikan bersama? Insya Allah saya coba bantu carikan rujukan.',
-                    skipOnboarding: true
-                },
-                'start-curhat-psikolog': {
-                    id: 'psikolog',
-                    title: 'Tanya ke Psikolog AI',
-                    subtitle: 'Pahami Perasaanmu, Bantu Tenangkan',
-                    welcomeMessage: 'Assalamualaikum. Selamat datang di ruang yang aman untuk bercerita. Apa yang sedang Anda rasakan atau pikirkan saat ini?',
-                    skipOnboarding: true
-                },
-                'start-curhat-insinyur': {
-                    id: 'insinyur',
-                    title: 'Tanya ke Insinyur AI',
-                    subtitle: 'Ngobrol Ringan, Ngobrolin Solusi',
-                    welcomeMessage: 'Assalamualaikum. Ada masalah teknis, proyek, atau ide inovatif yang ingin didiskusikan? Mari kita pecahkan bersama.',
-                    skipOnboarding: true
-                }
-            };
-
+            
+            // === TEST DATA OBJECTS (STIFIn & MBTI) ===
             const fullTestData = {
                 stifin: {
                     questions: [
@@ -276,29 +585,25 @@
 
             // === INITIALIZATION & EVENT LISTENERS ===
             function init() {
-                // FIX: Hanya mendaftarkan Service Worker di environment yang didukung (http/https)
-                if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.protocol === 'http:')) {
-                  window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw.js')
-                      .then(registration => {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                      })
-                      .catch(err => {
-                        console.error('ServiceWorker registration failed: ', err);
-                      });
+            // Tambahkan kode registrasi Service Worker di sini
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                  .then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                  })
+                  .catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
                   });
-                }
+              });
+            }
                 loadVoices();
                 displayInitialMessage();
                 updateButtonVisibility();
                 
+                // Event listener untuk semua tombol curhat
                 startCurhatBtns.forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const config = personaConfig[e.currentTarget.id];
-                        if (config) {
-                            initializeApp(false, config);
-                        }
-                    });
+                    btn.addEventListener('click', () => initializeApp(false));
                 });
 
                 startTestBtn.addEventListener('click', () => initializeApp(true));
@@ -321,7 +626,7 @@
                 });
             }
             
-            function initializeApp(startWithTest = false, personaConf = personaConfig['start-curhat-umum']) {
+            function initializeApp(startWithTest = false) {
                 if (!audioContext) {
                     try {
                         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -330,32 +635,27 @@
                 startOverlay.classList.add('hidden');
                 chatContainer.innerHTML = '';
                 
-                currentPersona = personaConf.id;
-                headerTitle.textContent = personaConf.title;
-                headerSubtitle.textContent = personaConf.subtitle;
-
                 if (startWithTest) {
                     isTesting = true;
                     currentTestType = 'selection';
                     const introMessage = `Selamat datang di Tes Kepribadian dan Potensi Diri.\n\nTes ini menawarkan dua pendekatan untuk membantu Anda lebih mengenal diri:\n- **Pendekatan STIFIn:** Berbasis konsep kecerdasan genetik untuk menemukan "sistem operasi" otak Anda yang dominan, yang akan memandu cara belajar dan profesi yang paling alami bagi Anda.\n- **Pendekatan MBTI:** Salah satu tes kepribadian paling populer di dunia, yang akan mengidentifikasi preferensi Anda dalam melihat dunia dan mengambil keputusan.\n\n---\n\n***Disclaimer:*** *Tes ini adalah pengantar untuk mengenali kepribadian dan potensi diri. Untuk hasil yang lebih akurat dan komprehensif, disarankan untuk mengikuti tes di Layanan Psikologi Profesional.*\n\nSekarang, silakan pilih pendekatan yang ingin Anda gunakan:\n[PILIHAN:Pendekatan STIFIn|Pendekatan MBTI]`;
+                    
                     displayMessage(introMessage, 'ai');
                     speakAsync("Selamat datang di tes kepribadian dan potensi diri. Silakan pilih pendekatan yang ingin Anda gunakan.", true);
+
                 } else {
                     isTesting = false; 
-                    if (personaConf.skipOnboarding) {
-                        displayMessage(personaConf.welcomeMessage, 'ai');
-                        speakAsync(personaConf.welcomeMessage.replace(/Disclaimer:.*$/i, ''), true);
-                    } else {
-                        startOnboardingIfNeeded();
-                    }
+                    startOnboardingIfNeeded();
                 }
             }
 
+            // === CURHAT-SPECIFIC LOGIC ===
             async function startOnboardingIfNeeded() {
                 isOnboarding = true;
                 statusDiv.textContent = "Sesi perkenalan...";
                 updateButtonVisibility();
                 try {
+                    // Poin 2: Hanya salam di awal
                     const firstGreeting = "Assalamualaikum, namaku RASA, teman curhatmu. Boleh kutahu siapa namamu?";
                     displayMessage(firstGreeting, 'ai');
                     await speakAsync(firstGreeting, true);
@@ -412,6 +712,7 @@
                 }
             }
 
+            // === TEST-SPECIFIC LOGIC ===
             function selectRandomQuestions(questionArray, count) {
                 const shuffled = [...questionArray].sort(() => 0.5 - Math.random());
                 return shuffled.slice(0, count);
@@ -420,16 +721,24 @@
             function initiateTest(type) {
                 currentTestType = type;
                 const originalTestData = (type === 'stifin') ? fullTestData.stifin : fullTestData.mbti;
+
                 let questionsToAsk = [];
                 if (type === 'stifin') {
                     const mainQuestions = originalTestData.questions.filter(q => !q.isDriveQuestion);
                     const driveQuestion = originalTestData.questions.find(q => q.isDriveQuestion);
                     questionsToAsk = selectRandomQuestions(mainQuestions, 8);
-                    if (driveQuestion) questionsToAsk.push(driveQuestion);
+                    if (driveQuestion) {
+                        questionsToAsk.push(driveQuestion);
+                    }
                 } else { 
                     questionsToAsk = selectRandomQuestions(originalTestData.questions, 12);
                 }
-                testData = { ...originalTestData, questions: questionsToAsk };
+
+                testData = {
+                    ...originalTestData,
+                    questions: questionsToAsk
+                };
+
                 testScores = {};
                 currentTestQuestionIndex = 0;
                 displayMessage(`Baik, mari kita mulai Tes Kepribadian dengan Pendekatan ${type.toUpperCase()}. Jawablah ${testData.questions.length} pertanyaan berikut.`, 'ai-system');
@@ -455,6 +764,7 @@
             function processTestAnswer(choice) {
                 const q = testData.questions[currentTestQuestionIndex];
                 if (!q) return;
+
                 if (currentTestType === 'stifin') {
                     const selectedOption = q.options.find(opt => opt.text === choice);
                     if (!selectedOption) return;
@@ -468,7 +778,9 @@
                     if (!selectedOption) return;
                     testScores[selectedOption.v] = (testScores[selectedOption.v] || 0) + 1;
                 }
+                
                 currentTestQuestionIndex++;
+
                 if (currentTestQuestionIndex >= testData.questions.length) {
                     calculateAndDisplayResult();
                 } else if (currentTestType === 'stifin' && testData.questions[currentTestQuestionIndex].isDriveQuestion) {
@@ -490,6 +802,7 @@
                 currentTestType = null;
                 let finalType = '';
                 let result;
+
                 if (localTestType === 'stifin') {
                     let dominantMK = Object.keys(testScores).length > 0 ? Object.keys(testScores).reduce((a, b) => testScores[a] > testScores[b] ? a : b) : "In";
                     finalType = dominantMK;
@@ -508,6 +821,7 @@
                     finalType += (J >= P) ? 'J' : 'P';
                     result = fullTestData.mbti.results[finalType];
                 }
+
                 if (result) {
                     let resultMessage = `Terima kasih telah menjawab. Berikut adalah hasil analisa kepribadian Anda:\n\n${result.explanation}\n\n---\n\n### **${result.title}**\n\n**Potensi Diri:**\n${result.potensiDiri}\n\n**Cara Belajar yang Cocok:**\n${result.caraBelajar}\n\n**Potensi Profesi yang Sesuai:**\n- ${result.profesi.split(', ').join('\n- ')}\n\n---\n\nIngat, ini adalah peta potensi, bukan takdir. Gunakan wawasan ini untuk berkembang.`;
                     displayMessage(resultMessage, 'ai');
@@ -518,6 +832,7 @@
                 updateButtonVisibility();
             }
 
+            // === CORE MESSAGE HANDLING & UI ===
             async function handleSendMessage() {
                 if (isRecording || isOnboarding || isTesting) return;
                 const userText = userInput.value.trim();
@@ -547,8 +862,10 @@
             function updateButtonVisibility() {
                 const isTyping = userInput.value.length > 0;
                 const isInputDisabled = isTesting || isOnboarding;
+
                 userInput.disabled = isInputDisabled;
                 userInput.placeholder = isInputDisabled ? "Jawab melalui tombol atau suara..." : "Tulis curhatmu di sini...";
+
                 if (isRecording || isInputDisabled) {
                     sendBtn.style.display = 'none';
                     if (isOnboarding) {
@@ -624,28 +941,54 @@
                 statusDiv.textContent = "RASA sedang berpikir...";
                 updateButtonVisibility();
                 
+                const linkKeywords = ['solusi', 'bantuan', 'cara mengatasi', 'psikolog', 'info', 'artikel', 'layanan', 'bingung cara'];
+                const isLinkRequest = linkKeywords.some(keyword => prompt.toLowerCase().includes(keyword));
                 let responseText = "";
-                
-                try {
-                    const apiResponse = await fetch('/api/chat', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt, name, gender, age, history: conversationHistory, persona: currentPersona }),
-                        signal: abortController.signal
-                    });
-                    if (!apiResponse.ok) throw new Error(`Server merespon dengan status ${apiResponse.status}`);
-                    const result = await apiResponse.json();
-                    responseText = result.aiText || `Terima kasih sudah berbagi, ${name || 'teman'}. Bisa ceritakan lebih lanjut?`;
-                } catch (error) {
-                    if (error.name !== 'AbortError') {
-                        responseText = `Maaf, sepertinya ada sedikit gangguan koneksi. Bisa ceritakan kembali?`;
+
+                if (isLinkRequest) {
+                    let topic = "kesehatan mental";
+                    let link = "https://www.halodoc.com/kesehatan/kesehatan-mental";
+                    let linkText = "Layanan Kesehatan Mental Halodoc";
+
+                    if (prompt.toLowerCase().includes('cemas') || prompt.toLowerCase().includes('anxiety')) {
+                        topic = "mengatasi kecemasan";
+                        link = "https://www.alodokter.com/berbagai-cara-menghilangkan-cemas-berlebihan-yang-bisa-anda-coba";
+                        linkText = "artikel cara mengatasi cemas dari Alodokter";
+                    } else if (prompt.toLowerCase().includes('depresi') || prompt.toLowerCase().includes('sedih')) {
+                        topic = "mengatasi depresi";
+                        link = "https://hellosehat.com/mental/depresi/cara-mengatasi-depresi/";
+                        linkText = "panduan mengatasi depresi dari Hello Sehat";
+                    } else if (prompt.toLowerCase().includes('belajar') || prompt.toLowerCase().includes('fokus')) {
+                        topic = "cara belajar efektif";
+                        link = "https://www.ruangguru.com/blog/cara-belajar-efektif";
+                        linkText = "tips belajar efektif dari Ruangguru";
+                    }
+                    
+                    responseText = `Saya mengerti Anda sedang mencari informasi atau solusi mengenai ${topic}. Selain berdiskusi, membaca dari sumber yang tepercaya bisa sangat membantu. Mungkin Anda bisa coba melihat [LINK:${link}]${linkText}[/LINK]. Semoga ini bisa memberikan pencerahan.`;
+                } else {
+                    try {
+                        const apiResponse = await fetch('/api/chat', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ prompt, name, gender, age, history: conversationHistory }),
+                            signal: abortController.signal
+                        });
+                        if (!apiResponse.ok) throw new Error(`Server merespon dengan status ${apiResponse.status}`);
+                        const result = await apiResponse.json();
+                        responseText = result.aiText || `Terima kasih sudah berbagi, ${name || 'teman'}. Bisa ceritakan lebih lanjut?`;
+                    } catch (error) {
+                        if (error.name !== 'AbortError') {
+                            responseText = `Maaf, sepertinya ada sedikit gangguan koneksi. Bisa ceritakan kembali?`;
+                        }
                     }
                 }
 
                 if (responseText) {
+                     // Poin 2: Menghilangkan salam berulang dari AI
                     if (conversationHistory.filter(m => m.role === 'RASA').length > 0) {
                         responseText = responseText.replace(/Assalamualaikum,?\s*/i, "").trim();
                     }
+
                     displayMessage(responseText, 'ai');
                     const textToSpeak = responseText.replace(/\[.*?\]/g, "").replace(/[\*#\-]/g, "");
                     await speakAsync(textToSpeak, true);
