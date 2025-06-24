@@ -1,0 +1,21 @@
+{
+  "name": "Teman Curhat RASA",
+  "short_name": "RASA",
+  "description": "Ruang Asuh Sadar Asa - Teman Curhat Psikis dan Spiritual Berbasis AI Terlatih.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#b3e5a3",
+  "theme_color": "#00695c",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
