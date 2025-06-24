@@ -447,7 +447,9 @@
                 </button>
                 <button id="start-curhat-dokter" class="modal-button start-curhat-action"
                         data-persona="Dokter AI"
-                        data-greeting="Halo, saya Dokter AI dari tim RASA. Anda bisa menceritakan gejala atau keluhan kesehatan yang Anda rasakan. Saya akan bantu memahaminya. *Disclaimer: Saya adalah AI, bukan pengganti dokter sungguhan.*">
+                        data-greeting="Halo, saya Dokter AI dari tim RASA. Anda bisa menceritakan gejala atau keluhan kesehatan yang Anda rasakan. Saya akan bantu memahaminya. *Disclaimer: Saya adalah AI, bukan pengganti dokter sungguhan.*"
+                        data-title="Tanya ke Dokter AI – Bantu Pahami Gejala Lebih Cepat"
+                        data-subtitle="Saya adalah AI yang dilatih dengan pengetahuan ilmu kedokteran.">
                     Tanya ke Dokter AI – Bantu Pahami Gejala Lebih Cepat
                 </button>
                 <button id="start-curhat-ngaji" class="modal-button start-curhat-action"
@@ -480,7 +482,7 @@
                 </svg>
                 <div class="title-group">
                     <h1 id="chat-title">Teman Curhat RASA</h1>
-                    <p>Ruang Asuh Sadar Asa - Teman Curhat Psikis dan Spiritual Berbasis AI Terlatih</p>
+                    <p id="chat-subtitle">Ruang Asuh Sadar Asa - Teman Curhat Psikis dan Spiritual Berbasis AI Terlatih</p>
                 </div>
             </div>
         </header>
@@ -518,6 +520,7 @@
             const statusDiv = document.getElementById('status');
             const startOverlay = document.getElementById('start-overlay');
             const chatTitle = document.getElementById('chat-title');
+            const chatSubtitle = document.getElementById('chat-subtitle');
             
             // Mengambil semua tombol curhat
             const startCurhatBtns = document.querySelectorAll('.start-curhat-action');
@@ -622,7 +625,9 @@
                     btn.addEventListener('click', (e) => {
                         const persona = e.currentTarget.dataset.persona;
                         const greeting = e.currentTarget.dataset.greeting;
-                        initializeApp(false, persona, greeting);
+                        const title = e.currentTarget.dataset.title;
+                        const subtitle = e.currentTarget.dataset.subtitle;
+                        initializeApp(false, persona, greeting, title, subtitle);
                     });
                 });
 
@@ -646,7 +651,7 @@
                 });
             }
             
-            function initializeApp(startWithTest = false, persona = 'Sahabat Umum', greeting = "Assalamualaikum, apa yang ingin kamu ceritakan?") {
+            function initializeApp(startWithTest = false, persona = 'Sahabat Umum', greeting = "Assalamualaikum, apa yang ingin kamu ceritakan?", title, subtitle) {
                 if (!audioContext) {
                     try {
                         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -659,6 +664,7 @@
                     isTesting = true;
                     currentTestType = 'selection';
                     chatTitle.textContent = "Tes Kepribadian RASA";
+                    chatSubtitle.textContent = "Pilih pendekatan untuk memulai tes Anda";
                     const introMessage = `Selamat datang di Tes Kepribadian dan Potensi Diri.\n\nTes ini menawarkan dua pendekatan untuk membantu Anda lebih mengenal diri:\n- **Pendekatan STIFIn:** Berbasis konsep kecerdasan genetik untuk menemukan "sistem operasi" otak Anda yang dominan.\n- **Pendekatan MBTI:** Salah satu tes kepribadian paling populer di dunia, untuk mengidentifikasi preferensi Anda.\n\n---\n\n***Disclaimer:*** *Tes ini adalah pengantar. Untuk hasil lebih komprehensif, disarankan mengikuti tes di Layanan Psikologi Profesional.*\n\nSilakan pilih pendekatan yang ingin Anda gunakan:\n[PILIHAN:Pendekatan STIFIn|Pendekatan MBTI]`;
                     displayMessage(introMessage, 'ai');
                     speakAsync("Selamat datang di tes kepribadian. Silakan pilih pendekatan yang ingin Anda gunakan.", true);
@@ -666,7 +672,16 @@
                 } else {
                     isTesting = false; 
                     currentPersona = persona;
-                    chatTitle.textContent = `Curhat dengan ${persona}`;
+                    
+                    // Memperbarui header sesuai data dari tombol atau kembali ke default
+                    if (title && subtitle) {
+                        chatTitle.textContent = title;
+                        chatSubtitle.textContent = subtitle;
+                    } else {
+                        chatTitle.textContent = `Curhat dengan ${persona}`;
+                        chatSubtitle.textContent = "Ruang Asuh Sadar Asa - Teman Curhat Psikis dan Spiritual Berbasis AI Terlatih";
+                    }
+
                     displayMessage(greeting, 'ai');
                     speakAsync(greeting, true);
                 }
@@ -738,7 +753,6 @@
 
 
             // === FUNGSI-FUNGSI LAINNYA (TIDAK BERUBAH SECARA SIGNIFIKAN) ===
-            // ... (Semua fungsi lain seperti test logic, voice recognition, displayMessage, dll tetap di sini) ...
             function listenOnce() {
                 return new Promise((resolve, reject) => {
                     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -872,6 +886,7 @@
                 }
                 updateButtonVisibility();
                 chatTitle.textContent = "Teman Curhat RASA";
+                chatSubtitle.textContent = "Ruang Asuh Sadar Asa - Teman Curhat Psikis dan Spiritual Berbasis AI Terlatih";
             }
 
             function updateButtonVisibility() {
