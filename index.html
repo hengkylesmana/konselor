@@ -786,7 +786,8 @@
                         
                         // Menambahkan pesan pembuka setelah info panel
                         const doctorGreeting = "Halo, selamat datang di layanan Dokter AI. Silakan ceritakan apa yang Anda rasakan atau tanyakan apa pun seputar kesehatan.";
-                        displayMessage(doctorGreeting, 'ai-system'); // Tampil tanpa history dan tanpa dibacakan
+                        displayMessage(doctorGreeting, 'ai-system'); // Tampil tanpa history 
+                        speakAsync(doctorGreeting, true, persona); // Menambahkan sapaan suara
                     } else if (greeting) {
                         displayMessage(greeting, 'ai');
                         speakAsync(greeting, true, persona);
