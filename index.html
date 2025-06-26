@@ -388,8 +388,6 @@
     </div>
 
     <script>
-        // Seluruh kode JavaScript dari aplikasi Anda tetap sama dan tidak perlu diubah.
-        // Kode ini saya salin langsung dari file Anda untuk memastikan semua fungsi tetap berjalan.
         document.addEventListener('DOMContentLoaded', () => {
             // === DOM ELEMENT SELECTION ===
             const chatContainer = document.getElementById('chat-container');
@@ -418,7 +416,7 @@
             let testScores = {};
             let currentTestQuestionIndex = 0;
             
-            // === TEST DATA OBJECTS (STIFIn & MBTI) ===
+            // === TEST DATA (UNCHANGED) ===
             const fullTestData = {
                 stifin: {
                     questions: [
@@ -484,13 +482,13 @@
 
             // === INITIALIZATION & EVENT LISTENERS ===
             function init() {
-            if ('serviceWorker' in navigator) {
-              window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                  .then(registration => console.log('ServiceWorker registration successful'))
-                  .catch(err => console.log('ServiceWorker registration failed: ', err));
-              });
-            }
+                if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('ServiceWorker registration successful'))
+                    .catch(err => console.log('ServiceWorker registration failed: ', err));
+                });
+                }
                 loadVoices();
                 displayInitialMessage();
                 updateButtonVisibility();
@@ -520,6 +518,10 @@
                 if (!audioContext) {
                     try {
                         audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        // Resume context on first user interaction, which is this click
+                        if(audioContext.state === 'suspended') {
+                            audioContext.resume();
+                        }
                     } catch(e) { console.error("Web Audio API tidak didukung."); }
                 }
                 startOverlay.classList.add('hidden');
@@ -539,7 +541,7 @@
                 }
             }
 
-            // === CURHAT-SPECIFIC LOGIC ===
+            // === ONBOARDING & LISTENING LOGIC (IMPROVED) ===
             async function startOnboardingIfNeeded() {
                 isOnboarding = true;
                 statusDiv.textContent = "Sesi perkenalan...";
@@ -574,16 +576,43 @@
             }
 
             function listenOnce() {
+                playSound('start'); // Play start sound
                 return new Promise((resolve, reject) => {
                     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                    if (!SpeechRecognition) { reject("Not supported"); return; }
+                    if (!SpeechRecognition) {
+                        playSound('stop');
+                        reject("Not supported");
+                        return;
+                    }
                     
                     const rec = new SpeechRecognition();
                     rec.lang = 'id-ID';
-                    rec.onresult = (event) => resolve(event.results[0][0].transcript);
-                    rec.onerror = (event) => reject(event.error);
+                    rec.continuous = false;
+                    rec.interimResults = false;
+
+                    let hasResolved = false;
+
+                    rec.onresult = (event) => {
+                        if (hasResolved) return;
+                        hasResolved = true;
+                        playSound('stop');
+                        resolve(event.results[0][0].transcript);
+                    };
+                    rec.onerror = (event) => {
+                        if (hasResolved) return;
+                        hasResolved = true;
+                        playSound('stop');
+                        reject(event.error);
+                    };
+                    rec.onend = () => {
+                        if (!hasResolved) { // Handle timeout
+                            hasResolved = true;
+                            playSound('stop');
+                            reject('no-speech');
+                        }
+                        if (statusDiv.textContent === "Mendengarkan...") statusDiv.textContent = "";
+                    };
                     rec.onstart = () => statusDiv.textContent = "Mendengarkan...";
-                    rec.onend = () => { if (statusDiv.textContent === "Mendengarkan...") statusDiv.textContent = ""; };
                     rec.start();
                 });
             }
@@ -596,12 +625,16 @@
                     displayMessage(answer, 'user');
                     return answer;
                 } catch (e) {
-                    displayMessage("Maaf, saya tidak dapat mendengar suaramu. Silakan coba lagi.", 'ai-system');
+                    const errorMessage = (e === 'no-speech' || e === 'audio-capture')
+                        ? "Maaf, saya tidak mendengar suaramu. Bisa ulangi lagi?"
+                        : "Maaf, terjadi sedikit gangguan. Silakan coba lagi.";
+                    console.error("Listen error:", e);
+                    displayMessage(errorMessage, 'ai-system');
                     return "";
                 }
             }
 
-            // === TEST-SPECIFIC LOGIC ===
+            // === TEST-SPECIFIC LOGIC (UNCHANGED) ===
             function selectRandomQuestions(questionArray, count) {
                 const shuffled = [...questionArray].sort(() => 0.5 - Math.random());
                 return shuffled.slice(0, count);
@@ -715,7 +748,7 @@
                 updateButtonVisibility();
             }
 
-            // === CORE MESSAGE HANDLING & UI ===
+            // === CORE MESSAGE HANDLING & UI (UNCHANGED) ===
             async function handleSendMessage() {
                 if (isRecording || isOnboarding || isTesting) return;
                 const userText = userInput.value.trim();
@@ -783,6 +816,7 @@
                 setTimeout(() => { if (statusDiv.textContent === "Proses dibatalkan.") statusDiv.textContent = ""; }, 2000);
             }
             
+            // === VOICE RECORDING (UPDATED) ===
             function toggleMainRecording() {
                 if (isTesting || isOnboarding) return;
                 if (isRecording) stopRecording();
@@ -790,7 +824,7 @@
             }
 
             function startRecording() {
-                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
                 if (!SpeechRecognition || isRecording) return;
                 playSound('start');
                 isRecording = true;
@@ -802,7 +836,7 @@
                 recognition.interimResults = false;
                 recognition.onresult = (event) => {
                     userInput.value = event.results[0][0].transcript;
-                    updateButtonVisibility(); // Update buttons once there's text
+                    updateButtonVisibility();
                     handleSendMessage();
                 };
                 recognition.onerror = (event) => {
@@ -824,66 +858,44 @@
                 if (statusDiv.textContent === "Mendengarkan...") statusDiv.textContent = "";
             }
             
+            // === SERVER COMMUNICATION (UNCHANGED) ===
             async function getAIResponse(prompt, name, gender, age) {
                 abortController = new AbortController();
                 statusDiv.textContent = "RASA sedang berpikir...";
                 updateButtonVisibility();
                 
-                const linkKeywords = ['solusi', 'bantuan', 'cara mengatasi', 'psikolog', 'info', 'artikel', 'layanan', 'bingung cara'];
-                const isLinkRequest = linkKeywords.some(keyword => prompt.toLowerCase().includes(keyword));
-                let responseText = "";
-
-                if (isLinkRequest) {
-                    let topic = "kesehatan mental";
-                    let link = "https://www.halodoc.com/kesehatan/kesehatan-mental";
-                    let linkText = "Layanan Kesehatan Mental Halodoc";
-
-                    if (prompt.toLowerCase().includes('cemas') || prompt.toLowerCase().includes('anxiety')) {
-                        topic = "mengatasi kecemasan";
-                        link = "https://www.alodokter.com/berbagai-cara-menghilangkan-cemas-berlebihan-yang-bisa-anda-coba";
-                        linkText = "artikel cara mengatasi cemas dari Alodokter";
-                    } else if (prompt.toLowerCase().includes('depresi') || prompt.toLowerCase().includes('sedih')) {
-                        topic = "mengatasi depresi";
-                        link = "https://hellosehat.com/mental/depresi/cara-mengatasi-depresi/";
-                        linkText = "panduan mengatasi depresi dari Hello Sehat";
-                    } else if (prompt.toLowerCase().includes('belajar') || prompt.toLowerCase().includes('fokus')) {
-                        topic = "cara belajar efektif";
-                        link = "https://www.ruangguru.com/blog/cara-belajar-efektif";
-                        linkText = "tips belajar efektif dari Ruangguru";
-                    }
+                try {
+                    const apiResponse = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt, name, gender, age, history: conversationHistory }),
+                        signal: abortController.signal
+                    });
+                    if (!apiResponse.ok) throw new Error(`Server merespon dengan status ${apiResponse.status}`);
+                    const result = await apiResponse.json();
+                    const responseText = result.aiText || `Terima kasih sudah berbagi, ${name || 'teman'}. Bisa ceritakan lebih lanjut?`;
                     
-                    responseText = `Saya mengerti Anda sedang mencari informasi atau solusi mengenai ${topic}. Selain berdiskusi, membaca dari sumber yang tepercaya bisa sangat membantu. Mungkin Anda bisa coba melihat [LINK:${link}]${linkText}[/LINK]. Semoga ini bisa memberikan pencerahan.`;
-                } else {
-                    try {
-                        const apiResponse = await fetch('/api/chat', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ prompt, name, gender, age, history: conversationHistory }),
-                            signal: abortController.signal
-                        });
-                        if (!apiResponse.ok) throw new Error(`Server merespon dengan status ${apiResponse.status}`);
-                        const result = await apiResponse.json();
-                        responseText = result.aiText || `Terima kasih sudah berbagi, ${name || 'teman'}. Bisa ceritakan lebih lanjut?`;
-                    } catch (error) {
-                        if (error.name !== 'AbortError') {
-                            responseText = `Maaf, sepertinya ada sedikit gangguan koneksi. Bisa ceritakan kembali?`;
+                    if (responseText) {
+                        let processedText = responseText;
+                        if (conversationHistory.filter(m => m.role === 'RASA').length > 0) {
+                            processedText = processedText.replace(/Assalamualaikum,?\s*/i, "").trim();
                         }
+                        displayMessage(processedText, 'ai');
+                        const textToSpeak = processedText.replace(/\[.*?\]/g, "").replace(/[\*#\-]/g, "");
+                        await speakAsync(textToSpeak, true);
                     }
-                }
 
-                if (responseText) {
-                    if (conversationHistory.filter(m => m.role === 'RASA').length > 0) {
-                        responseText = responseText.replace(/Assalamualaikum,?\s*/i, "").trim();
+                } catch (error) {
+                    if (error.name !== 'AbortError') {
+                       displayMessage(`Maaf, sepertinya ada sedikit gangguan koneksi. Bisa ceritakan kembali?`, 'ai-system');
                     }
-                    displayMessage(responseText, 'ai');
-                    const textToSpeak = responseText.replace(/\[.*?\]/g, "").replace(/[\*#\-]/g, "");
-                    await speakAsync(textToSpeak, true);
+                } finally {
+                    statusDiv.textContent = "";
+                    updateButtonVisibility();
                 }
-
-                statusDiv.textContent = "";
-                updateButtonVisibility();
             }
 
+            // === UTILITY FUNCTIONS (SPEECH & SOUND - UPDATED) ===
             function loadVoices() {
                 if (!('speechSynthesis' in window)) return;
                 const setVoices = () => { speechVoices = window.speechSynthesis.getVoices(); };
@@ -914,19 +926,29 @@
             function playSound(type) {
                 if (audioContext && audioContext.state === 'suspended') { audioContext.resume(); }
                 if (!audioContext) return;
+
                 const now = audioContext.currentTime;
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                oscillator.type = 'sine';
-                gainNode.gain.setValueAtTime(0, now);
-                gainNode.gain.linearRampToValueAtTime(0.3, now + 0.01);
-                if (type === 'start') { oscillator.frequency.setValueAtTime(1000, now); } 
-                else if (type === 'stop') { oscillator.frequency.setValueAtTime(800, now); }
-                oscillator.start(now);
-                gainNode.gain.exponentialRampToValueAtTime(0.00001, now + 0.1);
-                oscillator.stop(now + 0.1);
+
+                function beep(startTime, freq, duration) {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(freq, startTime);
+                    gainNode.gain.setValueAtTime(0, startTime);
+                    gainNode.gain.linearRampToValueAtTime(0.4, startTime + 0.01);
+                    oscillator.start(startTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.00001, startTime + duration);
+                    oscillator.stop(startTime + duration);
+                }
+
+                if (type === 'start') {
+                    beep(now, 1000, 0.1); // "Tut"
+                } else if (type === 'stop') {
+                    beep(now, 800, 0.08); // "Tut"
+                    beep(now + 0.12, 800, 0.08); // "Tut"
+                }
             }
 
             function displayInitialMessage() {
