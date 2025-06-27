@@ -192,7 +192,7 @@
         footer { padding: 10px 20px; text-align: center; color: var(--secondary-text); background-color: rgba(243, 244, 246, 0.7); border-top: 1px solid var(--border-color); flex-shrink: 0; }
         footer p { margin: 0; font-size: 0.7rem; }
         
-        .doctor-info-box {
+        .info-popup-box {
             display: none; 
             position: absolute;
             top: 65px; 
@@ -207,37 +207,50 @@
             box-sizing: border-box;
             animation: fadeInDown 0.5s ease;
         }
-        .doctor-info-content {
+        .info-popup-content {
             max-height: 250px; 
             overflow-y: auto; 
             font-size: 0.85rem;
             line-height: 1.7;
             color: var(--secondary-text);
         }
-        .doctor-info-content h4 {
-            font-size: 0.9rem;
+        .info-popup-content h4 {
+            font-size: 0.95rem;
             color: var(--primary-text);
             margin-top: 15px;
             margin-bottom: 10px;
             border-bottom: 1px solid #eee;
             padding-bottom: 5px;
         }
-        .doctor-info-content ul {
+        .info-popup-content h5 {
+            font-size: 0.9rem;
+            color: var(--primary-text);
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        .info-popup-content ul {
             list-style-type: none;
             padding-left: 5px;
         }
-        .doctor-info-content li {
+        .info-popup-content li {
             margin-bottom: 8px;
             padding-left: 15px;
             position: relative;
         }
-        .doctor-info-content li::before {
+        .info-popup-content li::before {
             content: '•';
             position: absolute;
             left: 0;
             color: var(--accent-color);
         }
-        .doctor-info-close {
+        .info-popup-content ol {
+            padding-left: 20px;
+        }
+        .info-popup-content ol li {
+            padding-left: 5px;
+            margin-bottom: 5px;
+        }
+        .info-popup-close {
             position: absolute;
             top: 10px;
             right: 15px;
@@ -247,7 +260,7 @@
             color: var(--secondary-text);
             transition: color 0.2s;
         }
-        .doctor-info-close:hover {
+        .info-popup-close:hover {
             color: var(--primary-text);
         }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -295,7 +308,6 @@
     </style>
 </head>
 <body>
-    <!-- HTML structure remains the same -->
     <div id="interactive-bg"></div>
     <div class="bg-ornaments">
         <div class="ornament"></div><div class="ornament"></div><div class="ornament"></div>
@@ -322,6 +334,7 @@
             </div>
             <div class="start-button-group">
                 <button id="start-curhat-btn" class="modal-button">Tanya ke Psikolog AI</button>
+                <button id="start-spiritual-btn" class="modal-button">Tanya ke Spiritual AI</button>
                 <button id="start-doctor-btn" class="modal-button">Tanya ke Dokter AI</button>
                 <button id="start-test-btn" class="modal-button secondary">Tes Kepribadian dan Potensi Diri</button>
             </div>
@@ -339,36 +352,89 @@
                 </div>
             </div>
         </header>
+        
+        <div id="spiritual-info-box" class="info-popup-box">
+            <span id="spiritual-info-close" class="info-popup-close">&times;</span>
+            <div class="info-popup-content">
+                <p><strong>Saya Spiritual AI,</strong> yang telah dilatih dengan bank data yang merujuk kepada Al Qur'an, hadits dan literatur islami. Saya dikembangkan untuk membantu menemukan rujukan islami.<br><em>Disclaimer : Segala rujukan dalam aplikasi ini untuk membantu literasi Anda dan bukan fatwa atau bukan pengganti nasihat ulama. Mohon rujuk langsung kepada Ahli Ilmu Agama untuk konsultasi dan bimbingan lebih dalam.</em></p>
+                <h4>Contoh mencari rujukan :</h4>
+                <h4>Ilmu Tauhid :</h4>
+                <ul>
+                    <li>Apa makna Laa ilaha illallah?</li>
+                    <li>Apa itu syirik besar?</li>
+                    <li>Bagaimana cara bertauhid dengan benar?</li>
+                    <li>Apakah percaya ramalan termasuk syirik?</li>
+                    <li>Apa perbedaan iman dan islam?</li>
+                </ul>
+                <h4>Dasar Hukum / Dalil :</h4>
+                <ul>
+                    <li>Apa dalil kewajiban sholat lima waktu?</li>
+                    <li>Jelaskan hukum warisan dalam Islam?</li>
+                    <li>Apa hukumnya wanita haid membaca Al-Qur'an?</li>
+                    <li>Ada dalil larangan riba dalam Al-Qur'an?</li>
+                </ul>
+                <h4>Tafsir Hukum :</h4>
+                <ul>
+                    <li>Apa hukum merayakan ulang tahun menurut Islam?</li>
+                    <li>Bolehkah wanita bekerja di luar rumah?</li>
+                    <li>Apa tafsir hukum terkait musik?</li>
+                    <li>Bagaimana hukum memakai emas bagi pria?</li>
+                </ul>
+                <h4>Tata Cara Ibadah :</h4>
+                <ul>
+                    <li>Apa rukun wudhu yang sholat?</li>
+                    <li>Apa rukun wudhu yang wajib?</li>
+                    <li>Bagaimana niat sholat subuh?</li>
+                    <li>Bagaimana cara tayamum saat tidak ada air?</li>
+                    <li>Apa yang membatalkan puasa?</li>
+                </ul>
+                <h4>Muamalah :</h4>
+                <ul>
+                    <li>Apa hukum jual beli kredit?</li>
+                    <li>Bolehkah hutang dengan bunga?</li>
+                    <li>Bagaimana akad nikah yang sah?</li>
+                    <li>Apa etika berdagang dalam Islam?</li>
+                </ul>
+                <hr>
+                <h4>Ringkasan metodologi Spiritual AI yang digunakan dalam memberikan rujukan islami :</h4>
+                <h5>1. Basis Pengetahuan Utama</h5>
+                <p>Basis pengetahuan secara spesifik merujuk pada sumber-sumber primer dan sekunder yang otoritatif dalam studi Islam :</p>
+                <ul>
+                    <li><strong>Al-Qur'an dan Ulumul Qur'an:</strong>
+                        <br>o	Teks Primer: Al-Qur'an.
+                        <br>o	Tafsir Klasik: Prioritas rujukan akan diberikan kepada Tafsir ath-Thabari, Tafsir Ibnu Katsir, dan Tafsir al-Qurthubi.
+                        <br>o	Ilmu Al-Qur'an: Pemahaman konteks ayat, asbabun nuzul, dan kaidah tafsir akan merujuk pada kitab seperti Al-Itqan fi 'Ulum al-Qur'an dan Mabahits fi 'Ulum al-Qur'an.</li>
+                    <li><strong>Hadits dan Ulumul Hadits:</strong>
+                        <br>o	Kitab Hadits Utama: Shahih al-Bukhari dan Shahih Muslim.
+                        <br>o	Hadits Tematik: Riyadhus Shalihin dan Arba'in an-Nawawiyyah.
+                        <br>o	Ilmu Musthalah Hadits: Muqaddimah Ibnu Shalah.</li>
+                </ul>
+                <h5>2. Hierarki dan Pendekatan Dalam Menyusun Rujukan Islami</h5>
+                <p>Saat menjawab pertanyaan, akan mengikuti hierarki dan pendekatan berikut:</p>
+                <ol>
+                    <li>Mencari Rujukan dari Al-Qur'an.</li>
+                    <li>Mencari Penjelasan dari Hadits Shahih.</li>
+                    <li>Mengutip Pendapat Ulama Salaf.</li>
+                    <li>Menyebutkan Sumber.</li>
+                    <li>Disclaimer.</li>
+                </ol>
+                <p>Dengan metodologi ini, fungsi "Spiritual AI" diharapkan memiliki kecerdasan yang lebih terstruktur, berbasis pada sumber-sumber ilmu Islam yang diakui oleh para ulama.</p>
+            </div>
+        </div>
 
-        <div id="doctor-info-box" class="doctor-info-box">
-            <span id="doctor-info-close" class="doctor-info-close">&times;</span>
-            <div class="doctor-info-content">
+        <div id="doctor-info-box" class="info-popup-box">
+            <span id="doctor-info-close" class="info-popup-close">&times;</span>
+            <div class="info-popup-content">
                 <p><strong>Saya Dokter AI,</strong> yang telah dilatih khusus dengan dasar ilmu kedokteran, spesialis, klinis, dan patologi. Saya dikembangkan dengan pemahaman kedokteran yang menyeluruh dan dengan kemampuan komunikasi memahami pola keluhan Anda dari sisi medis.</p>
-                
                 <h4>Contoh Komunikasi Gejala dan Keluhan</h4>
                 <ul>
                     <li>Dok, saya sering bersin-bersin pagi hari.</li>
                     <li>Saya merasa ngilu di pinggang setelah duduk lama.</li>
-                    <li>Perut saya sering begah setelah makan pedas.</li>
-                    <li>Saya mengalami sakit kepala sebelah sejak kemarin.</li>
-                    <li>Tangan saya sering kesemutan saat tidur.</li>
-                    <li>Saya batuk berdahak disertai demam sejak tiga hari terakhir.</li>
-                    <li>Saya sering merasa berdebar tanpa sebab.</li>
-                    <li>Saya gampang lelah, kulit jadi pucat, dan sering pusing.</li>
-                    <li>Ada benjolan di payudara saya dan terasa agak nyeri.</li>
-                    <li>Saya mengalami muntah darah dan nyeri di perut bagian atas.</li>
                 </ul>
-
                 <h4>Contoh Pertanyaan tentang Obat & Layanan Kesehatan</h4>
                  <ul>
                     <li>Obat Paracetamol sebenarnya untuk penyakit apa, ya?</li>
                     <li>Cara minum obat Amoxicillin gimana, sebelum atau sesudah makan?</li>
-                    <li>Kandungan utama dalam obat ini apa, dan ada efek sampingnya?</li>
-                    <li>Kalau saya lupa minum satu dosis, harus bagaimana?</li>
-                    <li>Pertolongan pertama untuk luka bakar ringan itu apa?</li>
-                    <li>Obat untuk sakit maag saya habis, ada alternatif yang bisa dibeli bebas?</li>
-                    <li>Ada salep aman untuk ruam di kulit anak usia 2 tahun?</li>
-                    <li>Saya ingin konsultasi alergi dengan dokter. Bisa diarahkan ke dokter apa?</li>
                 </ul>
             </div>
         </div>
@@ -385,8 +451,9 @@
     </div>
 
     <script>
+        // Script tidak ada perubahan dari versi sebelumnya
         document.addEventListener('DOMContentLoaded', () => {
-            // All const declarations remain the same
+            const startSpiritualBtn = document.getElementById('start-spiritual-btn');
             const chatContainer = document.getElementById('chat-container');
             const userInput = document.getElementById('user-input');
             const sendBtn = document.getElementById('send-btn');
@@ -400,10 +467,12 @@
             const header = document.querySelector('header');
             const headerTitle = document.getElementById('header-title');
             const headerSubtitle = document.getElementById('header-subtitle');
+            
             const doctorInfoBox = document.getElementById('doctor-info-box');
             const doctorInfoClose = document.getElementById('doctor-info-close');
+            const spiritualInfoBox = document.getElementById('spiritual-info-box');
+            const spiritualInfoClose = document.getElementById('spiritual-info-close');
             
-            // All let declarations remain the same
             let conversationHistory = [];
             let abortController = null;
             let recognition = null;
@@ -417,65 +486,16 @@
             let testScores = {};
             let currentTestQuestionIndex = 0;
             let currentMode = 'psychologist';
-            let currentAudio = null; // To control currently playing audio
+            let currentAudio = null;
 
-            // Personality test data remains the same
             const fullTestData = {
                 stifin: {
-                    questions: [
-                        { question: "Saat belajar hal baru, Anda lebih suka:", options: [ { text: "Menghafal fakta dan detail penting.", type: "S" }, { text: "Memahami logika dan rumus di baliknya.", type: "T" }, { text: "Mencari konsep besar dan polanya.", type: "I" }, { text: "Mendiskusikannya dengan teman atau guru.", type: "F" }, { text: "Langsung mencoba dan praktik.", type: "In" } ] },
-                        { question: "Film atau cerita seperti apa yang paling Anda nikmati?", options: [ { text: "Kisah nyata atau dokumenter yang faktual.", type: "S" }, { text: "Cerita detektif atau strategi yang penuh teka-teki.", type: "T" }, { text: "Fiksi ilmiah atau fantasi dengan dunia yang unik.", type: "I" }, { text: "Drama yang menyentuh perasaan dan hubungan antar tokoh.", type: "F" }, { text: "Petualangan seru dengan banyak aksi.", type: "In" } ] },
-                        { question: "Jika Anda memiliki uang lebih, Anda akan menggunakannya untuk:", options: [ { text: "Menabung atau investasi yang aman dan jelas hasilnya.", type: "S" }, { text: "Membeli barang berkualitas tinggi yang tahan lama.", type: "T" }, { text: "Berinvestasi pada ide bisnis baru yang berisiko tapi potensial.", type: "I" }, { text: "Mentraktir teman dan keluarga atau berdonasi.", type: "F" }, { text: "Mencoba pengalaman baru seperti traveling atau kursus singkat.", type: "In" } ] },
-                        { question: "Dalam kerja kelompok, peran Anda seringkali menjadi:", options: [ { text: "Pencatat detail dan memastikan semua sesuai data.", type: "S" }, { text: "Penentu strategi dan memastikan semuanya logis.", type: "T" }, { text: "Pemberi ide-ide kreatif dan out-of-the-box.", type: "I" }, { text: "Penjaga keharmonisan dan motivator tim.", type: "F" }, { text: "Penghubung dan penengah jika ada masalah.", type: "In" } ] },
-                        { question: "Ketika dihadapkan pada masalah, apa yang pertama kali Anda lakukan?", options: [ { text: "Mencari data dan fakta konkret yang pernah terjadi.", type: "S" }, { text: "Menganalisis sebab-akibat dan mencari solusi paling logis.", type: "T" }, { text: "Membayangkan berbagai kemungkinan dan ide-ide baru.", type: "I" }, { text: "Memikirkan dampaknya pada orang lain dan mencari harmoni.", type: "F" }, { text: "Merespon secara spontan dan beradaptasi dengan keadaan.", type: "In" } ] },
-                        { question: "Lingkungan kerja seperti apa yang paling Anda sukai?", options: [ { text: "Praktis, terstruktur, dan ada hasil nyata yang bisa dilihat.", type: "S" }, { text: "Efisien, berbasis aturan yang jelas, dan objektif.", type: "T" }, { text: "Inovatif, fleksibel, dan memberikan ruang untuk kreativitas.", type: "I" }, { text: "Kolaboratif, mendukung, dan penuh interaksi dengan rekan kerja.", type: "F" }, { text: "Dinamis, beragam, di mana saya bisa membantu di banyak bidang.", type: "In" } ] },
-                        { question: "Bagaimana cara Anda mengambil keputusan penting?", options: [ { text: "Berdasarkan pengalaman masa lalu dan bukti yang ada.", type: "S" }, { text: "Dengan pertimbangan untung-rugi yang matang dan rasional.", type: "T" }, { text: "Mengikuti intuisi dan gambaran besar tentang masa depan.", type: "I" }, { text: "Mempertimbangkan nilai-nilai pribadi dan perasaan orang lain.", type: "F" }, { text: "Dengan cepat, sesuai dengan naluri saat itu juga.", type: "In" } ] },
-                        { question: "Apa yang paling membuat Anda merasa puas dalam sebuah pencapaian?", options: [ { text: "Menyelesaikan tugas dengan tuntas dan hasilnya bisa diandalkan.", type: "S" }, { text: "Menciptakan sistem yang efisien atau memenangkan persaingan.", type: "T" }, { text: "Menghasilkan sebuah karya atau ide orisinal yang diakui.", type: "I" }, { text: "Membangun hubungan yang baik atau memimpin orang lain menuju sukses.", type: "F" }, { text: "Bisa berkontribusi dan membawa kedamaian bagi banyak orang.", type: "In" } ] },
-                        { question: "Saat mendeskripsikan sesuatu, Anda cenderung:", options: [ { text: "Memberikan detail yang spesifik dan berurutan.", type: "S" }, { text: "Menjelaskan pro dan kontranya secara objektif.", type: "T" }, { text: "Menggunakan metafora atau perumpamaan.", type: "I" }, { text: "Menceritakan bagaimana hal itu membuat Anda merasa.", type: "F" }, { text: "Menunjukkan dengan contoh atau gerakan.", type: "In" } ] },
-                        { question: "Hobi atau kegiatan waktu luang Anda biasanya melibatkan:", options: [ { text: "Olahraga, berkebun, atau kegiatan fisik lainnya.", type: "S" }, { text: "Bermain catur, sudoku, atau game strategi.", type: "T" }, { text: "Menulis, melukis, atau menciptakan sesuatu yang baru.", type: "I" }, { text: "Menjadi sukarelawan atau berkumpul dengan teman-teman.", type: "F" }, { text: "Menjelajahi tempat baru tanpa rencana yang pasti.", type: "In" } ] },
-                        { question: "Mana yang lebih menggambarkan diri Anda?", isDriveQuestion: true, options: [ { text: "Energi dan ide saya lebih sering muncul dari dalam diri. Saya memikirkannya dulu baru beraksi.", type: "i" }, { text: "Saya mendapatkan energi dan ide dari interaksi dengan dunia luar. Saya lebih suka langsung mencoba.", type: "e" } ] }
-                    ],
-                    results: {
-                        Si: { explanation: "Hasil tes Anda adalah **Sensing introvert (Si)**.\n\n- **Sensing (S)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan kelima panca indera dan memproses informasi secara konkret. Anda adalah seorang yang praktis dan fokus pada fakta.\n- **introvert (i)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari dalam ke luar, membuat Anda cenderung berpikir dulu sebelum bertindak dan memiliki stamina serta daya ingat yang kuat.", title: "Sensing introvert (Si) - Sang Penyimpan yang Tekun", potensiDiri: "Anda adalah 'kamus berjalan' yang andal, dengan daya ingat kuat untuk fakta dan detail. Sebagai pekerja keras yang ulet, disiplin, dan efisien, Anda hebat dalam mengeksekusi tugas. Anda percaya diri dan lebih suka menjadi pelaku langsung di lapangan daripada hanya merancang.", caraBelajar: "Paling efektif dengan pengulangan dan praktik. Merekam informasi melalui gerakan (misalnya menulis catatan) dan menggunakan alat peraga akan sangat membantu memperkuat ingatan otot dan visual Anda.", profesi: "Keuangan (Akuntan, Bankir), Sejarawan, Atlet, Tentara, Ahli Bahasa, Dokter, Pilot, Manajer Produksi, dan peran apa pun yang membutuhkan ketelitian dan daya tahan tinggi." },
-                        Se: { explanation: "Hasil tes Anda adalah **Sensing extrovert (Se)**.\n\n- **Sensing (S)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan kelima panca indera dan memproses informasi secara konkret. Anda adalah seorang yang praktis dan fokus pada fakta.\n- **extrovert (e)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari luar ke dalam, membuat Anda terpicu oleh lingkungan dan pengalaman langsung.", title: "Sensing extrovert (Se) - Sang Peluang yang Gesit", potensiDiri: "Anda sangat pandai menangkap peluang yang ada di depan mata. Sebagai pembelajar yang cepat dari pengalaman ('learning by doing'), Anda berkembang dalam lingkungan yang dinamis. Anda cenderung menikmati hidup, dermawan, dan membutuhkan stimulus dari luar untuk bergerak.", caraBelajar: "Teori harus diikuti dengan praktik langsung. Anda belajar paling cepat dengan terjun langsung, mencoba, dan mengalami sendiri. Menandai bacaan dan menggunakan visual akan membantu Anda.", profesi: "Wirausaha (Pedagang), Sales & Marketing, Entertainer, Bisnis Perhotelan, Fotografer, Presenter, Event Organizer, dan semua profesi yang membutuhkan respons cepat terhadap peluang." },
-                        Ti: { explanation: "Hasil tes Anda adalah **Thinking introvert (Ti)**.\n\n- **Thinking (T)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan logika dan penalaran objektif untuk membuat keputusan.\n- **introvert (i)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari dalam ke luar, membuat Anda menjadi pemikir yang mendalam, mandiri, dan fokus pada spesialisasi.", title: "Thinking introvert (Ti) - Sang Pakar yang Logis", potensiDiri: "Anda adalah seorang pakar atau spesialis sejati yang berpikir mendalam. Dengan 'tangan dingin', Anda mampu menyelesaikan masalah yang rumit secara sistematis. Anda sangat mandiri, teguh pada prinsip logika, dan kadang terlihat keras kepala karena keyakinan pada analisis Anda.", caraBelajar: "Fokus pada 'mengapa' di balik setiap informasi. Anda perlu menalar isi bacaan untuk menemukan logika dan intisarinya. Anda menyukai kerangka berpikir yang jelas dan efisien, serta mampu belajar mandiri dengan sangat baik.", profesi: "Ahli Riset & Teknologi, IT (Programmer, System Analyst), Insinyur, Ahli Strategi, Auditor, Konsultan Manajemen, Dokter Spesialis, Pembuat Kebijakan." },
-                        Te: { explanation: "Hasil tes Anda adalah **Thinking extrovert (Te)**.\n\n- **Thinking (T)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan logika dan penalaran objektif untuk membuat keputusan.\n- **extrovert (e)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari luar ke dalam, membuat Anda terdorong untuk mengorganisir lingkungan dan sistem secara efektif untuk mencapai tujuan.", title: "Thinking extrovert (Te) - Sang Komandan yang Efektif", potensiDiri: "Anda adalah seorang komandan atau manajer yang hebat. Kekuatan Anda terletak pada kemampuan mengelola sistem, sumber daya, dan organisasi secara efektif untuk melipatgandakan hasil. Anda objektif, adil, tegas, dan suka mengendalikan proses agar berjalan sesuai rencana.", caraBelajar: "Membutuhkan tujuan yang jelas dan langkah-langkah yang logis. Anda belajar dengan membuat struktur dan skema dari materi. Anda lebih suka gambaran besar yang sistematis daripada detail yang terlalu dalam.", profesi: "Eksekutif/CEO, Manajer Proyek, Birokrat, Pembuat Kebijakan, Manufaktur, Bisnis Properti, Ahli Hukum, Pemimpin Militer." },
-                        Ii: { explanation: "Hasil tes Anda adalah **Intuiting introvert (Ii)**.\n\n- **Intuiting (I)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan indra keenam (intuisi) dan imajinasi untuk melihat pola dan kemungkinan.\n- **introvert (i)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari dalam ke luar, menghasilkan ide-ide orisinal, murni, dan visioner dari dalam diri Anda.", title: "Intuiting introvert (Ii) - Sang Penggagas yang Visioner", potensiDiri: "Anda adalah penggagas sejati, pencipta ide-ide baru yang orisinal dan berkualitas tinggi. Sebagai seorang perfeksionis yang visioner, Anda mampu melihat jauh ke depan. Anda lebih nyaman bekerja di balik layar sebagai konseptor atau pencetus tren.", caraBelajar: "Belajar dengan memahami konsep besar di baliknya. Ilustrasi, grafis, film, dan cerita inspiratif akan memicu imajinasi Anda. Anda tidak terlalu suka menghafal, tetapi ingin tahu 'gambaran besarnya'.", profesi: "Peneliti Sains Murni, Penulis Sastra, Sutradara, Arsitek, Desainer, Investor, Pencipta Lagu, Entrepreneur di bidang inovasi, Filsuf." },
-                        Ie: { explanation: "Hasil tes Anda adalah **Intuiting extrovert (Ie)**.\n\n- **Intuiting (I)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan indra keenam (intuisi) dan imajinasi untuk melihat pola dan kemungkinan.\n- **extrovert (e)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari luar ke dalam, membuat Anda pandai merakit dan membumikan ide-ide besar agar diterima pasar.", title: "Intuiting extrovert (Ie) - Sang Inovator yang Adaptif", potensiDiri: "Anda adalah seorang pembaharu yang pandai merakit berbagai ide menjadi sebuah inovasi yang relevan dengan pasar. Anda mampu memprediksi tren bisnis dan 'mendaratkan' ide-ide besar menjadi sesuatu yang konkret dan bisa dijual. Kreativitas Anda bersifat aplikatif.", caraBelajar: "Belajar dengan merumuskan tema dan menghubungkan berbagai ide. Menggunakan peraga bongkar-pasang atau mempelajari studi kasus akan sangat efektif. Anda suka mengeksplorasi banyak hal untuk dirakit menjadi sesuatu yang baru.", profesi: "Wirausaha/Investor, Marketing & Periklanan, Konsultan Bisnis, Cinematografer, Detektif, Bidang Lifestyle & Mode, Business Development." },
-                        Fi: { explanation: "Hasil tes Anda adalah **Feeling introvert (Fi)**.\n\n- **Feeling (F)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan perasaan dan emosi untuk memahami orang dan membuat keputusan.\n- **introvert (i)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari dalam ke luar, memancarkan pengaruh dan kharisma kepemimpinan yang kuat dari dalam diri.", title: "Feeling introvert (Fi) - Sang Pemimpin yang Berkharisma", potensiDiri: "Anda adalah pemimpin alami yang kharismatik. Kekuatan Anda datang dari pengaruh kuat yang terpancar dari dalam. Anda mampu menyentuh emosi orang lain, memiliki visi yang jauh ke depan, populer, dan pandai meyakinkan orang untuk mengikuti ideologi Anda.", caraBelajar: "Anda adalah pendengar yang baik. Setelah mendengar, Anda perlu waktu untuk merefleksikan dan merasakan koneksinya. Anda akan sangat termotivasi jika materi relevan dengan nilai-nilai yang Anda yakini.", profesi: "Politisi, Negarawan, Pemimpin Organisasi/Yayasan, Psikolog, Motivator, Trainer/Public Speaker, Budayawan, Aktivis." },
-                        Fe: { explanation: "Hasil tes Anda adalah **Feeling extrovert (Fe)**.\n\n- **Feeling (F)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan perasaan dan emosi untuk memahami orang dan membuat keputusan.\n- **extrovert (e)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari luar ke dalam, membuat Anda terdorong untuk membangun hubungan, membina, dan mengayomi orang lain.", title: "Feeling extrovert (Fe) - Sang Pembina yang Peduli", potensiDiri: "Anda adalah seorang 'king-maker', mentor, atau pemilik yang hebat dalam membangun hubungan dan menggembleng orang lain menuju kesuksesan. Kemampuan sosial Anda luar biasa. Anda lebih suka bekerja di belakang layar, memastikan tim Anda solid dan berprestasi.", caraBelajar: "Melalui interaksi. Berdiskusi dengan guru atau teman, serta kerja kelompok, adalah cara belajar yang paling efektif. Anda menyerap energi dan pemahaman dari komunikasi dua arah.", profesi: "Psikolog/Konselor, Ahli Komunikasi/Humas, Diplomat, HRD (Personalia), Coach/Mentor, Manajer Komunitas." },
-                        In: { explanation: "Hasil tes Anda adalah **Insting (In)**.\n\n- **Insting (In)** adalah Mesin Kecerdasan (MK) Anda yang unik. Berada di otak tengah, Anda memiliki naluri yang tajam, kemampuan serba bisa, dan mudah beradaptasi di berbagai situasi. Anda adalah juru damai yang responsif, penyeimbang alami di antara tipe lainnya.", title: "Insting (In) - Sang Penyeimbang yang Serba Bisa", potensiDiri: "Anda adalah juru damai yang responsif dan pandai beradaptasi. Dengan naluri yang tajam, Anda seringkali tahu apa yang harus dilakukan tanpa perlu analisis panjang. Sebagai seorang generalis, Anda bisa diandalkan di banyak bidang dan sering menjadi penengah yang baik.", caraBelajar: "Anda belajar secara holistik. Pahami kesimpulan atau gambaran besarnya terlebih dahulu, baru kemudian masuk ke rincian (deduktif). Belajar paling baik dalam suasana tenang, damai, dan harmonis.", profesi: "Mediator, Jurnalis, Chef, Musisi, Aktivis Kemanusiaan/Agama, Pelayan Masyarakat, Terapis, dan sangat cocok sebagai 'tangan kanan' atau partner di berbagai posisi." }
-                    }
+                    questions: [ { question: "Saat belajar hal baru, Anda lebih suka:", options: [ { text: "Menghafal fakta dan detail penting.", type: "S" }, { text: "Memahami logika dan rumus di baliknya.", type: "T" }, { text: "Mencari konsep besar dan polanya.", type: "I" }, { text: "Mendiskusikannya dengan teman atau guru.", type: "F" }, { text: "Langsung mencoba dan praktik.", type: "In" } ] }, { question: "Film atau cerita seperti apa yang paling Anda nikmati?", options: [ { text: "Kisah nyata atau dokumenter yang faktual.", type: "S" }, { text: "Cerita detektif atau strategi yang penuh teka-teki.", type: "T" }, { text: "Fiksi ilmiah atau fantasi dengan dunia yang unik.", type: "I" }, { text: "Drama yang menyentuh perasaan dan hubungan antar tokoh.", type: "F" }, { text: "Petualangan seru dengan banyak aksi.", type: "In" } ] }, { question: "Jika Anda memiliki uang lebih, Anda akan menggunakannya untuk:", options: [ { text: "Menabung atau investasi yang aman dan jelas hasilnya.", type: "S" }, { text: "Membeli barang berkualitas tinggi yang tahan lama.", type: "T" }, { text: "Berinvestasi pada ide bisnis baru yang berisiko tapi potensial.", type: "I" }, { text: "Mentraktir teman dan keluarga atau berdonasi.", type: "F" }, { text: "Mencoba pengalaman baru seperti traveling atau kursus singkat.", type: "In" } ] }, { question: "Dalam kerja kelompok, peran Anda seringkali menjadi:", options: [ { text: "Pencatat detail dan memastikan semua sesuai data.", type: "S" }, { text: "Penentu strategi dan memastikan semuanya logis.", type: "T" }, { text: "Pemberi ide-ide kreatif dan out-of-the-box.", type: "I" }, { text: "Penjaga keharmonisan dan motivator tim.", type: "F" }, { text: "Penghubung dan penengah jika ada masalah.", type: "In" } ] }, { question: "Ketika dihadapkan pada masalah, apa yang pertama kali Anda lakukan?", options: [ { text: "Mencari data dan fakta konkret yang pernah terjadi.", type: "S" }, { text: "Menganalisis sebab-akibat dan mencari solusi paling logis.", type: "T" }, { text: "Membayangkan berbagai kemungkinan dan ide-ide baru.", type: "I" }, { text: "Memikirkan dampaknya pada orang lain dan mencari harmoni.", type: "F" }, { text: "Merespon secara spontan dan beradaptasi dengan keadaan.", type: "In" } ] }, { question: "Lingkungan kerja seperti apa yang paling Anda sukai?", options: [ { text: "Praktis, terstruktur, dan ada hasil nyata yang bisa dilihat.", type: "S" }, { text: "Efisien, berbasis aturan yang jelas, dan objektif.", type: "T" }, { text: "Inovatif, fleksibel, dan memberikan ruang untuk kreativitas.", type: "I" }, { text: "Kolaboratif, mendukung, dan penuh interaksi dengan rekan kerja.", type: "F" }, { text: "Dinamis, beragam, di mana saya bisa membantu di banyak bidang.", type: "In" } ] }, { question: "Bagaimana cara Anda mengambil keputusan penting?", options: [ { text: "Berdasarkan pengalaman masa lalu dan bukti yang ada.", type: "S" }, { text: "Dengan pertimbangan untung-rugi yang matang dan rasional.", type: "T" }, { text: "Mengikuti intuisi dan gambaran besar tentang masa depan.", type: "I" }, { text: "Mempertimbangkan nilai-nilai pribadi dan perasaan orang lain.", type: "F" }, { text: "Dengan cepat, sesuai dengan naluri saat itu juga.", type: "In" } ] }, { question: "Apa yang paling membuat Anda merasa puas dalam sebuah pencapaian?", options: [ { text: "Menyelesaikan tugas dengan tuntas dan hasilnya bisa diandalkan.", type: "S" }, { text: "Menciptakan sistem yang efisien atau memenangkan persaingan.", type: "T" }, { text: "Menghasilkan sebuah karya atau ide orisinal yang diakui.", type: "I" }, { text: "Membangun hubungan yang baik atau memimpin orang lain menuju sukses.", type: "F" }, { text: "Bisa berkontribusi dan membawa kedamaian bagi banyak orang.", type: "In" } ] }, { question: "Saat mendeskripsikan sesuatu, Anda cenderung:", options: [ { text: "Memberikan detail yang spesifik dan berurutan.", type: "S" }, { text: "Menjelaskan pro dan kontranya secara objektif.", type: "T" }, { text: "Menggunakan metafora atau perumpamaan.", type: "I" }, { text: "Menceritakan bagaimana hal itu membuat Anda merasa.", type: "F" }, { text: "Menunjukkan dengan contoh atau gerakan.", type: "In" } ] }, { question: "Hobi atau kegiatan waktu luang Anda biasanya melibatkan:", options: [ { text: "Olahraga, berkebun, atau kegiatan fisik lainnya.", type: "S" }, { text: "Bermain catur, sudoku, atau game strategi.", type: "T" }, { text: "Menulis, melukis, atau menciptakan sesuatu yang baru.", type: "I" }, { text: "Menjadi sukarelawan atau berkumpul dengan teman-teman.", type: "F" }, { text: "Menjelajahi tempat baru tanpa rencana yang pasti.", type: "In" } ] }, { question: "Mana yang lebih menggambarkan diri Anda?", isDriveQuestion: true, options: [ { text: "Energi dan ide saya lebih sering muncul dari dalam diri. Saya memikirkannya dulu baru beraksi.", type: "i" }, { text: "Saya mendapatkan energi dan ide dari interaksi dengan dunia luar. Saya lebih suka langsung mencoba.", type: "e" } ] } ],
+                    results: { Si: { explanation: "Hasil tes Anda adalah **Sensing introvert (Si)**.\n\n- **Sensing (S)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan kelima panca indera dan memproses informasi secara konkret. Anda adalah seorang yang praktis dan fokus pada fakta.\n- **introvert (i)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari dalam ke luar, membuat Anda cenderung berpikir dulu sebelum bertindak dan memiliki stamina serta daya ingat yang kuat.", title: "Sensing introvert (Si) - Sang Penyimpan yang Tekun", potensiDiri: "Anda adalah 'kamus berjalan' yang andal, dengan daya ingat kuat untuk fakta dan detail. Sebagai pekerja keras yang ulet, disiplin, dan efisien, Anda hebat dalam mengeksekusi tugas. Anda percaya diri dan lebih suka menjadi pelaku langsung di lapangan daripada hanya merancang.", caraBelajar: "Paling efektif dengan pengulangan dan praktik. Merekam informasi melalui gerakan (misalnya menulis catatan) dan menggunakan alat peraga akan sangat membantu memperkuat ingatan otot dan visual Anda.", profesi: "Keuangan (Akuntan, Bankir), Sejarawan, Atlet, Tentara, Ahli Bahasa, Dokter, Pilot, Manajer Produksi, dan peran apa pun yang membutuhkan ketelitian dan daya tahan tinggi." }, Se: { explanation: "Hasil tes Anda adalah **Sensing extrovert (Se)**.\n\n- **Sensing (S)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan kelima panca indera dan memproses informasi secara konkret. Anda adalah seorang yang praktis dan fokus pada fakta.\n- **extrovert (e)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari luar ke dalam, membuat Anda terpicu oleh lingkungan dan pengalaman langsung.", title: "Sensing extrovert (Se) - Sang Peluang yang Gesit", potensiDiri: "Anda sangat pandai menangkap peluang yang ada di depan mata. Sebagai pembelajar yang cepat dari pengalaman ('learning by doing'), Anda berkembang dalam lingkungan yang dinamis. Anda cenderung menikmati hidup, dermawan, dan membutuhkan stimulus dari luar untuk bergerak.", caraBelajar: "Teori harus diikuti dengan praktik langsung. Anda belajar paling cepat dengan terjun langsung, mencoba, dan mengalami sendiri. Menandai bacaan dan menggunakan visual akan membantu Anda.", profesi: "Wirausaha (Pedagang), Sales & Marketing, Entertainer, Bisnis Perhotelan, Fotografer, Presenter, Event Organizer, dan semua profesi yang membutuhkan respons cepat terhadap peluang." }, Ti: { explanation: "Hasil tes Anda adalah **Thinking introvert (Ti)**.\n\n- **Thinking (T)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan logika dan penalaran objektif untuk membuat keputusan.\n- **introvert (i)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari dalam ke luar, membuat Anda menjadi pemikir yang mendalam, mandiri, dan fokus pada spesialisasi.", title: "Thinking introvert (Ti) - Sang Pakar yang Logis", potensiDiri: "Anda adalah seorang pakar atau spesialis sejati yang berpikir mendalam. Dengan 'tangan dingin', Anda mampu menyelesaikan masalah yang rumit secara sistematis. Anda sangat mandiri, teguh pada prinsip logika, dan kadang terlihat keras kepala karena keyakinan pada analisis Anda.", caraBelajar: "Fokus pada 'mengapa' di balik setiap informasi. Anda perlu menalar isi bacaan untuk menemukan logika dan intisarinya. Anda menyukai kerangka berpikir yang jelas dan efisien, serta mampu belajar mandiri dengan sangat baik.", profesi: "Ahli Riset & Teknologi, IT (Programmer, System Analyst), Insinyur, Ahli Strategi, Auditor, Konsultan Manajemen, Dokter Spesialis, Pembuat Kebijakan." }, Te: { explanation: "Hasil tes Anda adalah **Thinking extrovert (Te)**.\n\n- **Thinking (T)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan logika dan penalaran objektif untuk membuat keputusan.\n- **extrovert (e)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari luar ke dalam, membuat Anda terdorong untuk mengorganisir lingkungan dan sistem secara efektif untuk mencapai tujuan.", title: "Thinking extrovert (Te) - Sang Komandan yang Efektif", potensiDiri: "Anda adalah seorang komandan atau manajer yang hebat. Kekuatan Anda terletak pada kemampuan mengelola sistem, sumber daya, dan organisasi secara efektif untuk melipatgandakan hasil. Anda objektif, adil, tegas, dan suka mengendalikan proses agar berjalan sesuai rencana.", caraBelajar: "Membutuhkan tujuan yang jelas dan langkah-langkah yang logis. Anda belajar dengan membuat struktur dan skema dari materi. Anda lebih suka gambaran besar yang sistematis daripada detail yang terlalu dalam.", profesi: "Eksekutif/CEO, Manajer Proyek, Birokrat, Pembuat Kebijakan, Manufaktur, Bisnis Properti, Ahli Hukum, Pemimpin Militer." }, Ii: { explanation: "Hasil tes Anda adalah **Intuiting introvert (Ii)**.\n\n- **Intuiting (I)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan indra keenam (intuisi) dan imajinasi untuk melihat pola dan kemungkinan.\n- **introvert (i)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari dalam ke luar, menghasilkan ide-ide orisinal, murni, dan visioner dari dalam diri Anda.", title: "Intuiting introvert (Ii) - Sang Penggagas yang Visioner", potensiDiri: "Anda adalah penggagas sejati, pencipta ide-ide baru yang orisinal dan berkualitas tinggi. Sebagai seorang perfeksionis yang visioner, Anda mampu melihat jauh ke depan. Anda lebih nyaman bekerja di balik layar sebagai konseptor atau pencetus tren.", caraBelajar: "Belajar dengan memahami konsep besar di baliknya. Ilustrasi, grafis, film, dan cerita inspiratif akan memicu imajinasi Anda. Anda tidak terlalu suka menghafal, tetapi ingin tahu 'gambaran besarnya'.", profesi: "Peneliti Sains Murni, Penulis Sastra, Sutradara, Arsitek, Desainer, Investor, Pencipta Lagu, Entrepreneur di bidang inovasi, Filsuf." }, Ie: { explanation: "Hasil tes Anda adalah **Intuiting extrovert (Ie)**.\n\n- **Intuiting (I)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan indra keenam (intuisi) dan imajinasi untuk melihat pola dan kemungkinan.\n- **extrovert (e)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari luar ke dalam, membuat Anda pandai merakit dan membumikan ide-ide besar agar diterima pasar.", title: "Intuiting extrovert (Ie) - Sang Inovator yang Adaptif", potensiDiri: "Anda adalah seorang pembaharu yang pandai merakit berbagai ide menjadi sebuah inovasi yang relevan dengan pasar. Anda mampu memprediksi tren bisnis dan 'mendaratkan' ide-ide besar menjadi sesuatu yang konkret dan bisa dijual. Kreativitas Anda bersifat aplikatif.", caraBelajar: "Belajar dengan merumuskan tema dan menghubungkan berbagai ide. Menggunakan peraga bongkar-pasang atau mempelajari studi kasus akan sangat efektif. Anda suka mengeksplorasi banyak hal untuk dirakit menjadi sesuatu yang baru.", profesi: "Wirausaha/Investor, Marketing & Periklanan, Konsultan Bisnis, Cinematografer, Detektif, Bidang Lifestyle & Mode, Business Development." }, Fi: { explanation: "Hasil tes Anda adalah **Feeling introvert (Fi)**.\n\n- **Feeling (F)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan perasaan dan emosi untuk memahami orang dan membuat keputusan.\n- **introvert (i)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari dalam ke luar, memancarkan pengaruh dan kharisma kepemimpinan yang kuat dari dalam diri.", title: "Feeling introvert (Fi) - Sang Pemimpin yang Berkharisma", potensiDiri: "Anda adalah pemimpin alami yang kharismatik. Kekuatan Anda datang dari pengaruh kuat yang terpancar dari dalam. Anda mampu menyentuh emosi orang lain, memiliki visi yang jauh ke depan, populer, dan pandai meyakinkan orang untuk mengikuti ideologi Anda.", caraBelajar: "Anda adalah pendengar yang baik. Setelah mendengar, Anda perlu waktu untuk merefleksikan dan merasakan koneksinya. Anda akan sangat termotivasi jika materi relevan dengan nilai-nilai yang Anda yakini.", profesi: "Politisi, Negarawan, Pemimpin Organisasi/Yayasan, Psikolog, Motivator, Trainer/Public Speaker, Budayawan, Aktivis." }, Fe: { explanation: "Hasil tes Anda adalah **Feeling extrovert (Fe)**.\n\n- **Feeling (F)** adalah Mesin Kecerdasan (MK) Anda, yang berarti Anda mengandalkan perasaan dan emosi untuk memahami orang dan membuat keputusan.\n- **extrovert (e)** adalah Kemudi Kecerdasan Anda, artinya energi Anda bergerak dari luar ke dalam, membuat Anda terdorong untuk membangun hubungan, membina, dan mengayomi orang lain.", title: "Feeling extrovert (Fe) - Sang Pembina yang Peduli", potensiDiri: "Anda adalah seorang 'king-maker', mentor, atau pemilik yang hebat dalam membangun hubungan dan menggembleng orang lain menuju kesuksesan. Kemampuan sosial Anda luar biasa. Anda lebih suka bekerja di belakang layar, memastikan tim Anda solid dan berprestasi.", caraBelajar: "Melalui interaksi. Berdiskusi dengan guru atau teman, serta kerja kelompok, adalah cara belajar yang paling efektif. Anda menyerap energi dan pemahaman dari komunikasi dua arah.", profesi: "Psikolog/Konselor, Ahli Komunikasi/Humas, Diplomat, HRD (Personalia), Coach/Mentor, Manajer Komunitas." }, In: { explanation: "Hasil tes Anda adalah **Insting (In)**.\n\n- **Insting (In)** adalah Mesin Kecerdasan (MK) Anda yang unik. Berada di otak tengah, Anda memiliki naluri yang tajam, kemampuan serba bisa, dan mudah beradaptasi di berbagai situasi. Anda adalah juru damai yang responsif, penyeimbang alami di antara tipe lainnya.", title: "Insting (In) - Sang Penyeimbang yang Serba Bisa", potensiDiri: "Anda adalah juru damai yang responsif dan pandai beradaptasi. Dengan naluri yang tajam, Anda seringkali tahu apa yang harus dilakukan tanpa perlu analisis panjang. Sebagai seorang generalis, Anda bisa diandalkan di banyak bidang dan sering menjadi penengah yang baik.", caraBelajar: "Anda belajar secara holistik. Pahami kesimpulan atau gambaran besarnya terlebih dahulu, baru kemudian masuk ke rincian (deduktif). Belajar paling baik dalam suasana tenang, damai, dan harmonis.", profesi: "Mediator, Jurnalis, Chef, Musisi, Aktivis Kemanusiaan/Agama, Pelayan Masyarakat, Terapis, dan sangat cocok sebagai 'tangan kanan' atau partner di berbagai posisi." } }
                 },
                 mbti: {
-                    questions: [
-                        { q: "Setelah seharian beraktivitas, bagaimana caramu mengisi ulang energi?", o: [{ t: "Dengan berinteraksi bersama banyak teman", v: "E" }, { t: "Dengan menyendiri dan menikmati waktu tenang", v: "I" }] },
-                        { q: "Saat menerima informasi, kamu lebih percaya pada?", o: [{ t: "Fakta konkret dan apa yang bisa kamu lihat/sentuh", v: "S" }, { t: "Pola, firasat, dan makna yang tersirat", v: "N" }] },
-                        { q: "Dalam mengambil keputusan, mana yang lebih kamu prioritaskan?", o: [{ t: "Keadilan, logika, dan konsistensi", v: "T" }, { t: "Keharmonisan, empati, dan perasaan orang lain", v: "F" }] },
-                        { q: "Kamu lebih suka hidup yang...", o: [{ t: "Terstruktur, terencana, dan terjadwal", v: "J" }, { t: "Fleksibel, spontan, dan terbuka pada pilihan", v: "P" }] },
-                        { q: "Di sebuah pesta, kamu cenderung?", o: [{ t: "Menjadi pusat perhatian dan mudah bergaul", v: "E" }, { t: "Mengobrol mendalam dengan beberapa orang yang dikenal", v: "I" }] },
-                        { q: "Kamu lebih tertarik pada?", o: [{ t: "Pengalaman nyata dan hal-hal praktis", v: "S" }, { t: "Ide-ide abstrak dan kemungkinan di masa depan", v: "N" }] },
-                        { q: "Saat memberikan kritik, kamu cenderung?", o: [{ t: "Langsung pada intinya dan jujur", v: "T" }, { t: "Menyampaikannya dengan hati-hati agar tidak menyakiti", v: "F" }] },
-                        { q: "Kamu merasa lebih nyaman saat?", o: [{ t: "Sebuah keputusan sudah dibuat dan ditetapkan", v: "J" }, { t: "Membiarkan pilihan tetap terbuka selama mungkin", v: "P" }] }
-                    ],
-                    results: {
-                        ISTJ: { explanation: "Hasil tes Anda adalah **ISTJ**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal (pikiran dan ide).\n- **S (Sensing):** Anda memproses informasi melalui fakta dan detail konkret.\n- **T (Thinking):** Anda mengambil keputusan berdasarkan logika dan objektivitas.\n- **J (Judging):** Anda menyukai kehidupan yang terencana dan terstruktur.", title: "ISTJ - Sang Pengawas", potensiDiri: "Sangat dapat diandalkan, praktis, dan logis. Anda adalah individu yang menghargai tradisi dan keteraturan. Anda teliti, bertanggung jawab, dan memastikan semua berjalan sesuai rencana.", caraBelajar: "Menyukai metode belajar terstruktur, langkah demi langkah, dan berbasis fakta. Belajar paling baik dengan aplikasi praktis dan contoh nyata.", profesi: "Akuntan, Manajer Logistik, Administrator, Teknisi, Insinyur, Ahli Hukum." },
-                        ISFJ: { explanation: "Hasil tes Anda adalah **ISFJ**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **S (Sensing):** Anda fokus pada fakta dan detail.\n- **F (Feeling):** Anda membuat keputusan berdasarkan nilai dan perasaan.\n- **J (Judging):** Anda menyukai keteraturan dan perencanaan.", title: "ISFJ - Sang Pelindung", potensiDiri: "Hangat, setia, dan sangat peduli pada orang lain. Anda memiliki ingatan yang kuat terhadap detail tentang orang-orang penting bagi Anda. Anda pekerja keras dan berdedikasi.", caraBelajar: "Membutuhkan lingkungan belajar yang mendukung dan guru yang sabar. Mengingat fakta dengan baik, terutama jika terkait dengan orang atau pengalaman.", profesi: "Perawat, Guru, Pekerja Sosial, Desainer Interior, Konselor, Staf HRD." },
-                        INFJ: { explanation: "Hasil tes Anda adalah **INFJ**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **N (Intuition):** Anda fokus pada ide dan konsep besar.\n- **F (Feeling):** Anda membuat keputusan berdasarkan nilai dan empati.\n- **J (Judging):** Anda menyukai kehidupan yang terencana.", title: "INFJ - Sang Penasihat", potensiDiri: "Visioner, idealis, dan memiliki pemahaman mendalam tentang manusia. Anda terdorong untuk membantu orang lain mencapai potensi mereka. Kreatif dan berprinsip.", caraBelajar: "Tertarik pada konsep dan ide besar di balik fakta. Belajar terbaik saat materi memiliki makna dan tujuan yang lebih tinggi.", profesi: "Psikolog, Penulis, Konselor, Seniman, Pemimpin Spiritual, Aktivis Sosial." },
-                        INTJ: { explanation: "Hasil tes Anda adalah **INTJ**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **N (Intuition):** Anda fokus pada pola dan kemungkinan.\n- **T (Thinking):** Anda membuat keputusan berdasarkan logika.\n- **J (Judging):** Anda menyukai perencanaan dan struktur.", title: "INTJ - Sang Arsitek", potensiDiri: "Pemikir strategis dengan rencana untuk segala hal. Anda mandiri, analitis, dan memiliki standar yang sangat tinggi. Anda melihat gambaran besar dan mampu mengubah teori menjadi kenyataan.", caraBelajar: "Menyukai tantangan intelektual dan sistem yang kompleks. Belajar secara mandiri dan konseptual. Tidak suka pengulangan yang tidak perlu.", profesi: "Ilmuwan, Ahli Strategi, Insinyur, Programmer, Pemimpin Organisasi, Pengacara." },
-                        ISTP: { explanation: "Hasil tes Anda adalah **ISTP**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **S (Sensing):** Anda fokus pada fakta dan pengalaman saat ini.\n- **T (Thinking):** Anda membuat keputusan secara logis.\n- **P (Perceiving):** Anda menyukai fleksibilitas dan spontanitas.", title: "ISTP - Sang Pengrajin", potensiDiri: "Toleran dan fleksibel, seorang pemecah masalah yang handal. Anda fokus pada saat ini dan cepat menemukan solusi praktis. Anda suka memahami cara kerja sesuatu.", caraBelajar: "Belajar dengan cara 'learning by doing'. Teori harus bisa dipraktikkan. Menyukai pemecahan masalah secara langsung.", profesi: "Mekanik, Pilot, Atlet, Teknisi Gawat Darurat, Wirausahawan, Ahli Forensik." },
-                        ISFP: { explanation: "Hasil tes Anda adalah **ISFP**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **S (Sensing):** Anda fokus pada pengalaman sensorik saat ini.\n- **F (Feeling):** Anda membuat keputusan berdasarkan nilai dan perasaan.\n- **P (Perceiving):** Anda menyukai fleksibilitas dan pilihan terbuka.", title: "ISFP - Sang Seniman", potensiDiri: "Ramah, sensitif, dan memiliki kesadaran estetika yang kuat. Anda menikmati momen saat ini dan menciptakan lingkungan yang indah. Setia pada nilai-nilai Anda.", caraBelajar: "Menyukai lingkungan belajar yang fleksibel dan mendukung. Belajar terbaik dengan pendekatan langsung dan pengalaman sensorik (visual, sentuhan).", profesi: "Seniman, Musisi, Desainer, Dokter Hewan, Guru Anak-anak, Chef." },
-                        INFP: { explanation: "Hasil tes Anda adalah **INFP**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **N (Intuition):** Anda fokus pada ide dan makna.\n- **F (Feeling):** Anda membuat keputusan berdasarkan nilai dan idealisme.\n- **P (Perceiving):** Anda menyukai kehidupan yang fleksibel dan penuh kemungkinan.", title: "INFP - Sang Mediator", potensiDiri: "Idealis, setia pada nilai-nilai Anda, dan ingin membuat dunia menjadi tempat yang lebih baik. Anda penasaran dan terbuka, serta pandai melihat kebaikan pada orang lain.", caraBelajar: "Termotivasi oleh materi yang sesuai dengan nilai-nilai mereka. Suka mengeksplorasi ide dan bekerja secara mandiri dengan bimbingan yang positif.", profesi: "Penulis, Aktivis, Konselor, Psikolog, Aktor, Editor, Pustakawan." },
-                        INTP: { explanation: "Hasil tes Anda adalah **INTP**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **N (Intuition):** Anda fokus pada konsep dan teori.\n- **T (Thinking):** Anda membuat keputusan berdasarkan logika yang presisi.\n- **P (Perceiving):** Anda menyukai fleksibilitas dan ide-ide baru.", title: "INTP - Sang Pemikir", potensiDiri: "Sangat haus akan pengetahuan. Anda adalah pemikir abstrak yang logis, analitis, dan memiliki kemampuan unik untuk fokus dalam memecahkan masalah.", caraBelajar: "Skeptis dan kritis, membutuhkan pemahaman logis atas setiap konsep. Belajar terbaik secara mandiri dengan mendalami teori.", profesi: "Fisikawan, Filsuf, Programmer, Analis Keuangan, Profesor, Ahli Matematika." },
-                        ESTP: { explanation: "Hasil tes Anda adalah **ESTP**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **S (Sensing):** Anda fokus pada fakta dan momen saat ini.\n- **T (Thinking):** Anda membuat keputusan berdasarkan logika praktis.\n- **P (Perceiving):** Anda menyukai kehidupan yang spontan dan penuh aksi.", title: "ESTP - Sang Wirausahawan", potensiDiri: "Cerdas, energik, dan sangat perseptif. Anda menikmati hidup di ujung tanduk dan berani mengambil risiko. Pandai beradaptasi dan hebat dalam situasi krisis.", caraBelajar: "Tidak suka teori yang panjang. Belajar harus aktif, menyenangkan, dan kompetitif. Cepat memahami saat terjun langsung ke lapangan.", profesi: "Pengusaha, Paramedis, Sales, Detektif, Atlet Profesional, Marketer." },
-                        ESFP: { explanation: "Hasil tes Anda adalah **ESFP**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **S (Sensing):** Anda fokus pada pengalaman sensorik saat ini.\n- **F (Feeling):** Anda membuat keputusan berdasarkan perasaan.\n- **P (Perceiving):** Anda menyukai spontanitas dan menikmati hidup.", title: "ESFP - Sang Penghibur", potensiDiri: "Spontan, energik, dan sangat antusias. Anda menikmati hal-hal sederhana dan suka menjadi pusat perhatian. Anda ramah dan pandai membuat orang lain senang.", caraBelajar: "Belajar dalam kelompok dan melalui aktivitas interaktif. Tidak suka rutinitas dan membutuhkan variasi agar tetap termotivasi.", profesi: "Aktor, Presenter, Event Organizer, Pemandu Wisata, Konsultan Fashion." },
-                        ENFP: { explanation: "Hasil tes Anda adalah **ENFP**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **N (Intuition):** Anda fokus pada kemungkinan dan ide.\n- **F (Feeling):** Anda membuat keputusan berdasarkan nilai dan perasaan.\n- **P (Perceiving):** Anda menyukai kehidupan yang fleksibel dan penuh inspirasi.", title: "ENFP - Sang Juru Kampanye", potensiDiri: "Antusias, kreatif, dan sangat mudah bergaul. Anda mampu melihat kehidupan sebagai rangkaian kemungkinan yang tak terbatas. Pandai berkomunikasi dan memotivasi orang lain.", caraBelajar: "Membutuhkan lingkungan yang kolaboratif dan inspiratif. Belajar terbaik saat mereka bisa menghubungkan ide dengan pengalaman manusia.", profesi: "Jurnalis, Politisi, Konsultan, Wirausahawan Sosial, Aktor, Perencana Acara." },
-                        ENTP: { explanation: "Hasil tes Anda adalah **ENTP**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **N (Intuition):** Anda fokus pada konsep dan kemungkinan.\n- **T (Thinking):** Anda membuat keputusan berdasarkan logika objektif.\n- **P (Perceiving):** Anda menyukai perdebatan ide dan fleksibilitas.", title: "ENTP - Sang Pendebat", potensiDiri: "Cerdas, blak-blakan, dan tidak takut menentang status quo. Anda menikmati adu argumen dan ide. Cepat memahami konsep yang kompleks dan berpikir out-of-the-box.", caraBelajar: "Suka berdebat dan mengeksplorasi ide dari berbagai sudut pandang. Belajar terbaik dengan tantangan intelektual dan kebebasan untuk bereksperimen.", profesi: "Pengacara, Insinyur, Ilmuwan, Aktor, Perencana Strategis, Konsultan." },
-                        ESTJ: { explanation: "Hasil tes Anda adalah **ESTJ**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **S (Sensing):** Anda fokus pada fakta dan logika praktis.\n- **T (Thinking):** Anda membuat keputusan secara objektif.\n- **J (Judging):** Anda menyukai organisasi dan efisiensi.", title: "ESTJ - Sang Eksekutif", potensiDiri: "Administrator yang luar biasa, tak tertandingi dalam mengelola sesuatu atau orang. Anda praktis, realistis, dan berpegang pada fakta. Suka mengambil alih kepemimpinan.", caraBelajar: "Menyukai tujuan yang jelas, materi yang terorganisir, dan hasil yang terukur. Belajar paling efisien dari instruktur yang kompeten dan berpengalaman.", profesi: "CEO, Manajer Proyek, Hakim, Pejabat Militer, Analis Bisnis, Administrator Sekolah." },
-                        ESFJ: { explanation: "Hasil tes Anda adalah **ESFJ**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **S (Sensing):** Anda fokus pada fakta dan kebutuhan orang lain.\n- **F (Feeling):** Anda membuat keputusan berdasarkan nilai dan keharmonisan.\n- **J (Judging):** Anda menyukai kehidupan yang teratur dan membantu sesama.", title: "ESFJ - Sang Konsul", potensiDiri: "Sangat peduli, sosial, dan populer. Anda selalu bersemangat untuk membantu orang lain. Anda menghargai keharmonisan dan sangat peka terhadap kebutuhan orang lain.", caraBelajar: "Belajar terbaik dalam lingkungan yang harmonis dan terstruktur. Membutuhkan umpan balik positif dan dorongan dari pengajar.", profesi: "Sales, Perawat, Guru, Administrator, Event Coordinator, Konselor." },
-                        ENFJ: { explanation: "Hasil tes Anda adalah **ENFJ**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **N (Intuition):** Anda fokus pada potensi dan mimpi orang lain.\n- **F (Feeling):** Anda membuat keputusan berdasarkan empati.\n- **J (Judging):** Anda menyukai perencanaan untuk mencapai visi bersama.", title: "ENFJ - Sang Protagonis", potensiDiri: "Pemimpin yang karismatik dan inspirasional. Anda mampu menyerap emosi, kebutuhan, dan motivasi orang lain. Anda melihat potensi dalam diri setiap orang.", caraBelajar: "Menyukai aktivitas kelompok yang kooperatif. Termotivasi ketika materi pelajaran dapat diterapkan untuk membantu orang lain.", profesi: "Guru, Diplomat, Manajer HR, Politisi, Motivator, Sutradara." },
-                        ENTJ: { explanation: "Hasil tes Anda adalah **ENTJ**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **N (Intuition):** Anda fokus pada strategi jangka panjang.\n- **T (Thinking):** Anda membuat keputusan berdasarkan logika dan efisiensi.\n- **J (Judging):** Anda menyukai perencanaan dan pencapaian tujuan.", title: "ENTJ - Sang Komandan", potensiDiri: "Pemimpin yang berani, imajinatif, dan berkemauan kuat. Anda selalu menemukan atau menciptakan cara untuk mencapai tujuan. Tegas dan tidak suka inefisiensi.", caraBelajar: "Menyukai lingkungan belajar yang menantang dan kompetitif. Ingin tahu strategi dan konsep di balik setiap materi.", profesi: "CEO, Pemimpin Militer, Pengacara, Konsultan, Wirausahawan, Direktur." }
-                    }
+                    questions: [ { q: "Setelah seharian beraktivitas, bagaimana caramu mengisi ulang energi?", o: [{ t: "Dengan berinteraksi bersama banyak teman", v: "E" }, { t: "Dengan menyendiri dan menikmati waktu tenang", v: "I" }] }, { q: "Saat menerima informasi, kamu lebih percaya pada?", o: [{ t: "Fakta konkret dan apa yang bisa kamu lihat/sentuh", v: "S" }, { t: "Pola, firasat, dan makna yang tersirat", v: "N" }] }, { q: "Dalam mengambil keputusan, mana yang lebih kamu prioritaskan?", o: [{ t: "Keadilan, logika, dan konsistensi", v: "T" }, { t: "Keharmonisan, empati, dan perasaan orang lain", v: "F" }] }, { q: "Kamu lebih suka hidup yang...", o: [{ t: "Terstruktur, terencana, dan terjadwal", v: "J" }, { t: "Fleksibel, spontan, dan terbuka pada pilihan", v: "P" }] }, { q: "Di sebuah pesta, kamu cenderung?", o: [{ t: "Menjadi pusat perhatian dan mudah bergaul", v: "E" }, { t: "Mengobrol mendalam dengan beberapa orang yang dikenal", v: "I" }] }, { q: "Kamu lebih tertarik pada?", o: [{ t: "Pengalaman nyata dan hal-hal praktis", v: "S" }, { t: "Ide-ide abstrak dan kemungkinan di masa depan", v: "N" }] }, { q: "Saat memberikan kritik, kamu cenderung?", o: [{ t: "Langsung pada intinya dan jujur", v: "T" }, { t: "Menyampaikannya dengan hati-hati agar tidak menyakiti", v: "F" }] }, { q: "Kamu merasa lebih nyaman saat?", o: [{ t: "Sebuah keputusan sudah dibuat dan ditetapkan", v: "J" }, { t: "Membiarkan pilihan tetap terbuka selama mungkin", v: "P" }] } ],
+                    results: { ISTJ: { explanation: "Hasil tes Anda adalah **ISTJ**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal (pikiran dan ide).\n- **S (Sensing):** Anda memproses informasi melalui fakta dan detail konkret.\n- **T (Thinking):** Anda mengambil keputusan berdasarkan logika dan objektivitas.\n- **J (Judging):** Anda menyukai kehidupan yang terencana dan terstruktur.", title: "ISTJ - Sang Pengawas", potensiDiri: "Sangat dapat diandalkan, praktis, dan logis. Anda adalah individu yang menghargai tradisi dan keteraturan. Anda teliti, bertanggung jawab, dan memastikan semua berjalan sesuai rencana.", caraBelajar: "Menyukai metode belajar terstruktur, langkah demi langkah, dan berbasis fakta. Belajar paling baik dengan aplikasi praktis dan contoh nyata.", profesi: "Akuntan, Manajer Logistik, Administrator, Teknisi, Insinyur, Ahli Hukum." }, ISFJ: { explanation: "Hasil tes Anda adalah **ISFJ**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **S (Sensing):** Anda fokus pada fakta dan detail.\n- **F (Feeling):** Anda membuat keputusan berdasarkan nilai dan perasaan.\n- **J (Judging):** Anda menyukai keteraturan dan perencanaan.", title: "ISFJ - Sang Pelindung", potensiDiri: "Hangat, setia, dan sangat peduli pada orang lain. Anda memiliki ingatan yang kuat terhadap detail tentang orang-orang penting bagi Anda. Anda pekerja keras dan berdedikasi.", caraBelajar: "Membutuhkan lingkungan belajar yang mendukung dan guru yang sabar. Mengingat fakta dengan baik, terutama jika terkait dengan orang atau pengalaman.", profesi: "Perawat, Guru, Pekerja Sosial, Desainer Interior, Konselor, Staf HRD." }, INFJ: { explanation: "Hasil tes Anda adalah **INFJ**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **N (Intuition):** Anda fokus pada ide dan konsep besar.\n- **F (Feeling):** Anda membuat keputusan berdasarkan nilai dan empati.\n- **J (Judging):** Anda menyukai kehidupan yang terencana.", title: "INFJ - Sang Penasihat", potensiDiri: "Visioner, idealis, dan memiliki pemahaman mendalam tentang manusia. Anda terdorong untuk membantu orang lain mencapai potensi mereka. Kreatif dan berprinsip.", caraBelajar: "Tertarik pada konsep dan ide besar di balik fakta. Belajar terbaik saat materi memiliki makna dan tujuan yang lebih tinggi.", profesi: "Psikolog, Penulis, Konselor, Seniman, Pemimpin Spiritual, Aktivis Sosial." }, INTJ: { explanation: "Hasil tes Anda adalah **INTJ**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **N (Intuition):** Anda fokus pada pola dan kemungkinan.\n- **T (Thinking):** Anda membuat keputusan berdasarkan logika.\n- **J (Judging):** Anda menyukai perencanaan dan struktur.", title: "INTJ - Sang Arsitek", potensiDiri: "Pemikir strategis dengan rencana untuk segala hal. Anda mandiri, analitis, dan memiliki standar yang sangat tinggi. Anda melihat gambaran besar dan mampu mengubah teori menjadi kenyataan.", caraBelajar: "Menyukai tantangan intelektual dan sistem yang kompleks. Belajar secara mandiri dan konseptual. Tidak suka pengulangan yang tidak perlu.", profesi: "Ilmuwan, Ahli Strategi, Insinyur, Programmer, Pemimpin Organisasi, Pengacara." }, ISTP: { explanation: "Hasil tes Anda adalah **ISTP**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **S (Sensing):** Anda fokus pada fakta dan pengalaman saat ini.\n- **T (Thinking):** Anda membuat keputusan secara logis.\n- **P (Perceiving):** Anda menyukai fleksibilitas dan spontanitas.", title: "ISTP - Sang Pengrajin", potensiDiri: "Toleran dan fleksibel, seorang pemecah masalah yang handal. Anda fokus pada saat ini dan cepat menemukan solusi praktis. Anda suka memahami cara kerja sesuatu.", caraBelajar: "Belajar dengan cara 'learning by doing'. Teori harus bisa dipraktikkan. Menyukai pemecahan masalah secara langsung.", profesi: "Mekanik, Pilot, Atlet, Teknisi Gawat Darurat, Wirausahawan, Ahli Forensik." }, ISFP: { explanation: "Hasil tes Anda adalah **ISFP**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **S (Sensing):** Anda fokus pada pengalaman sensorik saat ini.\n- **F (Feeling):** Anda membuat keputusan berdasarkan nilai dan perasaan.\n- **P (Perceiving):** Anda menyukai fleksibilitas dan pilihan terbuka.", title: "ISFP - Sang Seniman", potensiDiri: "Ramah, sensitif, dan memiliki kesadaran estetika yang kuat. Anda menikmati momen saat ini dan menciptakan lingkungan yang indah. Setia pada nilai-nilai Anda.", caraBelajar: "Menyukai lingkungan belajar yang fleksibel dan mendukung. Belajar terbaik dengan pendekatan langsung dan pengalaman sensorik (visual, sentuhan).", profesi: "Seniman, Musisi, Desainer, Dokter Hewan, Guru Anak-anak, Chef." }, INFP: { explanation: "Hasil tes Anda adalah **INFP**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **N (Intuition):** Anda fokus pada ide dan makna.\n- **F (Feeling):** Anda membuat keputusan berdasarkan nilai dan idealisme.\n- **P (Perceiving):** Anda menyukai kehidupan yang fleksibel dan penuh kemungkinan.", title: "INFP - Sang Mediator", potensiDiri: "Idealis, setia pada nilai-nilai Anda, dan ingin membuat dunia menjadi tempat yang lebih baik. Anda penasaran dan terbuka, serta pandai melihat kebaikan pada orang lain.", caraBelajar: "Termotivasi oleh materi yang sesuai dengan nilai-nilai mereka. Suka mengeksplorasi ide dan bekerja secara mandiri dengan bimbingan yang positif.", profesi: "Penulis, Aktivis, Konselor, Psikolog, Aktor, Editor, Pustakawan." }, INTP: { explanation: "Hasil tes Anda adalah **INTP**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal.\n- **N (Intuition):** Anda fokus pada konsep dan teori.\n- **T (Thinking):** Anda membuat keputusan berdasarkan logika yang presisi.\n- **P (Perceiving):** Anda menyukai fleksibilitas dan ide-ide baru.", title: "INTP - Sang Pemikir", potensiDiri: "Sangat haus akan pengetahuan. Anda adalah pemikir abstrak yang logis, analitis, dan memiliki kemampuan unik untuk fokus dalam memecahkan masalah.", caraBelajar: "Skeptis dan kritis, membutuhkan pemahaman logis atas setiap konsep. Belajar terbaik secara mandiri dengan mendalami teori.", profesi: "Fisikawan, Filsuf, Programmer, Analis Keuangan, Profesor, Ahli Matematika." }, ESTP: { explanation: "Hasil tes Anda adalah **ESTP**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **S (Sensing):** Anda fokus pada fakta dan momen saat ini.\n- **T (Thinking):** Anda membuat keputusan berdasarkan logika praktis.\n- **P (Perceiving):** Anda menyukai kehidupan yang spontan dan penuh aksi.", title: "ESTP - Sang Wirausahawan", potensiDiri: "Cerdas, energik, dan sangat perseptif. Anda menikmati hidup di ujung tanduk dan berani mengambil risiko. Pandai beradaptasi dan hebat dalam situasi krisis.", caraBelajar: "Tidak suka teori yang panjang. Belajar harus aktif, menyenangkan, dan kompetitif. Cepat memahami saat terjun langsung ke lapangan.", profesi: "Pengusaha, Paramedis, Sales, Detektif, Atlet Profesional, Marketer." }, ESFP: { explanation: "Hasil tes Anda adalah **ESFP**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **S (Sensing):** Anda fokus pada pengalaman sensorik saat ini.\n- **F (Feeling):** Anda membuat keputusan berdasarkan perasaan.\n- **P (Perceiving):** Anda menyukai spontanitas dan menikmati hidup.", title: "ESFP - Sang Penghibur", potensiDiri: "Spontan, energik, dan sangat antusias. Anda menikmati hal-hal sederhana dan suka menjadi pusat perhatian. Anda ramah dan pandai membuat orang lain senang.", caraBelajar: "Belajar dalam kelompok dan melalui aktivitas interaktif. Tidak suka rutinitas dan membutuhkan variasi agar tetap termotivasi.", profesi: "Aktor, Presenter, Event Organizer, Pemandu Wisata, Konsultan Fashion." }, ENFP: { explanation: "Hasil tes Anda adalah **ENFP**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **N (Intuition):** Anda fokus pada kemungkinan dan ide.\n- **F (Feeling):** Anda membuat keputusan berdasarkan nilai dan perasaan.\n- **P (Perceiving):** Anda menyukai kehidupan yang fleksibel dan penuh inspirasi.", title: "ENFP - Sang Juru Kampanye", potensiDiri: "Antusias, kreatif, dan sangat mudah bergaul. Anda mampu melihat kehidupan sebagai rangkaian kemungkinan yang tak terbatas. Pandai berkomunikasi dan memotivasi orang lain.", caraBelajar: "Membutuhkan lingkungan yang kolaboratif dan inspiratif. Belajar terbaik saat mereka bisa menghubungkan ide dengan pengalaman manusia.", profesi: "Jurnalis, Politisi, Konsultan, Wirausahawan Sosial, Aktor, Perencana Acara." }, ENTP: { explanation: "Hasil tes Anda adalah **ENTP**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **N (Intuition):** Anda fokus pada konsep dan kemungkinan.\n- **T (Thinking):** Anda membuat keputusan berdasarkan logika objektif.\n- **P (Perceiving):** Anda menyukai perdebatan ide dan fleksibilitas.", title: "ENTP - Sang Pendebat", potensiDiri: "Cerdas, blak-blakan, dan tidak takut menentang status quo. Anda menikmati adu argumen dan ide. Cepat memahami konsep yang kompleks dan berpikir out-of-the-box.", caraBelajar: "Suka berdebat dan mengeksplorasi ide dari berbagai sudut pandang. Belajar terbaik dengan tantangan intelektual dan kebebasan untuk bereksperimen.", profesi: "Pengacara, Insinyur, Ilmuwan, Aktor, Perencana Strategis, Konsultan." }, ESTJ: { explanation: "Hasil tes Anda adalah **ESTJ**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **S (Sensing):** Anda fokus pada fakta dan logika praktis.\n- **T (Thinking):** Anda membuat keputusan secara objektif.\n- **J (Judging):** Anda menyukai organisasi dan efisiensi.", title: "ESTJ - Sang Eksekutif", potensiDiri: "Administrator yang luar biasa, tak tertandingi dalam mengelola sesuatu atau orang. Anda praktis, realistis, dan berpegang pada fakta. Suka mengambil alih kepemimpinan.", caraBelajar: "Menyukai tujuan yang jelas, materi yang terorganisir, dan hasil yang terukur. Belajar paling efisien dari instruktur yang kompeten dan berpengalaman.", profesi: "CEO, Manajer Proyek, Hakim, Pejabat Militer, Analis Bisnis, Administrator Sekolah." }, ESFJ: { explanation: "Hasil tes Anda adalah **ESFJ**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **S (Sensing):** Anda fokus pada fakta dan kebutuhan orang lain.\n- **F (Feeling):** Anda membuat keputusan berdasarkan nilai dan keharmonisan.\n- **J (Judging):** Anda menyukai kehidupan yang teratur dan membantu sesama.", title: "ESFJ - Sang Konsul", potensiDiri: "Sangat peduli, sosial, dan populer. Anda selalu bersemangat untuk membantu orang lain. Anda menghargai keharmonisan dan sangat peka terhadap kebutuhan orang lain.", caraBelajar: "Belajar terbaik dalam lingkungan yang harmonis dan terstruktur. Membutuhkan umpan balik positif dan dorongan dari pengajar.", profesi: "Sales, Perawat, Guru, Administrator, Event Coordinator, Konselor." }, ENFJ: { explanation: "Hasil tes Anda adalah **ENFJ**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **N (Intuition):** Anda fokus pada potensi dan mimpi orang lain.\n- **F (Feeling):** Anda membuat keputusan berdasarkan empati.\n- **J (Judging):** Anda menyukai perencanaan untuk mencapai visi bersama.", title: "ENFJ - Sang Protagonis", potensiDiri: "Pemimpin yang karismatik dan inspirasional. Anda mampu menyerap emosi, kebutuhan, dan motivasi orang lain. Anda melihat potensi dalam diri setiap orang.", caraBelajar: "Menyukai aktivitas kelompok yang kooperatif. Termotivasi ketika materi pelajaran dapat diterapkan untuk membantu orang lain.", profesi: "Guru, Diplomat, Manajer HR, Politisi, Motivator, Sutradara." }, ENTJ: { explanation: "Hasil tes Anda adalah **ENTJ**.\nIni adalah peta preferensi Anda:\n- **E (Extravert):** Anda mendapatkan energi dari interaksi sosial.\n- **N (Intuition):** Anda fokus pada strategi jangka panjang.\n- **T (Thinking):** Anda membuat keputusan berdasarkan logika dan efisiensi.\n- **J (Judging):** Anda menyukai perencanaan dan pencapaian tujuan.", title: "ENTJ - Sang Komandan", potensiDiri: "Pemimpin yang berani, imajinatif, dan berkemauan kuat. Anda selalu menemukan atau menciptakan cara untuk mencapai tujuan. Tegas dan tidak suka inefisiensi.", caraBelajar: "Menyukai lingkungan belajar yang menantang dan kompetitif. Ingin tahu strategi dan konsep di balik setiap materi.", profesi: "CEO, Pemimpin Militer, Pengacara, Konsultan, Wirausahawan, Direktur." } }
                 }
             };
             
@@ -490,15 +510,19 @@
                 displayInitialMessage();
                 updateButtonVisibility();
 
-                // Event listeners remain the same
                 startCurhatBtn.addEventListener('click', () => initializeApp({ isCurhat: true }));
+                startSpiritualBtn.addEventListener('click', () => initializeApp({ isSpiritual: true }));
                 startTestBtn.addEventListener('click', () => initializeApp({ isTest: true }));
                 startDoctorBtn.addEventListener('click', () => initializeApp({ isDoctor: true }));
+                
                 doctorInfoClose.addEventListener('click', () => { doctorInfoBox.style.display = 'none'; });
+                spiritualInfoClose.addEventListener('click', () => { spiritualInfoBox.style.display = 'none'; });
+
                 header.addEventListener('click', () => window.location.reload());
                 sendBtn.addEventListener('click', handleSendMessage);
                 voiceBtn.addEventListener('click', toggleMainRecording);
                 endChatBtn.addEventListener('click', handleCancelResponse);
+
                 userInput.addEventListener('input', () => {
                     userInput.style.height = 'auto';
                     userInput.style.height = (userInput.scrollHeight) + 'px';
@@ -511,8 +535,6 @@
                     }
                 });
             }
-
-            // Other functions like initializeApp, startOnboardingIfNeeded, etc. remain the same up to getAIResponse
             
             function initializeApp(mode = {}) {
                 if (!audioContext) {
@@ -525,7 +547,9 @@
                 }
                 startOverlay.classList.add('hidden');
                 chatContainer.innerHTML = '';
+                
                 doctorInfoBox.style.display = 'none';
+                spiritualInfoBox.style.display = 'none';
                 
                 if (mode.isTest) {
                     currentMode = 'psychologist';
@@ -535,8 +559,7 @@
                     currentTestType = 'selection';
                     const introMessage = `Selamat datang di Tes Kepribadian dan Potensi Diri.\n\nTes ini menawarkan dua pendekatan untuk membantu Anda lebih mengenal diri:\n- **Pendekatan STIFIn:** Berbasis 5 Mesin Kecerdasan genetik.\n- **Pendekatan MBTI:** Mengidentifikasi 4 dimensi preferensi Anda.\n\n---\n\n***Disclaimer:*** *Tes ini adalah pengantar. Untuk hasil yang komprehensif, disarankan untuk mengikuti tes di Layanan Psikologi Profesional.*\n\nSilakan pilih pendekatan yang ingin Anda gunakan:\n[PILIHAN:Tes STIFIn|Tes MBTI]`;
                     displayMessage(introMessage, 'ai');
-                    speakAsync(introMessage, true);
-
+                    speakAsync(introMessage);
                 } else if (mode.isDoctor) {
                     currentMode = 'doctor';
                     headerTitle.textContent = "Tanya ke Dokter AI";
@@ -546,8 +569,17 @@
                     isOnboarding = false;
                     const welcomeMessage = "Halo, saya Dokter AI RASA. Ada keluhan medis yang bisa saya bantu?";
                     displayMessage(welcomeMessage, 'ai');
-                    speakAsync(welcomeMessage, true);
-
+                    speakAsync(welcomeMessage);
+                } else if (mode.isSpiritual) {
+                    currentMode = 'spiritual';
+                    headerTitle.textContent = "Tanya ke Spiritual AI";
+                    headerSubtitle.textContent = "Namaku RASA, bersamamu sebagai Konselor Spiritual";
+                    spiritualInfoBox.style.display = 'block'; 
+                    isTesting = false; 
+                    isOnboarding = false; 
+                    const welcomeMessage = "Assalamualaikum, saya siap membantu Anda menemukan rujukan islami atau literasi jawaban permasalahan seputar islam?";
+                    displayMessage(welcomeMessage, 'ai');
+                    speakAsync(welcomeMessage);
                 } else { 
                     currentMode = 'psychologist';
                     headerTitle.textContent = "Tanya ke Psikolog AI";
@@ -564,7 +596,7 @@
                 try {
                     const firstGreeting = "Perkenalkan , saya adalah asisten pribadi Anda yang bernama RASA. Saya sebagai seorang Psikolog AI, siap membantu Anda. Mari kita mulai dengan sesi perkenalan, boleh saya tahu nama Anda?";
                     displayMessage(firstGreeting, 'ai');
-                    await speakAsync(firstGreeting, true);
+                    await speakAsync(firstGreeting);
                     const nameAnswer = await listenOnce();
                     displayMessage(nameAnswer, 'user');
                     userName = nameAnswer.trim();
@@ -583,10 +615,10 @@
                     updateButtonVisibility();
                     const welcomeMessage = `Baik, ${userName || 'temanku'}, terima kasih sudah berkenalan. Sekarang, saya siap mendengarkan. Silakan ceritakan apa yang kamu rasakan.`;
                     displayMessage(welcomeMessage, 'ai');
-                    speakAsync(welcomeMessage, true);
+                    speakAsync(welcomeMessage);
                 }
             }
-
+            
             function listenOnce() {
                 playSound('start'); 
                 return new Promise((resolve, reject) => {
@@ -628,7 +660,7 @@
 
             async function askAndListen(question) {
                 displayMessage(question, 'ai');
-                await speakAsync(question, true);
+                await speakAsync(question);
                 try {
                     const answer = await listenOnce();
                     displayMessage(answer, 'user');
@@ -742,7 +774,7 @@
                 if (result) {
                     let resultMessage = `Terima kasih telah menjawab. Berikut adalah hasil analisa kepribadian Anda:\n\n${result.explanation}\n\n---\n\n### **${result.title}**\n\n**Potensi Diri:**\n${result.potensiDiri}\n\n**Cara Belajar yang Cocok:**\n${result.caraBelajar}\n\n**Potensi Profesi yang Sesuai:**\n- ${result.profesi.split(', ').join('\n- ')}\n\n---\n\nIngat, ini adalah peta potensi, bukan takdir. Gunakan wawasan ini untuk berkembang.`;
                     displayMessage(resultMessage, 'ai');
-                    speakAsync(resultMessage, true);
+                    speakAsync(resultMessage);
                 } else {
                     displayMessage("Maaf, terjadi kesalahan dalam menampilkan hasil tes. Silakan mulai ulang dari header.", 'ai-system');
                 }
@@ -771,7 +803,7 @@
                             processedText = processedText.replace(/Assalamualaikum,?\s*/i, "").trim();
                         }
                         displayMessage(processedText, 'ai');
-                        await speakAsync(processedText, true);
+                        await speakAsync(processedText);
                     }
 
                 } catch (error) {
@@ -790,22 +822,10 @@
                     currentAudio.src = '';
                     currentAudio = null;
                 }
-
-                // <!-- PENYEMPURNAAN: Membersihkan semua karakter format sebelum dikirim -->
-                const textForSpeech = text
-                    .replace(/\[PILIHAN:.*?\]/g, '')      // Hapus tag pilihan
-                    .replace(/\[.*?\]\(.*?\)/g, '')       // Hapus link markdown
-                    .replace(/###/g, '')                 // Hapus heading
-                    .replace(/---/g, '')                 // Hapus garis horizontal
-                    .replace(/\*\*\*/g, '')              // Hapus ***
-                    .replace(/\*\*/g, '')               // Hapus ** untuk tebal
-                    .replace(/\*/g, '')                  // Hapus * untuk miring
-                    .replace(/\bAI\b/g, 'E Ai');         // Ucapkan "AI" dengan benar
-
+                const textForSpeech = text.replace(/\[PILIHAN:.*?\]/g, '').replace(/\[.*?\]\(.*?\)/g, '').replace(/###/g, '').replace(/---/g, '').replace(/\*\*\*/g, '').replace(/\*\*/g, '').replace(/\*/g, '').replace(/\bAI\b/g, 'E Ai');
                 if (!textForSpeech.trim()) {
                     return Promise.resolve();
                 }
-                
                 statusDiv.textContent = "Menyiapkan suara...";
                 try {
                     const response = await fetch('/api/synthesize', {
@@ -813,18 +833,14 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ text: textForSpeech })
                     });
-
                     if (!response.ok) {
                         throw new Error(`Gagal membuat suara: ${response.statusText}`);
                     }
-
                     const data = await response.json();
                     const audioBase64 = data.audioContent;
                     const audioBlob = new Blob([Uint8Array.from(atob(audioBase64), c => c.charCodeAt(0))], { type: 'audio/mpeg' });
                     const audioUrl = URL.createObjectURL(audioBlob);
-                    
                     currentAudio = new Audio(audioUrl);
-                    
                     return new Promise((resolve) => {
                         currentAudio.onended = () => {
                             statusDiv.textContent = "";
@@ -839,7 +855,6 @@
                         currentAudio.play();
                         statusDiv.textContent = "Memutar suara...";
                     });
-
                 } catch (error) {
                     console.error("Speech synthesis error:", error);
                     statusDiv.textContent = "Gagal mengambil data suara.";
@@ -847,7 +862,6 @@
                 }
             }
 
-            // Other functions remain unchanged
             function handleSendMessage() {
                 if (isRecording || isOnboarding || isTesting) return;
                 const userText = userInput.value.trim();
@@ -876,10 +890,8 @@
             function updateButtonVisibility() {
                 const isTyping = userInput.value.length > 0;
                 const isInputDisabled = isTesting || isOnboarding;
-
                 userInput.disabled = isInputDisabled;
                 userInput.placeholder = isInputDisabled ? "Jawab melalui tombol atau suara..." : "Tulis ceritamu di sini...";
-
                 if (isRecording || isInputDisabled) {
                     sendBtn.style.display = 'none';
                     if (isOnboarding) {
