@@ -451,7 +451,6 @@
     </div>
 
     <script>
-        // Script tidak ada perubahan dari versi sebelumnya
         document.addEventListener('DOMContentLoaded', () => {
             const startSpiritualBtn = document.getElementById('start-spiritual-btn');
             const chatContainer = document.getElementById('chat-container');
@@ -787,7 +786,8 @@
                 updateButtonVisibility();
                 
                 try {
-                    const apiResponse = await fetch('/api/chat', {
+                    // PERBAIKAN: Menggunakan URL absolut untuk fetch
+                    const apiResponse = await fetch(window.location.origin + '/api/chat', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ prompt, name, gender, age, history: conversationHistory, mode: currentMode }),
@@ -828,7 +828,8 @@
                 }
                 statusDiv.textContent = "Menyiapkan suara...";
                 try {
-                    const response = await fetch('/api/synthesize', {
+                    // PERBAIKAN: Menggunakan URL absolut untuk fetch
+                    const response = await fetch(window.location.origin + '/api/synthesize', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ text: textForSpeech })
