@@ -10,11 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Import font */
+        /* CSS styles remain the same */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
         :root {
-            /* Palet Warna */
             --bg-calm: #f0f4f8;
             --container-bg: rgba(255, 255, 255, 0.85);
             --user-msg-bg: #e0eaff;
@@ -28,7 +27,6 @@
             --danger-color: #ef4444;
         }
 
-        /* Latar Belakang Interaktif */
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #eaf2ff;
@@ -45,7 +43,6 @@
             -moz-osx-font-smoothing: grayscale;
         }
         
-        /* Ornamen animasi */
         .bg-ornaments {
             position: fixed;
             top: 0;
@@ -116,7 +113,7 @@
             flex-direction: column;
             overflow: hidden;
             z-index: 1;
-            position: relative; /* Diperlukan untuk positioning info box */
+            position: relative;
         }
 
         header {
@@ -195,11 +192,10 @@
         footer { padding: 10px 20px; text-align: center; color: var(--secondary-text); background-color: rgba(243, 244, 246, 0.7); border-top: 1px solid var(--border-color); flex-shrink: 0; }
         footer p { margin: 0; font-size: 0.7rem; }
         
-        /* PENAMBAHAN BARU: Info Box untuk Dokter AI */
         .doctor-info-box {
-            display: none; /* Disembunyikan secara default */
+            display: none; 
             position: absolute;
-            top: 65px; /* Tampil di bawah header */
+            top: 65px; 
             left: 5%;
             width: 90%;
             background-color: #fff;
@@ -212,8 +208,8 @@
             animation: fadeInDown 0.5s ease;
         }
         .doctor-info-content {
-            max-height: 250px; /* Batas tinggi agar bisa di-scroll */
-            overflow-y: auto; /* Aktifkan scroll vertikal */
+            max-height: 250px; 
+            overflow-y: auto; 
             font-size: 0.85rem;
             line-height: 1.7;
             color: var(--secondary-text);
@@ -256,7 +252,6 @@
         }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* GAYA LAYAR PEMBUKA */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
@@ -300,6 +295,7 @@
     </style>
 </head>
 <body>
+    <!-- HTML structure remains the same -->
     <div id="interactive-bg"></div>
     <div class="bg-ornaments">
         <div class="ornament"></div><div class="ornament"></div><div class="ornament"></div>
@@ -344,7 +340,6 @@
             </div>
         </header>
 
-        <!-- PENAMBAHAN BARU: Struktur HTML untuk Info Box Dokter AI -->
         <div id="doctor-info-box" class="doctor-info-box">
             <span id="doctor-info-close" class="doctor-info-close">&times;</span>
             <div class="doctor-info-content">
@@ -390,8 +385,8 @@
     </div>
 
     <script>
-        // Fungsionalitas JavaScript tidak diubah dan tetap sama seperti versi sebelumnya.
         document.addEventListener('DOMContentLoaded', () => {
+            // All const declarations remain the same
             const chatContainer = document.getElementById('chat-container');
             const userInput = document.getElementById('user-input');
             const sendBtn = document.getElementById('send-btn');
@@ -405,13 +400,11 @@
             const header = document.querySelector('header');
             const headerTitle = document.getElementById('header-title');
             const headerSubtitle = document.getElementById('header-subtitle');
-            
-            // PENAMBAHAN BARU: Seleksi elemen info box baru
             const doctorInfoBox = document.getElementById('doctor-info-box');
             const doctorInfoClose = document.getElementById('doctor-info-close');
             
-            let conversationHistory = []; 
-            let speechVoices = [];
+            // All let declarations remain the same
+            let conversationHistory = [];
             let abortController = null;
             let recognition = null;
             let isRecording = false;
@@ -423,8 +416,10 @@
             let testData = {};
             let testScores = {};
             let currentTestQuestionIndex = 0;
-            let currentMode = 'psychologist'; 
-            
+            let currentMode = 'psychologist';
+            let currentAudio = null; // To control currently playing audio
+
+            // Personality test data remains the same
             const fullTestData = {
                 stifin: {
                     questions: [
@@ -454,18 +449,14 @@
                 },
                 mbti: {
                     questions: [
-                        { q: "Setelah menghabiskan waktu di acara sosial yang ramai, Anda biasanya merasa:", o: [{ t: "Bersemangat dan 'terisi' energinya.", v: "E" }, { t: "Lelah dan butuh waktu untuk menyendiri.", v: "I" }] },
-                        { q: "Anda lebih mempercayai:", o: [{ t: "Pengalaman langsung dan fakta yang konkret.", v: "S" }, { t: "Inspirasi, firasat, dan gambaran besar.", v: "N" }] },
-                        { q: "Saat membuat keputusan, Anda lebih sering:", o: [{ t: "Menganalisis pro dan kontra secara objektif.", v: "T" }, { t: "Mempertimbangkan perasaan orang lain dan nilai-nilai Anda.", v: "F" }] },
-                        { q: "Dalam bekerja atau menjalani hari, Anda lebih suka:", o: [{ t: "Memiliki rencana yang jelas dan jadwal yang pasti.", v: "J" }, { t: "Tetap terbuka pada pilihan dan bersikap spontan.", v: "P" }] },
-                        { q: "Saat merakit perabotan baru, Anda:", o: [{ t: "Membaca dan mengikuti instruksi langkah demi langkah dengan teliti.", v: "S" }, { t: "Melihat gambar hasil akhir dan mencoba merakitnya berdasarkan intuisi.", v: "N" }] },
-                        { q: "Seorang teman curhat tentang masalahnya. Respon pertama Anda adalah:", o: [{ t: "Menawarkan solusi logis dan langkah-langkah penyelesaian.", v: "T" }, { t: "Memberikan dukungan emosional dan mengatakan 'saya turut prihatin'.", v: "F" }] },
-                        { q: "Ketika merencanakan liburan, Anda:", o: [{ t: "Membuat itinerary detail dari hari pertama hingga terakhir.", v: "J" }, { t: "Hanya memesan tiket dan hotel, sisanya biarkan mengalir.", v: "P" }] },
-                        { q: "Di antara teman-teman, Anda lebih dikenal sebagai orang yang:", o: [{ t: "Mudah bergaul dan banyak bicara.", v: "E" }, { t: "Pendengar yang baik dan lebih suka mengamati.", v: "I" }] },
-                        { q: "Anda cenderung lebih memperhatikan:", o: [{ t: "Apa yang nyata dan terjadi saat ini.", v: "S" }, { t: "Apa yang mungkin terjadi di masa depan.", v: "N" }] },
-                        { q: "Kritik atau masukan dari orang lain Anda terima sebagai:", o: [{ t: "Informasi logis untuk perbaikan, tidak personal.", v: "T" }, { t: "Sesuatu yang terkadang menyakiti perasaan.", v: "F" }] },
-                        { q: "Ketika mengerjakan sebuah proyek, Anda merasa lebih nyaman:", o: [{ t: "Menyelesaikannya jauh-jauh hari sebelum tenggat waktu.", v: "J" }, { t: "Bekerja mendekati tenggat waktu karena tekanan memotivasi Anda.", v: "P" }] },
-                        { q: "Saat berada dalam sebuah kelompok, Anda lebih sering:", o: [{ t: "Menjadi orang yang memulai percakapan.", v: "E" }, { t: "Menunggu orang lain untuk menyapa Anda terlebih dahulu.", v: "I" }] }
+                        { q: "Setelah seharian beraktivitas, bagaimana caramu mengisi ulang energi?", o: [{ t: "Dengan berinteraksi bersama banyak teman", v: "E" }, { t: "Dengan menyendiri dan menikmati waktu tenang", v: "I" }] },
+                        { q: "Saat menerima informasi, kamu lebih percaya pada?", o: [{ t: "Fakta konkret dan apa yang bisa kamu lihat/sentuh", v: "S" }, { t: "Pola, firasat, dan makna yang tersirat", v: "N" }] },
+                        { q: "Dalam mengambil keputusan, mana yang lebih kamu prioritaskan?", o: [{ t: "Keadilan, logika, dan konsistensi", v: "T" }, { t: "Keharmonisan, empati, dan perasaan orang lain", v: "F" }] },
+                        { q: "Kamu lebih suka hidup yang...", o: [{ t: "Terstruktur, terencana, dan terjadwal", v: "J" }, { t: "Fleksibel, spontan, dan terbuka pada pilihan", v: "P" }] },
+                        { q: "Di sebuah pesta, kamu cenderung?", o: [{ t: "Menjadi pusat perhatian dan mudah bergaul", v: "E" }, { t: "Mengobrol mendalam dengan beberapa orang yang dikenal", v: "I" }] },
+                        { q: "Kamu lebih tertarik pada?", o: [{ t: "Pengalaman nyata dan hal-hal praktis", v: "S" }, { t: "Ide-ide abstrak dan kemungkinan di masa depan", v: "N" }] },
+                        { q: "Saat memberikan kritik, kamu cenderung?", o: [{ t: "Langsung pada intinya dan jujur", v: "T" }, { t: "Menyampaikannya dengan hati-hati agar tidak menyakiti", v: "F" }] },
+                        { q: "Kamu merasa lebih nyaman saat?", o: [{ t: "Sebuah keputusan sudah dibuat dan ditetapkan", v: "J" }, { t: "Membiarkan pilihan tetap terbuka selama mungkin", v: "P" }] }
                     ],
                     results: {
                         ISTJ: { explanation: "Hasil tes Anda adalah **ISTJ**.\nIni adalah peta preferensi Anda:\n- **I (Introvert):** Anda mendapatkan energi dari dunia internal (pikiran dan ide).\n- **S (Sensing):** Anda memproses informasi melalui fakta dan detail konkret.\n- **T (Thinking):** Anda mengambil keputusan berdasarkan logika dan objektivitas.\n- **J (Judging):** Anda menyukai kehidupan yang terencana dan terstruktur.", title: "ISTJ - Sang Pengawas", potensiDiri: "Sangat dapat diandalkan, praktis, dan logis. Anda adalah individu yang menghargai tradisi dan keteraturan. Anda teliti, bertanggung jawab, dan memastikan semua berjalan sesuai rencana.", caraBelajar: "Menyukai metode belajar terstruktur, langkah demi langkah, dan berbasis fakta. Belajar paling baik dengan aplikasi praktis dan contoh nyata.", profesi: "Akuntan, Manajer Logistik, Administrator, Teknisi, Insinyur, Ahli Hukum." },
@@ -487,37 +478,32 @@
                     }
                 }
             };
-
+            
             function init() {
                 if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw.js')
-                    .then(registration => console.log('ServiceWorker registration successful'))
-                    .catch(err => console.log('ServiceWorker registration failed: ', err));
-                });
+                    window.addEventListener('load', () => {
+                        navigator.serviceWorker.register('/sw.js')
+                        .then(registration => console.log('ServiceWorker registration successful'))
+                        .catch(err => console.log('ServiceWorker registration failed: ', err));
+                    });
                 }
-                loadVoices();
                 displayInitialMessage();
                 updateButtonVisibility();
 
+                // Event listeners remain the same
                 startCurhatBtn.addEventListener('click', () => initializeApp({ isCurhat: true }));
                 startTestBtn.addEventListener('click', () => initializeApp({ isTest: true }));
                 startDoctorBtn.addEventListener('click', () => initializeApp({ isDoctor: true }));
-                
-                // PENAMBAHAN BARU: Event listener untuk tombol tutup
                 doctorInfoClose.addEventListener('click', () => { doctorInfoBox.style.display = 'none'; });
-
                 header.addEventListener('click', () => window.location.reload());
                 sendBtn.addEventListener('click', handleSendMessage);
                 voiceBtn.addEventListener('click', toggleMainRecording);
                 endChatBtn.addEventListener('click', handleCancelResponse);
-                
                 userInput.addEventListener('input', () => {
                     userInput.style.height = 'auto';
                     userInput.style.height = (userInput.scrollHeight) + 'px';
                     updateButtonVisibility();
                 });
-
                 userInput.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
@@ -525,6 +511,8 @@
                     }
                 });
             }
+
+            // Other functions like initializeApp, startOnboardingIfNeeded, etc. remain the same up to getAIResponse
             
             function initializeApp(mode = {}) {
                 if (!audioContext) {
@@ -537,30 +525,23 @@
                 }
                 startOverlay.classList.add('hidden');
                 chatContainer.innerHTML = '';
-                
-                // PENAMBAHAN BARU: Sembunyikan info box secara default setiap kali inisialisasi
                 doctorInfoBox.style.display = 'none';
                 
                 if (mode.isTest) {
                     currentMode = 'psychologist';
                     headerTitle.textContent = "Tes Kepribadian dan Potensi Diri";
                     headerSubtitle.textContent = "Namaku RASA, bersamamu sebagai Konselor";
-
                     isTesting = true;
                     currentTestType = 'selection';
-                    const introMessage = `Selamat datang di Tes Kepribadian dan Potensi Diri.\n\nTes ini menawarkan dua pendekatan untuk membantu Anda lebih mengenal diri:\n- **Pendekatan STIFIn:** Berbasis konsep kecerdasan genetik.\n- **Pendekatan MBTI:** Mengidentifikasi preferensi Anda dalam melihat dunia.\n\n---\n\n***Disclaimer:*** *Tes ini adalah pengantar. Untuk hasil yang komprehensif, disarankan untuk mengikuti tes di Layanan Psikologi Profesional.*\n\nSilakan pilih pendekatan yang ingin Anda gunakan:\n[PILIHAN:Pendekatan STIFIn|Pendekatan MBTI]`;
-                    
+                    const introMessage = `Selamat datang di Tes Kepribadian dan Potensi Diri.\n\nTes ini menawarkan dua pendekatan untuk membantu Anda lebih mengenal diri:\n- **Pendekatan STIFIn:** Berbasis 5 Mesin Kecerdasan genetik.\n- **Pendekatan MBTI:** Mengidentifikasi 4 dimensi preferensi Anda.\n\n---\n\n***Disclaimer:*** *Tes ini adalah pengantar. Untuk hasil yang komprehensif, disarankan untuk mengikuti tes di Layanan Psikologi Profesional.*\n\nSilakan pilih pendekatan yang ingin Anda gunakan:\n[PILIHAN:Tes STIFIn|Tes MBTI]`;
                     displayMessage(introMessage, 'ai');
-                    speakAsync("Selamat datang di tes kepribadian dan potensi diri. Silakan pilih pendekatan yang ingin Anda gunakan.", true);
+                    speakAsync(introMessage, true);
 
                 } else if (mode.isDoctor) {
                     currentMode = 'doctor';
                     headerTitle.textContent = "Tanya ke Dokter AI";
                     headerSubtitle.textContent = "Namaku RASA, bersamamu sebagai Dokter Profesional";
-                    
-                    // PENAMBAHAN BARU: Tampilkan info box saat mode dokter dipilih
                     doctorInfoBox.style.display = 'block';
-
                     isTesting = false; 
                     isOnboarding = false;
                     const welcomeMessage = "Halo, saya Dokter AI RASA. Ada keluhan medis yang bisa saya bantu?";
@@ -584,11 +565,9 @@
                     const firstGreeting = "Perkenalkan , saya adalah asisten pribadi Anda yang bernama RASA. Saya sebagai seorang Psikolog AI, siap membantu Anda. Mari kita mulai dengan sesi perkenalan, boleh saya tahu nama Anda?";
                     displayMessage(firstGreeting, 'ai');
                     await speakAsync(firstGreeting, true);
-                    
                     const nameAnswer = await listenOnce();
                     displayMessage(nameAnswer, 'user');
                     userName = nameAnswer.trim();
-                    
                     const genderAnswer = await askAndListen("Boleh konfirmasi, apakah kamu seorang laki-laki atau wanita?");
                     if (genderAnswer.toLowerCase().includes('wanita') || genderAnswer.toLowerCase().includes('perempuan')) {
                         userGender = 'Wanita';
@@ -596,7 +575,6 @@
                     const ageAnswer = await askAndListen("Kalau usiamu berapa?");
                     const ageMatch = ageAnswer.match(/\d+/);
                     if (ageMatch) userAge = ageMatch[0];
-
                 } catch (error) {
                     console.log("Onboarding diabaikan:", error);
                 } finally {
@@ -618,14 +596,11 @@
                         reject("Not supported");
                         return;
                     }
-                    
                     const rec = new SpeechRecognition();
                     rec.lang = 'id-ID';
                     rec.continuous = false;
                     rec.interimResults = false;
-
                     let hasResolved = false;
-
                     rec.onresult = (event) => {
                         if (hasResolved) return;
                         hasResolved = true;
@@ -670,27 +645,20 @@
 
             function selectRandomQuestions(questionArray, count) {
                 const shuffled = [...questionArray].sort(() => 0.5 - Math.random());
+                if (!count || count > shuffled.length) {
+                    return shuffled;
+                }
                 return shuffled.slice(0, count);
             }
 
             function initiateTest(type) {
                 currentTestType = type;
                 const originalTestData = (type === 'stifin') ? fullTestData.stifin : fullTestData.mbti;
-
-                let questionsToAsk = [];
-                if (type === 'stifin') {
-                    const mainQuestions = originalTestData.questions.filter(q => !q.isDriveQuestion);
-                    const driveQuestion = originalTestData.questions.find(q => q.isDriveQuestion);
-                    questionsToAsk = selectRandomQuestions(mainQuestions, 8);
-                    if (driveQuestion) questionsToAsk.push(driveQuestion);
-                } else { 
-                    questionsToAsk = selectRandomQuestions(originalTestData.questions, 12);
-                }
-
+                let questionsToAsk = selectRandomQuestions(originalTestData.questions);
                 testData = { ...originalTestData, questions: questionsToAsk };
                 testScores = {};
                 currentTestQuestionIndex = 0;
-                displayMessage(`Baik, mari kita mulai Tes Kepribadian dengan Pendekatan ${type.toUpperCase()}. Jawablah ${testData.questions.length} pertanyaan berikut.`, 'ai-system');
+                displayMessage(`Baik, mari kita mulai ${type.toUpperCase()}. Jawablah ${testData.questions.length} pertanyaan berikut.`, 'ai-system');
                 setTimeout(displayNextTestQuestion, 1000);
             }
 
@@ -764,10 +732,10 @@
                     const S = testScores['S'] || 0; const N = testScores['N'] || 0;
                     const T = testScores['T'] || 0; const F = testScores['F'] || 0;
                     const J = testScores['J'] || 0; const P = testScores['P'] || 0;
-                    finalType += (E >= I) ? 'E' : 'I';
-                    finalType += (S >= N) ? 'S' : 'N';
-                    finalType += (T >= F) ? 'T' : 'F';
-                    finalType += (J >= P) ? 'J' : 'P';
+                    finalType += (E > I) ? 'E' : 'I';
+                    finalType += (S > N) ? 'S' : 'N';
+                    finalType += (T > F) ? 'T' : 'F';
+                    finalType += (J > P) ? 'J' : 'P';
                     result = fullTestData.mbti.results[finalType];
                 }
 
@@ -780,28 +748,115 @@
                 }
                 updateButtonVisibility();
             }
+            
+            async function getAIResponse(prompt, name, gender, age) {
+                abortController = new AbortController();
+                statusDiv.textContent = "RASA sedang berpikir...";
+                updateButtonVisibility();
+                
+                try {
+                    const apiResponse = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt, name, gender, age, history: conversationHistory, mode: currentMode }),
+                        signal: abortController.signal
+                    });
+                    if (!apiResponse.ok) throw new Error(`Server merespon dengan status ${apiResponse.status}`);
+                    const result = await apiResponse.json();
+                    const responseText = result.aiText || `Terima kasih sudah berbagi, ${name || 'teman'}. Bisa ceritakan lebih lanjut?`;
+                    
+                    if (responseText) {
+                        let processedText = responseText;
+                        if (conversationHistory.filter(m => m.role === 'RASA').length > 0 && currentMode !== 'doctor') {
+                            processedText = processedText.replace(/Assalamualaikum,?\s*/i, "").trim();
+                        }
+                        displayMessage(processedText, 'ai');
+                        await speakAsync(processedText, true);
+                    }
 
-            async function handleSendMessage() {
+                } catch (error) {
+                    if (error.name !== 'AbortError') {
+                       displayMessage(`Maaf, sepertinya ada sedikit gangguan koneksi. Bisa ceritakan kembali?`, 'ai-system');
+                    }
+                } finally {
+                    statusDiv.textContent = "";
+                    updateButtonVisibility();
+                }
+            }
+
+            async function speakAsync(text) {
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio.src = '';
+                    currentAudio = null;
+                }
+
+                // <!-- PENYEMPURNAAN: Membersihkan semua karakter format sebelum dikirim -->
+                const textForSpeech = text
+                    .replace(/\[PILIHAN:.*?\]/g, '')      // Hapus tag pilihan
+                    .replace(/\[.*?\]\(.*?\)/g, '')       // Hapus link markdown
+                    .replace(/###/g, '')                 // Hapus heading
+                    .replace(/---/g, '')                 // Hapus garis horizontal
+                    .replace(/\*\*\*/g, '')              // Hapus ***
+                    .replace(/\*\*/g, '')               // Hapus ** untuk tebal
+                    .replace(/\*/g, '')                  // Hapus * untuk miring
+                    .replace(/\bAI\b/g, 'E Ai');         // Ucapkan "AI" dengan benar
+
+                if (!textForSpeech.trim()) {
+                    return Promise.resolve();
+                }
+                
+                statusDiv.textContent = "Menyiapkan suara...";
+                try {
+                    const response = await fetch('/api/synthesize', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ text: textForSpeech })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Gagal membuat suara: ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    const audioBase64 = data.audioContent;
+                    const audioBlob = new Blob([Uint8Array.from(atob(audioBase64), c => c.charCodeAt(0))], { type: 'audio/mpeg' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    
+                    currentAudio = new Audio(audioUrl);
+                    
+                    return new Promise((resolve) => {
+                        currentAudio.onended = () => {
+                            statusDiv.textContent = "";
+                            currentAudio = null;
+                            resolve();
+                        };
+                        currentAudio.onerror = () => {
+                             statusDiv.textContent = "Gagal memutar suara.";
+                             currentAudio = null;
+                             resolve();
+                        };
+                        currentAudio.play();
+                        statusDiv.textContent = "Memutar suara...";
+                    });
+
+                } catch (error) {
+                    console.error("Speech synthesis error:", error);
+                    statusDiv.textContent = "Gagal mengambil data suara.";
+                    return Promise.resolve();
+                }
+            }
+
+            // Other functions remain unchanged
+            function handleSendMessage() {
                 if (isRecording || isOnboarding || isTesting) return;
                 const userText = userInput.value.trim();
                 if (!userText) return;
-
                 displayMessage(userText, 'user');
-                
-                if (userText.toLowerCase() === 'tunjukkan contoh link') {
-                    userInput.value = '';
-                    userInput.style.height = 'auto';
-                    updateButtonVisibility();
-                    const linkMessage = "Tentu, ini adalah contoh tautan wisata di Malang yang aktif: \n\n- [Jatim Park 3](https://jtp.id/jatimpark3)\n- [Kampung Warna Warni Jodipan](https://www.instagram.com/kampung_warna_warni_jodipan)";
-                    displayMessage(linkMessage, 'ai');
-                    speakAsync("Tentu, ini adalah contoh tautan yang bisa diklik.", true);
-                    return;
-                }
-                
                 userInput.value = '';
                 userInput.style.height = 'auto';
                 updateButtonVisibility();
-                await getAIResponse(userText, userName, userGender, userAge);
+                getAIResponse(userText, userName, userGender, userAge);
             }
             
             function handleSendMessageWithChoice(choice) {
@@ -847,7 +902,9 @@
             
             function handleCancelResponse() {
                 if (abortController) abortController.abort();
-                window.speechSynthesis.cancel();
+                if (currentAudio) {
+                    currentAudio.pause();
+                }
                 if (recognition) recognition.abort();
                 isRecording = false;
                 isTesting = false;
@@ -899,80 +956,11 @@
                 updateButtonVisibility();
                 if (statusDiv.textContent === "Mendengarkan...") statusDiv.textContent = "";
             }
-            
-            async function getAIResponse(prompt, name, gender, age) {
-                abortController = new AbortController();
-                statusDiv.textContent = "RASA sedang berpikir...";
-                updateButtonVisibility();
-                
-                try {
-                    const apiResponse = await fetch('/api/chat', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt, name, gender, age, history: conversationHistory, mode: currentMode }),
-                        signal: abortController.signal
-                    });
-                    if (!apiResponse.ok) throw new Error(`Server merespon dengan status ${apiResponse.status}`);
-                    const result = await apiResponse.json();
-                    const responseText = result.aiText || `Terima kasih sudah berbagi, ${name || 'teman'}. Bisa ceritakan lebih lanjut?`;
-                    
-                    if (responseText) {
-                        let processedText = responseText;
-                        if (conversationHistory.filter(m => m.role === 'RASA').length > 0 && currentMode !== 'doctor') {
-                            processedText = processedText.replace(/Assalamualaikum,?\s*/i, "").trim();
-                        }
-                        displayMessage(processedText, 'ai');
-                        await speakAsync(processedText, true);
-                    }
-
-                } catch (error) {
-                    if (error.name !== 'AbortError') {
-                       displayMessage(`Maaf, sepertinya ada sedikit gangguan koneksi. Bisa ceritakan kembali?`, 'ai-system');
-                    }
-                } finally {
-                    statusDiv.textContent = "";
-                    updateButtonVisibility();
-                }
-            }
-
-            function loadVoices() {
-                if (!('speechSynthesis' in window)) return;
-                const setVoices = () => { speechVoices = window.speechSynthesis.getVoices(); };
-                setVoices();
-                if (speechVoices.length === 0 && window.speechSynthesis.onvoiceschanged !== undefined) {
-                    window.speechSynthesis.onvoiceschanged = setVoices;
-                }
-            }
-            
-            function speakAsync(text, isAIResponse = false) {
-                return new Promise((resolve) => {
-                    if (!('speechSynthesis' in window)) { resolve(); return; }
-                    window.speechSynthesis.cancel();
-                    
-                    const textForSpeech = text.replace(/\[[^\]]+\]\([^)]+\)/g, '') 
-                                             .replace(/\[LINK:.*?\](.*?)\[\/LINK\]/g, '$1')
-                                             .replace(/\bAI\b/g, 'E Ai');
-                    
-                    const utterance = new SpeechSynthesisUtterance(textForSpeech);
-                    utterance.lang = 'id-ID';
-                    utterance.rate = 0.95;
-                    utterance.pitch = 1;
-                    if (isAIResponse) {
-                        let indonesianVoice = speechVoices.find(v => v.lang === 'id-ID');
-                        if (indonesianVoice) utterance.voice = indonesianVoice;
-                    }
-                    utterance.onend = () => resolve();
-                    utterance.onerror = (e) => { console.error("Speech synthesis error:", e); resolve(e); };
-                    window.speechSynthesis.speak(utterance);
-                });
-            }
 
             function playSound(type) {
                 if (audioContext && audioContext.state === 'suspended') { audioContext.resume(); }
                 if (!audioContext) return;
-
                 const now = audioContext.currentTime;
-
                 function beep(startTime, freq, duration) {
                     const oscillator = audioContext.createOscillator();
                     const gainNode = audioContext.createGain();
@@ -986,7 +974,6 @@
                     gainNode.gain.exponentialRampToValueAtTime(0.00001, startTime + duration);
                     oscillator.stop(startTime + duration);
                 }
-
                 if (type === 'start') {
                     beep(now, 1000, 0.1);
                 } else if (type === 'stop') {
