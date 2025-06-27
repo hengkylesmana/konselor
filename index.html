@@ -220,7 +220,7 @@
         @keyframes popUp { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         .start-content .logo { margin-bottom: 16px; }
 
-        /* PEMBARUAN: Styling Judul 3 Paragraf */
+        /* Styling Judul 3 Paragraf */
         .start-title-container {
             margin-bottom: 20px;
         }
@@ -276,7 +276,7 @@
         <div class="ornament"></div>
     </div>
 
-    <!-- Layar Pembuka (Judul Dikoreksi) -->
+    <!-- Layar Pembuka -->
     <div id="start-overlay" class="modal-overlay visible">
         <div class="start-content">
             <svg class="logo" width="72" height="72" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -506,7 +506,6 @@
                 statusDiv.textContent = "Sesi perkenalan...";
                 updateButtonVisibility();
                 try {
-                    // --- PEMBARUAN: Teks sapaan awal diubah ---
                     const firstGreeting = "Perkenalkan , saya adalah asisten pribadi Anda yang bernama RASA. Saya sebagai seorang Psikolog AI, siap membantu Anda. Mari kita mulai dengan sesi perkenalan, boleh saya tahu nama Anda?";
                     displayMessage(firstGreeting, 'ai');
                     await speakAsync(firstGreeting, true);
@@ -713,6 +712,19 @@
                 if (!userText) return;
 
                 displayMessage(userText, 'user');
+                
+                // --- PEMBARUAN: Menambahkan trigger untuk uji coba link ---
+                if (userText.toLowerCase() === 'tunjukkan contoh link') {
+                    userInput.value = '';
+                    userInput.style.height = 'auto';
+                    updateButtonVisibility();
+                    // Menampilkan pesan link secara langsung tanpa memanggil AI
+                    const linkMessage = "Tentu, ini adalah contoh tautan yang bisa diklik: [LINK:https://www.google.com]Buka Google[/LINK].";
+                    displayMessage(linkMessage, 'ai');
+                    speakAsync("Tentu, ini adalah contoh tautan yang bisa diklik.", true);
+                    return;
+                }
+                
                 userInput.value = '';
                 userInput.style.height = 'auto';
                 updateButtonVisibility();
@@ -912,6 +924,7 @@
                 displayMessage("Pilih layanan di layar awal untuk memulai...", 'ai-system');
             }
 
+            // --- PEMBARUAN: Logika rendering link disempurnakan ---
             function displayMessage(message, sender) {
                 if (sender !== 'ai-system') {
                     const role = (sender === 'ai') ? 'RASA' : 'User';
@@ -923,9 +936,8 @@
                 if (sender.startsWith('user')) {
                     messageContainer.textContent = message;
                 } else {
-                    let processedHTML = message;
-                    const choiceRegex = /\[PILIHAN:(.*?)\]/g;
-                    processedHTML = processedHTML.replace(choiceRegex, (match, optionsString) => {
+                    // Proses format [PILIHAN:...] terlebih dahulu
+                    let processedHTML = message.replace(/\[PILIHAN:(.*?)\]/g, (match, optionsString) => {
                         const options = optionsString.split('|');
                         let buttonsHTML = '<div class="choice-container">';
                         options.forEach(option => {
@@ -938,15 +950,17 @@
                     let textPart = processedHTML.split('<div class="choice-container">')[0];
                     let choicePart = processedHTML.includes('<div class="choice-container">') ? '<div class="choice-container">' + processedHTML.split('<div class="choice-container">')[1] : '';
 
+                    // Proses format Markdown pada bagian teks
                     let html = textPart
                         .replace(/\[LINK:(.*?)\](.*?)\[\/LINK\]/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="chat-link">$2</a>')
                         .replace(/\*\*\*(.*?)\*\*\*/g, '<em><strong>$1</strong></em>') 
                         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                         .replace(/\*(.*?)\*/g, '<em>$1</em>')
                         .replace(/###\s*(.*)/g, '<h3>$1</h3>')
-                        .replace(/---\n/g, '<hr>')
+                        .replace(/---\n?/g, '<hr>')
                         .replace(/\n\s*-\s/g, '<li>');
 
+                    // Proses list dengan paragraf
                     const lines = html.split('\n');
                     let inList = false;
                     let finalHTML = '';
@@ -957,7 +971,14 @@
                             finalHTML += `<li>${trimmedLine.substring(4)}</li>`;
                         } else {
                             if (inList) { finalHTML += '</ul>'; inList = false; }
-                            if (trimmedLine) finalHTML += `<p>${trimmedLine}</p>`;
+                            if (trimmedLine) {
+                                // Memastikan tag link tidak dibungkus dengan <p> yang tidak perlu
+                                if (!trimmedLine.startsWith('<a') && !trimmedLine.startsWith('<h')) {
+                                   finalHTML += `<p>${trimmedLine}</p>`;
+                                } else {
+                                   finalHTML += trimmedLine;
+                                }
+                            }
                         }
                     });
                     if (inList) finalHTML += '</ul>';
