@@ -875,8 +875,10 @@
                     if (!('speechSynthesis' in window)) { resolve(); return; }
                     window.speechSynthesis.cancel();
                     
-                    // Mengganti "AI" menjadi "E Ai" hanya untuk audio
-                    const textForSpeech = text.replace(/\bAI\b/g, 'E Ai');
+                    // Mengganti "AI" menjadi "E Ai" hanya untuk audio, dan menghapus format link/markdown
+                    const textForSpeech = text.replace(/\[[^\]]+\]\([^)]+\)/g, '') // Hapus [teks](url)
+                                             .replace(/\[LINK:.*?\](.*?)\[\/LINK\]/g, '$1') // Hapus format link kustom
+                                             .replace(/\bAI\b/g, 'E Ai');
                     
                     const utterance = new SpeechSynthesisUtterance(textForSpeech);
                     utterance.lang = 'id-ID';
