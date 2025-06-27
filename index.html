@@ -116,7 +116,7 @@
             flex-direction: column;
             overflow: hidden;
             z-index: 1;
-            position: relative; /* Diperlukan untuk positioning info box */
+            position: relative;
         }
 
         header {
@@ -195,24 +195,6 @@
         footer { padding: 10px 20px; text-align: center; color: var(--secondary-text); background-color: rgba(243, 244, 246, 0.7); border-top: 1px solid var(--border-color); flex-shrink: 0; }
         footer p { margin: 0; font-size: 0.7rem; }
         
-        /* PEMBARUAN: Info Box untuk Dokter AI */
-        .doctor-info-box {
-            display: none; position: absolute; top: 65px; left: 5%; width: 90%;
-            background-color: #fff; border: 1px solid var(--border-color); border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 10; padding: 15px;
-            box-sizing: border-box; animation: fadeInDown 0.5s ease;
-        }
-        .doctor-info-content {
-            max-height: 120px; overflow-y: auto; font-size: 0.85rem;
-            line-height: 1.6; color: var(--secondary-text);
-        }
-        .doctor-info-close {
-            position: absolute; top: 5px; right: 10px; font-size: 1.5rem;
-            font-weight: bold; cursor: pointer; color: var(--secondary-text);
-        }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* GAYA LAYAR PEMBUKA */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
@@ -300,28 +282,6 @@
             </div>
         </header>
 
-        <div id="doctor-info-box" class="doctor-info-box">
-            <span id="doctor-info-close" class="doctor-info-close">&times;</span>
-            <div class="doctor-info-content">
-                <p><strong>Saya Dokter AI,</strong> yang telah dilatih khusus dengan dasar ilmu kedokteran, spesialis, klinis, dan patologi. Saya dikembangkan dengan pemahaman kedokteran yang menyeluruh dan dengan kemampuan komunikasi memahami pola keluhan Anda dari sisi medis.</p>
-                <hr>
-                <p><strong>Contoh Komunikasi Gejala dan Keluhan:</strong></p>
-                <ul>
-                    <li>Dok, saya sering bersin-bersin pagi hari.</li>
-                    <li>Saya merasa ngilu di pinggang setelah duduk lama.</li>
-                    <li>Perut saya sering begah setelah makan pedas.</li>
-                    <li>Ada benjolan di payudara saya dan terasa agak nyeri.</li>
-                </ul>
-                <p><strong>Contoh Pertanyaan tentang Obat & Layanan Kesehatan:</strong></p>
-                <ul>
-                    <li>Obat Paracetamol sebenarnya untuk penyakit apa, ya?</li>
-                    <li>Cara minum obat Amoxicillin gimana, sebelum atau sesudah makan?</li>
-                    <li>Kalau saya lupa minum satu dosis, harus bagaimana?</li>
-                    <li>Pertolongan pertama untuk luka bakar ringan itu apa?</li>
-                </ul>
-            </div>
-        </div>
-
         <div class="chat-container" id="chat-container"></div>
         <div class="input-container">
             <textarea id="user-input" placeholder="Tulis ceritamu di sini..." rows="1"></textarea>
@@ -334,7 +294,6 @@
     </div>
 
     <script>
-        // Fungsionalitas JavaScript tidak diubah dan tetap sama seperti versi sebelumnya.
         document.addEventListener('DOMContentLoaded', () => {
             const chatContainer = document.getElementById('chat-container');
             const userInput = document.getElementById('user-input');
@@ -349,9 +308,6 @@
             const header = document.querySelector('header');
             const headerTitle = document.getElementById('header-title');
             const headerSubtitle = document.getElementById('header-subtitle');
-            // PEMBARUAN: Seleksi elemen info box baru
-            const doctorInfoBox = document.getElementById('doctor-info-box');
-            const doctorInfoClose = document.getElementById('doctor-info-close');
             
             let conversationHistory = []; 
             let speechVoices = [];
@@ -368,6 +324,7 @@
             let currentTestQuestionIndex = 0;
             let currentMode = 'psychologist'; 
             
+            // PEMBARUAN: Data tes disalin dari file yang diupload
             const fullTestData = {
                 stifin: {
                     questions: [
@@ -446,8 +403,7 @@
                 startCurhatBtn.addEventListener('click', () => initializeApp({ isCurhat: true }));
                 startTestBtn.addEventListener('click', () => initializeApp({ isTest: true }));
                 startDoctorBtn.addEventListener('click', () => initializeApp({ isDoctor: true }));
-                doctorInfoClose.addEventListener('click', () => { doctorInfoBox.style.display = 'none'; });
-
+                
                 header.addEventListener('click', () => window.location.reload());
                 sendBtn.addEventListener('click', handleSendMessage);
                 voiceBtn.addEventListener('click', toggleMainRecording);
@@ -478,7 +434,6 @@
                 }
                 startOverlay.classList.add('hidden');
                 chatContainer.innerHTML = '';
-                doctorInfoBox.style.display = 'none';
                 
                 if (mode.isTest) {
                     currentMode = 'psychologist';
@@ -487,7 +442,7 @@
 
                     isTesting = true;
                     currentTestType = 'selection';
-                    const introMessage = `Selamat datang di Tes Kepribadian dan Potensi Diri.\n\nTes ini menawarkan dua pendekatan untuk membantu Anda lebih mengenal diri:\n- **Pendekatan STIFIn:** Berbasis konsep kecerdasan genetik.\n- **Pendekatan MBTI:** Mengidentifikasi preferensi Anda dalam melihat dunia.\n\n---\n\n***Disclaimer:*** *Tes ini adalah pengantar. Untuk hasil yang komprehensif, disarankan untuk mengikuti tes di Layanan Psikologi Profesional.*\n\nSilakan pilih pendekatan yang ingin Anda gunakan:\n[PILIHAN:Pendekatan STIFIn|Pendekatan MBTI]`;
+                    const introMessage = `Selamat datang di Tes Kepribadian dan Potensi Diri.\n\nTes ini menawarkan dua pendekatan untuk membantu Anda lebih mengenal diri:\n- **Pendekatan STIFIn:** Berbasis konsep kecerdasan genetik untuk menemukan "sistem operasi" otak Anda yang dominan, yang akan memandu cara belajar dan profesi yang paling alami bagi Anda.\n- **Pendekatan MBTI:** Salah satu tes kepribadian paling populer di dunia, yang akan mengidentifikasi preferensi Anda dalam melihat dunia dan mengambil keputusan.\n\n---\n\n***Disclaimer:*** *Tes ini adalah pengantar untuk mengenali kepribadian dan potensi diri. Untuk hasil yang lebih akurat dan komprehensif, disarankan untuk mengikuti tes di Layanan Psikologi Profesional.*\n\nSekarang, silakan pilih pendekatan yang ingin Anda gunakan:\n[PILIHAN:Pendekatan STIFIn|Pendekatan MBTI]`;
                     
                     displayMessage(introMessage, 'ai');
                     speakAsync("Selamat datang di tes kepribadian dan potensi diri. Silakan pilih pendekatan yang ingin Anda gunakan.", true);
@@ -496,7 +451,6 @@
                     currentMode = 'doctor';
                     headerTitle.textContent = "Tanya ke Dokter AI";
                     headerSubtitle.textContent = "Namaku RASA, bersamamu sebagai Dokter Profesional";
-                    doctorInfoBox.style.display = 'block';
                     isTesting = false; 
                     isOnboarding = false;
                     const welcomeMessage = "Halo, saya Dokter AI RASA. Ada keluhan medis yang bisa saya bantu?";
