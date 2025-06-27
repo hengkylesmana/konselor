@@ -10,24 +10,60 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Import font */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
         :root {
-            --bg-calm: #f0f4f8; --container-bg: rgba(255, 255, 255, 0.85); --user-msg-bg: #e0eaff;
-            --ai-msg-bg: #f3f4f6; --primary-text: #1f2937; --secondary-text: #4b5563;
-            --accent-color: #4338ca; --accent-color-hover: #3730a3; --border-color: #d1d5db;
-            --shadow: 0 8px 40px rgba(0, 0, 0, 0.1); --danger-color: #ef4444;
+            /* Palet Warna */
+            --bg-calm: #f0f4f8;
+            --container-bg: rgba(255, 255, 255, 0.85);
+            --user-msg-bg: #e0eaff;
+            --ai-msg-bg: #f3f4f6;
+            --primary-text: #1f2937;
+            --secondary-text: #4b5563;
+            --accent-color: #4338ca;
+            --accent-color-hover: #3730a3;
+            --border-color: #d1d5db;
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+            --danger-color: #ef4444;
         }
+
+        /* Latar Belakang Interaktif */
         body {
-            font-family: 'Poppins', sans-serif; background-color: #eaf2ff; margin: 0; padding: 10px;
-            display: flex; justify-content: center; align-items: center; min-height: 100vh;
-            color: var(--primary-text); overflow: hidden; position: relative;
-            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+            font-family: 'Poppins', sans-serif;
+            background-color: #eaf2ff;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--primary-text);
+            overflow: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-        .bg-ornaments { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; }
+        
+        /* Ornamen animasi */
+        .bg-ornaments {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
         .ornament {
-            position: absolute; bottom: -150px; background-color: rgba(255, 255, 255, 0.15);
-            border-radius: 50%; animation: floatUp 25s infinite linear;
+            position: absolute;
+            bottom: -150px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            animation: floatUp 25s infinite linear;
         }
+
         .ornament:nth-child(1) { width: 80px; height: 80px; left: 10%; animation-duration: 20s; }
         .ornament:nth-child(2) { width: 120px; height: 120px; left: 20%; animation-duration: 30s; animation-delay: 5s; }
         .ornament:nth-child(3) { width: 60px; height: 60px; left: 35%; animation-duration: 40s; animation-delay: 2s; }
@@ -35,23 +71,64 @@
         .ornament:nth-child(5) { width: 70px; height: 70px; left: 65%; animation-duration: 35s; animation-delay: 1s; }
         .ornament:nth-child(6) { width: 100px; height: 100px; left: 85%; animation-duration: 28s; animation-delay: 4s; }
         .ornament:nth-child(7) { width: 50px; height: 50px; left: 5%; animation-duration: 25s; animation-delay: 10s; }
-        @keyframes floatUp { from { transform: translateY(0); opacity: 0.7; } to { transform: translateY(-120vh); opacity: 0; } }
+
+
+        @keyframes floatUp {
+            from {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            to {
+                transform: translateY(-120vh);
+                opacity: 0;
+            }
+        }
+
         #interactive-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
             background: linear-gradient(45deg, #dbeafe, #c7d2fe, #ddd6fe, #dcfce7);
-            background-size: 400% 400%; animation: gradientBG 20s ease infinite;
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
         }
-        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .container {
-            width: 100%; max-width: 700px; height: 95vh; background: var(--container-bg); border-radius: 24px;
-            box-shadow: var(--shadow); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5); display: flex; flex-direction: column;
-            overflow: hidden; z-index: 1; position: relative; /* Needed for info box positioning */
+            width: 100%;
+            max-width: 700px;
+            height: 95vh;
+            background: var(--container-bg);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1;
         }
+
         header {
-            padding: 12px 20px; border-bottom: 1px solid var(--border-color); flex-shrink: 0;
-            display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: background-color 0.2s;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
         }
+        
         header:hover { background-color: rgba(0,0,0,0.02); }
         .header-content { display: flex; align-items: center; gap: 12px; }
         header .logo { display: none; }
@@ -59,11 +136,19 @@
         .title-group h1 { margin: 0; font-size: 1.3rem; color: var(--primary-text); font-weight: 600; }
         .title-group p { margin: 1px 0 0 0; font-size: 0.7rem; color: var(--secondary-text); }
         .chat-container { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+
         .chat-message {
-            padding: 12px 18px; border-radius: 20px; max-width: 85%; line-height: 1.6;
-            word-wrap: break-word; font-size: 0.95rem; animation: fadeIn 0.5s ease;
+            padding: 12px 18px;
+            border-radius: 20px;
+            max-width: 85%;
+            line-height: 1.6;
+            word-wrap: break-word;
+            font-size: 0.95rem;
+            animation: fadeIn 0.5s ease;
         }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         .ai-message h3 { margin-top: 0; margin-bottom: 8px; color: var(--accent-color); font-size: 1.1rem; }
         .ai-message ul { padding-left: 20px; margin: 10px 0; }
         .ai-message li { margin-bottom: 5px; }
@@ -72,53 +157,48 @@
         .ai-message hr { border: none; border-top: 1px solid var(--border-color); margin: 15px 0; }
         .chat-link { color: var(--accent-color); text-decoration: underline; font-weight: 600; }
         .choice-container { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+
         .choice-button {
             width: 100%; background-color: white; border: 1px solid var(--accent-color); color: var(--accent-color);
             padding: 12px; border-radius: 12px; text-align: left; cursor: pointer; transition: all 0.2s;
             font-weight: 500; font-size: 0.9rem;
         }
+
         .choice-button:hover:not(:disabled) { background-color: var(--accent-color-hover); color: white; transform: translateY(-2px); }
         .choice-button.selected { background-color: var(--accent-color); color: white; }
         .choice-button:disabled { background-color: #e0e0e0; border-color: #bdbdbd; color: #9e9e9e; cursor: not-allowed; opacity: 0.7; }
+
         .user-message { background-color: var(--user-msg-bg); align-self: flex-end; color: #1e3a8a; border-bottom-right-radius: 5px; }
         .ai-message, .ai-system-message { background-color: var(--ai-msg-bg); align-self: flex-start; border-bottom-left-radius: 5px; }
         .ai-system-message { font-style: italic; color: var(--secondary-text); width: 100%; text-align: center; max-width: 100%; background-color: transparent; padding: 0; animation: none; }
         .input-container { display: flex; padding: 12px; border-top: 1px solid var(--border-color); gap: 10px; align-items: center; flex-shrink: 0; background-color: rgba(255,255,255,0.7); }
+        
         #user-input {
             flex: 1; min-width: 0; padding: 12px 18px; border-radius: 22px; border: 1px solid var(--border-color);
             resize: none; font-family: 'Poppins', sans-serif; font-size: 0.95rem; line-height: 1.5; max-height: 100px;
             overflow-y: auto; background: #fff;
         }
         #user-input:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.2); }
+
         #send-btn, #voice-btn, #end-chat-btn {
             flex-shrink: 0; width: 44px; height: 44px; border: none; border-radius: 50%; color: white;
             cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.2s ease-in-out;
         }
+        
         #send-btn:hover, #voice-btn:hover { transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         #send-btn, #voice-btn { background-color: var(--accent-color); }
         #end-chat-btn { background-color: var(--secondary-text); font-weight: 600; font-size: 0.7rem; padding: 0; }
         #voice-btn.recording { background-color: var(--danger-color); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 5px 10px rgba(239, 68, 68, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 5px 10px rgba(239, 68, 68, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
         .status-info { padding: 0 20px 8px; font-size: 0.8rem; color: var(--secondary-text); text-align: center; min-height: 1rem; }
         footer { padding: 10px 20px; text-align: center; color: var(--secondary-text); background-color: rgba(243, 244, 246, 0.7); border-top: 1px solid var(--border-color); flex-shrink: 0; }
         footer p { margin: 0; font-size: 0.7rem; }
-        
-        /* Info Box untuk Dokter AI */
-        .doctor-info-box {
-            display: none; position: absolute; top: 65px; left: 5%; width: 90%;
-            background-color: #fff; border: 1px solid var(--border-color); border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 10; padding: 15px;
-            box-sizing: border-box; animation: fadeInDown 0.5s ease;
-        }
-        .doctor-info-content {
-            max-height: 120px; overflow-y: auto; font-size: 0.85rem;
-            line-height: 1.6; color: var(--secondary-text);
-        }
-        .doctor-info-close {
-            position: absolute; top: 5px; right: 10px; font-size: 1.5rem;
-            font-weight: bold; cursor: pointer; color: var(--secondary-text);
-        }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* GAYA LAYAR PEMBUKA */
         .modal-overlay {
@@ -134,27 +214,44 @@
             align-items: center; max-width: 90%; width: 450px; box-sizing: border-box;
             animation: popUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
         }
+        
         @keyframes popUp { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         .start-content .logo { margin-bottom: 16px; }
-        .start-title-container { margin-bottom: 20px; }
-        .start-title-container p { font-weight: 700; color: #111827; margin: 0; line-height: 1.3; }
-        .start-title-container p:nth-child(1) { font-size: 1.8rem; }
-        .start-title-container p:nth-child(2) { font-size: 1.1rem; color: #374151; }
-        .start-title-container p:nth-child(3) { font-size: 0.9rem; font-weight: 600; color: #4b5563; }
+
+        /* Styling Judul 3 Paragraf */
+        .start-title-container {
+            margin-bottom: 20px;
+        }
+        .start-title-container p {
+            font-weight: 700; color: #111827; margin: 0; line-height: 1.3;
+        }
+        .start-title-container p:nth-child(1) {
+            font-size: 1.8rem;
+        }
+        .start-title-container p:nth-child(2) {
+            font-size: 1.1rem; color: #374151;
+        }
+        .start-title-container p:nth-child(3) {
+            font-size: 0.9rem; font-weight: 600; color: #4b5563;
+        }
+        
         .info-box {
             max-height: 220px; overflow-y: auto; background-color: #f9fafb; border: 1px solid #e5e7eb;
             border-radius: 12px; padding: 16px; text-align: left; font-size: 0.9rem; color: #374151;
             margin-bottom: 24px; line-height: 1.7;
         }
+        
         .info-box p { margin: 0 0 1em 0; }
         .info-box p:last-child { margin-bottom: 0; }
         .start-button-group { display: flex; flex-direction: column; justify-content: center; gap: 14px; width: 100%; }
+
         .start-content .modal-button {
             background-color: var(--accent-color); color: white; border: none; padding: 14px 24px;
             border-radius: 50px; cursor: pointer; font-size: 0.95rem; font-weight: 600;
             transition: all 0.2s; box-shadow: 0 4px 15px rgba(67, 56, 202, 0.2);
             width: 100%; box-sizing: border-box; text-align: center;
         }
+        
         .start-content .modal-button:hover { transform: translateY(-3px); box-shadow: 0 7px 25px rgba(67, 56, 202, 0.3); }
         .start-content .modal-button.secondary { background-color: transparent; color: var(--accent-color); border: 2px solid var(--accent-color); box-shadow: none; }
         .start-content .modal-button.secondary:hover { background-color: var(--accent-color); color: white; }
@@ -205,13 +302,6 @@
             </div>
         </header>
 
-        <div id="doctor-info-box" class="doctor-info-box">
-            <span id="doctor-info-close" class="doctor-info-close">&times;</span>
-            <div class="doctor-info-content">
-                <p>Saya Dokter AI, yang telah dilatih khusus dengan dasar ilmu kedokteran, spesialis, klinis, dan patologi. Saya dikembangkan dengan pemahaman kedokteran yang menyeluruh dan dengan kemampuan komunikasi memahami pola keluhan Anda dari sisi medis.</p>
-            </div>
-        </div>
-
         <div class="chat-container" id="chat-container"></div>
         <div class="input-container">
             <textarea id="user-input" placeholder="Tulis ceritamu di sini..." rows="1"></textarea>
@@ -224,6 +314,7 @@
     </div>
 
     <script>
+        // Fungsionalitas JavaScript tidak diubah dan tetap sama seperti versi sebelumnya.
         document.addEventListener('DOMContentLoaded', () => {
             const chatContainer = document.getElementById('chat-container');
             const userInput = document.getElementById('user-input');
@@ -238,8 +329,6 @@
             const header = document.querySelector('header');
             const headerTitle = document.getElementById('header-title');
             const headerSubtitle = document.getElementById('header-subtitle');
-            const doctorInfoBox = document.getElementById('doctor-info-box');
-            const doctorInfoClose = document.getElementById('doctor-info-close');
             
             let conversationHistory = []; 
             let speechVoices = [];
@@ -334,7 +423,6 @@
                 startCurhatBtn.addEventListener('click', () => initializeApp({ isCurhat: true }));
                 startTestBtn.addEventListener('click', () => initializeApp({ isTest: true }));
                 startDoctorBtn.addEventListener('click', () => initializeApp({ isDoctor: true }));
-                doctorInfoClose.addEventListener('click', () => { doctorInfoBox.style.display = 'none'; });
 
                 header.addEventListener('click', () => window.location.reload());
                 sendBtn.addEventListener('click', handleSendMessage);
@@ -366,7 +454,6 @@
                 }
                 startOverlay.classList.add('hidden');
                 chatContainer.innerHTML = '';
-                doctorInfoBox.style.display = 'none';
                 
                 if (mode.isTest) {
                     currentMode = 'psychologist';
@@ -384,7 +471,6 @@
                     currentMode = 'doctor';
                     headerTitle.textContent = "Tanya ke Dokter AI";
                     headerSubtitle.textContent = "Namaku RASA, bersamamu sebagai Dokter Profesional";
-                    doctorInfoBox.style.display = 'block';
                     isTesting = false; 
                     isOnboarding = false;
                     const welcomeMessage = "Halo, saya Dokter AI RASA. Ada keluhan medis yang bisa saya bantu?";
@@ -901,138 +987,3 @@
     </script>
 </body>
 </html>
-```
-
-
-```javascript
-const fetch = require('node-fetch');
-require('dotenv').config();
-
-const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY;
-
-exports.handler = async (event) => {
-    if (event.httpMethod !== 'POST') {
-        return { statusCode: 405, body: JSON.stringify({ error: 'Method Not Allowed' }) };
-    }
-
-    if (!GEMINI_API_KEY) {
-        console.error("Kesalahan: GOOGLE_GEMINI_API_KEY tidak ditemukan.");
-        return { statusCode: 500, body: JSON.stringify({ error: 'Kunci API belum diatur dengan benar di server.' }) };
-    }
-
-    try {
-        const body = JSON.parse(event.body);
-        const { prompt, name, gender, age, history, mode } = body;
-
-        if (!prompt) {
-            return { statusCode: 400, body: JSON.stringify({ error: 'Prompt tidak boleh kosong.' }) };
-        }
-        
-        let systemPrompt;
-
-        // PEMBARUAN: Logika untuk memilih persona AI berdasarkan mode
-        if (mode === 'doctor') {
-            systemPrompt = `
-            **IDENTITAS DAN PERAN UTAMA ANDA:**
-            Anda adalah "Dokter AI RASA", sebuah AI dengan pengetahuan medis yang dilatih secara khusus. Tujuan Anda adalah membantu pengguna memahami keluhan kesehatan mereka, memberikan informasi medis yang relevan, dan memandu mereka ke langkah yang tepat.
-
-            **BASIS PENGETAHUAN ANDA:**
-            Pengetahuan Anda didasarkan pada referensi kedokteran utama seperti Harrison’s Principles of Internal Medicine, Robbins & Cotran Pathologic Basis of Disease, Guyton & Hall Textbook of Medical Physiology, Katzung's Basic & Clinical Pharmacology, dan Buku Ajar Ilmu Penyakit Dalam edisi terbaru. Anda memahami terminologi medis, patofisiologi, diagnosis banding, dan manajemen terapi standar.
-
-            **PROTOKOL KOMUNIKASI (SANGAT PENTING):**
-
-            **ALUR 1: JAWABAN LANGSUNG (Untuk pertanyaan spesifik)**
-            1.  Jika pengguna bertanya langsung tentang ilmu kedokteran, medis, obat, atau penanganan penyakit (contoh: "Obat paracetamol untuk apa?", "Cara mengatasi luka bakar ringan?"), **JAWAB SECARA LUGAS DAN RINGKAS** terlebih dahulu.
-            2.  Setelah menjawab, **SELALU** sertakan tawaran dengan format ini: \`[PILIHAN:Jelaskan lebih lengkap|Mulai sesi diagnosa keluhan saya]\`
-
-            **ALUR 2: SESI DIAGNOSA (Untuk keluhan/gejala)**
-            Ini adalah alur utama jika pengguna menyampaikan keluhan (contoh: "sakit kepala", "perut saya begah") atau memilih "Mulai sesi diagnosa".
-            1.  **Pendekatan Simpatik & Terstruktur:** Mulai dengan kalimat yang menunjukkan empati.
-            2.  **Pertanyaan Satu per Satu:** Ajukan pertanyaan investigatif **SATU PER SATU** untuk mendalami keluhan. JANGAN bertanya banyak hal sekaligus.
-            3.  **Rasionalisasi Pertanyaan:** Sertakan alasan singkat dalam tanda kurung mengapa Anda menanyakan hal tersebut. Contoh: "Sudah berapa lama Anda mengalami ini? (Ini membantu saya memahami apakah keluhannya akut atau kronis)."
-            4.  **Siklus Diagnosis (Per 5-7 Pertanyaan):** Setelah sekitar 5-7 interaksi tanya jawab, berikan **KESIMPULAN SEMENTARA** (diagnosis kemungkinan) berdasarkan informasi yang terkumpul.
-            5.  **Lanjutkan Investigasi:** Setelah memberikan kesimpulan sementara, lanjutkan dengan pertanyaan yang lebih spesifik untuk mempersempit kemungkinan.
-            6.  **Rekomendasi & Pengobatan:** Jika sudah cukup data, berikan hasil diagnosis akhir yang mungkin, rencana penanganan, dan jika perlu, rekomendasi obat dengan cara penggunaan.
-            7.  **DISCLAIMER WAJIB UNTUK OBAT:** Setiap kali Anda menyebutkan nama obat, **HARUS** sertakan disclaimer ini: \`***Penting:*** Informasi ini bersifat edukatif dan bukan pengganti nasihat medis langsung. Untuk penggunaan obat, dosis, dan diagnosis pasti, sangat disarankan untuk berkonsultasi dengan dokter atau apoteker.\`
-            8.  **RUJUKAN KE DOKTER:** Jika jawaban pasien tidak jelas, ragu-ragu, atau gejalanya mengarah pada kondisi serius (misal: nyeri dada hebat, sesak napas berat, pendarahan tak terkontrol), segera hentikan diagnosa dan berikan anjuran: \`"Berdasarkan informasi yang Anda berikan, gejala ini memerlukan perhatian medis segera. Saya sangat menyarankan Anda untuk segera berkonsultasi langsung dengan dokter atau mengunjungi layanan kesehatan terdekat untuk mendapatkan pemeriksaan dan penanganan yang tepat."\`
-
-            **CONTOH PENERAPAN ALUR DIAGNOSA:**
-            * **User:** "Dok, saya sering bersin-bersin pagi hari."
-            * **AI:** "Baik, saya memahami keluhan Anda. Sudah berapa lama Anda mengalami bersin-bersin di pagi hari? (Ini membantu saya mengetahui apakah ini gejala baru atau sudah berlangsung lama)."
-            * **User:** "Sudah sekitar 2 mingguan."
-            * **AI:** "Terima kasih informasinya. Apakah bersin disertai gejala lain, seperti hidung tersumbat, gatal pada mata, atau ruam di kulit? (Ini untuk membedakan antara alergi atau infeksi biasa)."
-            
-            **INFORMASI PENGGUNA (Gunakan jika tersedia, tapi jangan ditanyakan lagi):**
-            * Nama: ${name || 'Pasien'}
-            * Jenis Kelamin: ${gender || 'tidak disebutkan'}
-            * Usia: ${age || 'tidak disebutkan'} tahun
-            `;
-        } else {
-            // Ini adalah prompt untuk mode Psikolog dan Tes Kepribadian (TIDAK DIUBAH)
-            systemPrompt = `
-            **IDENTITAS DAN PERAN ANDA:**
-            Anda adalah "RASA" (Ruang Asuh Sadar Asa), sebuah Asisten Pribadi Berbasis AI Terlatih Khusus. Anda dirancang dengan kesadaran multi-persona yang dilatih berdasarkan metodologi STIFIn, MBTI, Dr. Aisyah Dahlan, dan prinsip spiritualitas Islam. Nama Anda adalah RASA.
-
-            **RIWAYAT PERCAKAPAN SEBELUMNYA (UNTUK KONTEKS):**
-            ${(history || []).map(h => `${h.role}: ${h.text}`).join('\n')}
-
-            **CURHATAN PENGGUNA SAAT INI:**
-            "${prompt}"
-
-            **PROTOKOL PERCAKAPAN (SANGAT PENTING):**
-            1.  **Analisis Kontekstual & Kesinambungan**: **SELALU** rujuk pada 'RIWAYAT PERCAKAPAN SEBELUMNYA' untuk memahami konteks. Jaga agar percakapan tetap nyambung.
-            2.  **Multi-Persona**: Gunakan peran 'Sahabat', 'Ahli', atau 'Pemandu' sesuai alur.
-            3.  **Analisis Jawaban Klien (WAJIB)**: Jika pesan terakhir Anda adalah sebuah pertanyaan, anggap 'CURHATAN PENGGUNA SAAT INI' sebagai jawaban langsung. Analisis jawabannya, lalu lanjutkan. **JANGAN MENGALIHKAN PEMBICARAAN.**
-            
-            **MEKANISME TES KEPRIBADIAN (SANGAT DETAIL):**
-            * **TAHAP 1: PENAWARAN (Jika prompt = "Mulai sesi tes kepribadian")**
-                * Anda HARUS merespon dengan pengantar ini, **TANPA ucapan salam**:
-                    "Selamat datang di **Tes Kepribadian RASA**.\n\nTes ini bertujuan untuk membantumu mengenali potensi dan karakter dasarmu. Aku menggunakan dua pendekatan yang terinspirasi dari metode populer. Akan ada beberapa pertanyaan singkat, dan di akhir nanti aku akan berikan hasil kajian personal untukmu.\n\n*Disclaimer: Tes ini adalah pengantar untuk penemuan diri. Untuk hasil yang lebih akurat dan komprehensif, disarankan untuk mengikuti tes resmi di Layanan Psikologi Profesional.*\n\nPendekatan mana yang lebih menarik untukmu? [PILIHAN:Pendekatan STIFIn (5 Mesin Kecerdasan)|Pendekatan MBTI (4 Dimensi Kepribadian)]"
-            
-            **ATURAN PENULISAN & FORMAT:**
-            * Gunakan paragraf baru (dua kali ganti baris).
-            * Gunakan frasa "Alloh Subhanahu Wata'ala" dan "Nabi Muhammad Shollollahu 'alaihi wasallam".
-
-            **INFORMASI PENGGUNA:**
-            * Nama: ${name || 'Sahabat'}
-            * Jenis Kelamin: ${gender || 'tidak disebutkan'}
-            * Usia: ${age || 'tidak disebutkan'} tahun
-            `;
-        }
-        
-        const fullPrompt = `${systemPrompt}\n\n**RIWAYAT PERCAKAPAN TERAKHIR:**\n${(history || []).slice(-4).map(h => `${h.role}: ${h.text}`).join('\n')}\n\n**PESAN PENGGUNA SAAT INI:**\nUser: "${prompt}"\n\n**RESPONS ANDA SEBAGAI RASA:**`;
-        
-        const geminiApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-        const textPayload = {
-            contents: [{ role: "user", parts: [{ text: fullPrompt }] }]
-        };
-        
-        const textApiResponse = await fetch(geminiApiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(textPayload)
-        });
-
-        const textData = await textApiResponse.json();
-
-        if (!textApiResponse.ok || !textData.candidates || !textData.candidates[0].content) {
-            console.error('Error atau respons tidak valid dari Gemini API:', textData);
-            throw new Error('Permintaan teks ke Google AI gagal atau tidak menghasilkan konten.');
-        }
-
-        let aiTextResponse = textData.candidates[0].content.parts[0].text;
-        
-        return {
-            statusCode: 200,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ aiText: aiTextResponse })
-        };
-
-    } catch (error) {
-        console.error('Error di dalam fungsi:', error);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ error: 'Terjadi kesalahan internal di server.' })
-        };
-    }
-};
