@@ -699,7 +699,7 @@
                 if (result) {
                     let resultMessage = `Terima kasih telah menjawab. Berikut adalah hasil analisa kepribadian Anda:\n\n${result.explanation}\n\n---\n\n### **${result.title}**\n\n**Potensi Diri:**\n${result.potensiDiri}\n\n**Cara Belajar yang Cocok:**\n${result.caraBelajar}\n\n**Potensi Profesi yang Sesuai:**\n- ${result.profesi.split(', ').join('\n- ')}\n\n---\n\nIngat, ini adalah peta potensi, bukan takdir. Gunakan wawasan ini untuk berkembang.`;
                     displayMessage(resultMessage, 'ai');
-                    speakAsync(resultMessage.replace(/[\*#\-]/g, ''), true);
+                    speakAsync(resultMessage, true);
                 } else {
                     displayMessage("Maaf, terjadi kesalahan dalam menampilkan hasil tes. Silakan mulai ulang dari header.", 'ai-system');
                 }
@@ -717,7 +717,7 @@
                     userInput.value = '';
                     userInput.style.height = 'auto';
                     updateButtonVisibility();
-                    const linkMessage = "Tentu, ini adalah contoh tautan yang bisa diklik: [Buka Google](https://www.google.com).";
+                    const linkMessage = "Tentu, ini adalah contoh tautan wisata di Malang yang aktif: \n\n- [Jatim Park 3](https://jtp.id/jatimpark3)\n- [Kampung Warna Warni Jodipan](https://www.instagram.com/kampung_warna_warni_jodipan)";
                     displayMessage(linkMessage, 'ai');
                     speakAsync("Tentu, ini adalah contoh tautan yang bisa diklik.", true);
                     return;
@@ -847,8 +847,7 @@
                             processedText = processedText.replace(/Assalamualaikum,?\s*/i, "").trim();
                         }
                         displayMessage(processedText, 'ai');
-                        const textToSpeak = processedText.replace(/\[.*?\]/g, "").replace(/[\*#\-]/g, "");
-                        await speakAsync(textToSpeak, true);
+                        await speakAsync(processedText, true);
                     }
 
                 } catch (error) {
@@ -870,11 +869,16 @@
                 }
             }
             
+            // --- PEMBARUAN: Logika pengejaan "AI" ditambahkan ---
             function speakAsync(text, isAIResponse = false) {
                 return new Promise((resolve) => {
                     if (!('speechSynthesis' in window)) { resolve(); return; }
                     window.speechSynthesis.cancel();
-                    const utterance = new SpeechSynthesisUtterance(text);
+                    
+                    // Mengganti "AI" menjadi "E Ai" hanya untuk audio
+                    const textForSpeech = text.replace(/\bAI\b/g, 'E Ai');
+                    
+                    const utterance = new SpeechSynthesisUtterance(textForSpeech);
                     utterance.lang = 'id-ID';
                     utterance.rate = 0.95;
                     utterance.pitch = 1;
@@ -947,6 +951,7 @@
                     let textPart = textWithChoices.split('<div class="choice-container">')[0];
                     let choicePart = textWithChoices.includes('<div class="choice-container">') ? '<div class="choice-container">' + textWithChoices.split('<div class="choice-container">')[1] : '';
 
+                    // Mendukung format Markdown [teks](url) dan format kustom [LINK:url]teks[/LINK]
                     let html = textPart
                         .replace(/\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>')
                         .replace(/\[LINK:(.*?)\](.*?)\[\/LINK\]/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="chat-link">$2</a>')
