@@ -234,7 +234,7 @@
             font-size: 1.8rem; /* RASA */
         }
         .start-title-container p:nth-child(2) {
-            font-size: 1.1rem; /* (Ruang Sadar Sadar Asa) */
+            font-size: 1.1rem; /* (Ruang Asuh Sadar Asa) */
             color: #374151;
         }
         .start-title-container p:nth-child(3) {
@@ -276,7 +276,7 @@
         <div class="ornament"></div>
     </div>
 
-    <!-- Layar Pembuka (Struktur dan Teks Diperbarui) -->
+    <!-- Layar Pembuka (Judul Dikoreksi) -->
     <div id="start-overlay" class="modal-overlay visible">
         <div class="start-content">
             <svg class="logo" width="72" height="72" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -291,7 +291,7 @@
             </svg>
             <div class="start-title-container">
                 <p>RASA</p>
-                <p>(Ruang Sadar Sadar Asa)</p>
+                <p>(Ruang Asuh Sadar Asa)</p>
                 <p>Asisten Pribadi Berbasis AI Terlatih Khusus</p>
             </div>
             <div class="info-box">
@@ -345,7 +345,6 @@
     </div>
 
     <script>
-        // Fungsionalitas JavaScript tidak diubah dan tetap sama seperti versi sebelumnya.
         document.addEventListener('DOMContentLoaded', () => {
             const chatContainer = document.getElementById('chat-container');
             const userInput = document.getElementById('user-input');
@@ -507,7 +506,8 @@
                 statusDiv.textContent = "Sesi perkenalan...";
                 updateButtonVisibility();
                 try {
-                    const firstGreeting = "Assalamualaikum, namaku RASA, teman curhatmu. Boleh kutahu siapa namamu?";
+                    // --- PEMBARUAN: Teks sapaan awal diubah ---
+                    const firstGreeting = "Perkenalkan , saya adalah asisten pribadi Anda yang bernama RASA. Saya sebagai seorang Psikolog AI, siap membantu Anda. Mari kita mulai dengan sesi perkenalan, boleh saya tahu nama Anda?";
                     displayMessage(firstGreeting, 'ai');
                     await speakAsync(firstGreeting, true);
                     
