@@ -116,6 +116,7 @@
             flex-direction: column;
             overflow: hidden;
             z-index: 1;
+            position: relative; /* Diperlukan untuk positioning info box */
         }
 
         header {
@@ -189,16 +190,27 @@
         #send-btn, #voice-btn { background-color: var(--accent-color); }
         #end-chat-btn { background-color: var(--secondary-text); font-weight: 600; font-size: 0.7rem; padding: 0; }
         #voice-btn.recording { background-color: var(--danger-color); animation: pulse 1.5s infinite; }
-
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 5px 10px rgba(239, 68, 68, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 5px 10px rgba(239, 68, 68, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
         .status-info { padding: 0 20px 8px; font-size: 0.8rem; color: var(--secondary-text); text-align: center; min-height: 1rem; }
         footer { padding: 10px 20px; text-align: center; color: var(--secondary-text); background-color: rgba(243, 244, 246, 0.7); border-top: 1px solid var(--border-color); flex-shrink: 0; }
         footer p { margin: 0; font-size: 0.7rem; }
+        
+        /* PEMBARUAN: Info Box untuk Dokter AI */
+        .doctor-info-box {
+            display: none; position: absolute; top: 65px; left: 5%; width: 90%;
+            background-color: #fff; border: 1px solid var(--border-color); border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 10; padding: 15px;
+            box-sizing: border-box; animation: fadeInDown 0.5s ease;
+        }
+        .doctor-info-content {
+            max-height: 120px; overflow-y: auto; font-size: 0.85rem;
+            line-height: 1.6; color: var(--secondary-text);
+        }
+        .doctor-info-close {
+            position: absolute; top: 5px; right: 10px; font-size: 1.5rem;
+            font-weight: bold; cursor: pointer; color: var(--secondary-text);
+        }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* GAYA LAYAR PEMBUKA */
         .modal-overlay {
@@ -214,26 +226,13 @@
             align-items: center; max-width: 90%; width: 450px; box-sizing: border-box;
             animation: popUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
         }
-        
         @keyframes popUp { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         .start-content .logo { margin-bottom: 16px; }
-
-        /* Styling Judul 3 Paragraf */
-        .start-title-container {
-            margin-bottom: 20px;
-        }
-        .start-title-container p {
-            font-weight: 700; color: #111827; margin: 0; line-height: 1.3;
-        }
-        .start-title-container p:nth-child(1) {
-            font-size: 1.8rem;
-        }
-        .start-title-container p:nth-child(2) {
-            font-size: 1.1rem; color: #374151;
-        }
-        .start-title-container p:nth-child(3) {
-            font-size: 0.9rem; font-weight: 600; color: #4b5563;
-        }
+        .start-title-container { margin-bottom: 20px; }
+        .start-title-container p { font-weight: 700; color: #111827; margin: 0; line-height: 1.3; }
+        .start-title-container p:nth-child(1) { font-size: 1.8rem; }
+        .start-title-container p:nth-child(2) { font-size: 1.1rem; color: #374151; }
+        .start-title-container p:nth-child(3) { font-size: 0.9rem; font-weight: 600; color: #4b5563; }
         
         .info-box {
             max-height: 220px; overflow-y: auto; background-color: #f9fafb; border: 1px solid #e5e7eb;
@@ -244,7 +243,6 @@
         .info-box p { margin: 0 0 1em 0; }
         .info-box p:last-child { margin-bottom: 0; }
         .start-button-group { display: flex; flex-direction: column; justify-content: center; gap: 14px; width: 100%; }
-
         .start-content .modal-button {
             background-color: var(--accent-color); color: white; border: none; padding: 14px 24px;
             border-radius: 50px; cursor: pointer; font-size: 0.95rem; font-weight: 600;
@@ -302,6 +300,28 @@
             </div>
         </header>
 
+        <div id="doctor-info-box" class="doctor-info-box">
+            <span id="doctor-info-close" class="doctor-info-close">&times;</span>
+            <div class="doctor-info-content">
+                <p><strong>Saya Dokter AI,</strong> yang telah dilatih khusus dengan dasar ilmu kedokteran, spesialis, klinis, dan patologi. Saya dikembangkan dengan pemahaman kedokteran yang menyeluruh dan dengan kemampuan komunikasi memahami pola keluhan Anda dari sisi medis.</p>
+                <hr>
+                <p><strong>Contoh Komunikasi Gejala dan Keluhan:</strong></p>
+                <ul>
+                    <li>Dok, saya sering bersin-bersin pagi hari.</li>
+                    <li>Saya merasa ngilu di pinggang setelah duduk lama.</li>
+                    <li>Perut saya sering begah setelah makan pedas.</li>
+                    <li>Ada benjolan di payudara saya dan terasa agak nyeri.</li>
+                </ul>
+                <p><strong>Contoh Pertanyaan tentang Obat & Layanan Kesehatan:</strong></p>
+                <ul>
+                    <li>Obat Paracetamol sebenarnya untuk penyakit apa, ya?</li>
+                    <li>Cara minum obat Amoxicillin gimana, sebelum atau sesudah makan?</li>
+                    <li>Kalau saya lupa minum satu dosis, harus bagaimana?</li>
+                    <li>Pertolongan pertama untuk luka bakar ringan itu apa?</li>
+                </ul>
+            </div>
+        </div>
+
         <div class="chat-container" id="chat-container"></div>
         <div class="input-container">
             <textarea id="user-input" placeholder="Tulis ceritamu di sini..." rows="1"></textarea>
@@ -329,6 +349,9 @@
             const header = document.querySelector('header');
             const headerTitle = document.getElementById('header-title');
             const headerSubtitle = document.getElementById('header-subtitle');
+            // PEMBARUAN: Seleksi elemen info box baru
+            const doctorInfoBox = document.getElementById('doctor-info-box');
+            const doctorInfoClose = document.getElementById('doctor-info-close');
             
             let conversationHistory = []; 
             let speechVoices = [];
@@ -423,6 +446,7 @@
                 startCurhatBtn.addEventListener('click', () => initializeApp({ isCurhat: true }));
                 startTestBtn.addEventListener('click', () => initializeApp({ isTest: true }));
                 startDoctorBtn.addEventListener('click', () => initializeApp({ isDoctor: true }));
+                doctorInfoClose.addEventListener('click', () => { doctorInfoBox.style.display = 'none'; });
 
                 header.addEventListener('click', () => window.location.reload());
                 sendBtn.addEventListener('click', handleSendMessage);
@@ -454,6 +478,7 @@
                 }
                 startOverlay.classList.add('hidden');
                 chatContainer.innerHTML = '';
+                doctorInfoBox.style.display = 'none';
                 
                 if (mode.isTest) {
                     currentMode = 'psychologist';
@@ -471,6 +496,7 @@
                     currentMode = 'doctor';
                     headerTitle.textContent = "Tanya ke Dokter AI";
                     headerSubtitle.textContent = "Namaku RASA, bersamamu sebagai Dokter Profesional";
+                    doctorInfoBox.style.display = 'block';
                     isTesting = false; 
                     isOnboarding = false;
                     const welcomeMessage = "Halo, saya Dokter AI RASA. Ada keluhan medis yang bisa saya bantu?";
