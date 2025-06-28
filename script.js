@@ -224,9 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return shuffled.slice(0, count);
     }
 
-    // Fungsi initiateTest diubah menjadi async untuk memuat data dari JSON
     async function initiateTest(type) {
-        // Memuat data tes jika belum ada
         if (Object.keys(fullTestData).length === 0) {
             try {
                 statusDiv.textContent = "Memuat data tes...";
@@ -375,25 +373,60 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function speakAsync(text) {
+    // PERBAIKAN: Fungsi speakAsync diperbarui untuk menangani teks panjang
+    async function speakAsync(fullText) {
         if (currentAudio) {
             currentAudio.pause();
             currentAudio.src = '';
             currentAudio = null;
         }
-        const textForSpeech = text.replace(/\[PILIHAN:.*?\]/g, '').replace(/\[.*?\]\(.*?\)/g, '').replace(/###/g, '').replace(/---/g, '').replace(/\*\*\*/g, '').replace(/\*\*/g, '').replace(/\*/g, '').replace(/\bAI\b/g, 'E Ai');
-        if (!textForSpeech.trim()) {
-            return Promise.resolve();
+
+        // Membersihkan teks dari markdown untuk diproses
+        const cleanFullText = fullText
+            .replace(/\[PILIHAN:.*?\]/g, '')
+            .replace(/\[.*?\]\(.*?\)/g, '')
+            .replace(/###/g, '')
+            .replace(/---/g, '')
+            .replace(/\*\*\*/g, '')
+            .replace(/\*\*/g, '')
+            .replace(/\*/g, '');
+
+        let textForApi;
+        const MAX_VOICE_LENGTH = 250; // Batas maksimal karakter untuk diucapkan
+        const VOICE_INSTRUCTION = " Untuk selengkapnya, silakan baca di layar Anda.";
+
+        // Jika teks lebih panjang dari batas, potong untuk dijadikan suara
+        if (cleanFullText.length > MAX_VOICE_LENGTH) {
+            let shortText = cleanFullText.substring(0, MAX_VOICE_LENGTH);
+            // Cari titik atau spasi terakhir untuk memotong di akhir kalimat/kata
+            let cutOffPoint = shortText.lastIndexOf('.') > 0 ? shortText.lastIndexOf('.') + 1 : shortText.lastIndexOf(' ');
+            if (cutOffPoint > 0) {
+                shortText = shortText.substring(0, cutOffPoint);
+            }
+            textForApi = shortText.trim() + VOICE_INSTRUCTION;
+        } else {
+            textForApi = cleanFullText;
         }
+        
+        // Ganti "AI" menjadi "E Ai" untuk pengucapan yang lebih baik
+        const finalTextForApi = textForApi.replace(/\bAI\b/g, 'E Ai');
+
+        if (!finalTextForApi.trim()) {
+            return Promise.resolve(); // Jangan lakukan apa-apa jika tidak ada teks
+        }
+
         statusDiv.textContent = "Menyiapkan suara...";
         try {
             const response = await fetch('/api/synthesize', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: textForSpeech })
+                body: JSON.stringify({ text: finalTextForApi })
             });
             if (!response.ok) {
-                throw new Error(`Gagal membuat suara: ${response.statusText}`);
+                // Tambahkan detail error dari server jika ada
+                const errData = await response.json().catch(() => null);
+                const detail = errData ? errData.details || errData.error : response.statusText;
+                throw new Error(`Gagal membuat suara: ${detail}`);
             }
             const data = await response.json();
             const audioBase64 = data.audioContent;
@@ -406,8 +439,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentAudio = null;
                     resolve();
                 };
-                currentAudio.onerror = () => {
+                currentAudio.onerror = (e) => {
                      statusDiv.textContent = "Gagal memutar suara.";
+                     console.error("Audio playback error:", e)
                      currentAudio = null;
                      resolve();
                 };
@@ -416,7 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } catch (error) {
             console.error("Speech synthesis error:", error);
-            statusDiv.textContent = "Gagal mengambil data suara.";
+            statusDiv.textContent = `Gagal mengambil data suara.`; // Menampilkan pesan error yang lebih jelas
             return Promise.resolve();
         }
     }
@@ -432,13 +466,11 @@ document.addEventListener('DOMContentLoaded', () => {
         getAIResponse(userText, userName, userGender, userAge);
     }
     
-    // Fungsi ini diubah menjadi async untuk menangani pemanggilan initiateTest
     async function handleSendMessageWithChoice(choice) {
         displayMessage(choice, 'user');
         if (isTesting) {
             if (currentTestType === 'selection') {
                 const type = choice.toLowerCase().includes('stifin') ? 'stifin' : 'mbti';
-                // Panggil initiateTest yang sekarang async
                 await initiateTest(type);
             } else {
                 processTestAnswer(choice);
@@ -632,6 +664,5 @@ document.addEventListener('DOMContentLoaded', () => {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
     
-    // Memulai aplikasi setelah semua didefinisikan
     init();
 });
