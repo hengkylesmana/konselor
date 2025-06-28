@@ -373,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // PERBAIKAN: Fungsi speakAsync diperbarui untuk menangani teks panjang dengan lebih baik
+    // PERBAIKAN FINAL: Fungsi speakAsync dengan pemotongan teks yang lebih efektif
     async function speakAsync(fullText) {
         if (currentAudio) {
             currentAudio.pause();
@@ -381,46 +381,38 @@ document.addEventListener('DOMContentLoaded', () => {
             currentAudio = null;
         }
 
-        // Membersihkan teks dari markdown untuk diproses
+        // Hapus semua format markdown untuk pemrosesan
         const cleanFullText = fullText
             .replace(/\[PILIHAN:.*?\]/g, '')
             .replace(/\[.*?\]\(.*?\)/g, '')
             .replace(/###/g, '')
             .replace(/---/g, '')
-            .replace(/\*\*\*/g, '')
-            .replace(/\*\*/g, '')
-            .replace(/\*/g, '');
+            .replace(/\*\*\*|__/g, '')
+            .replace(/\*\*|__/g, '')
+            .replace(/\*|_/g, '');
 
         let textForApi;
-        // Batas karakter yang lebih aman untuk menghindari timeout Netlify Function (10 detik)
-        const MAX_VOICE_LENGTH = 150; 
-        const VOICE_INSTRUCTION = " Untuk detailnya, silakan baca di layar.";
+        // Batas karakter yang sangat aman untuk diproses di bawah 5 detik.
+        const MAX_VOICE_LENGTH = 120; 
+        const VOICE_INSTRUCTION = " Untuk lebih lengkap, silakan dibaca di layar Anda ya.";
 
         // Jika teks lebih panjang dari batas, potong untuk dijadikan suara
         if (cleanFullText.length > MAX_VOICE_LENGTH) {
             // Ambil bagian awal teks
             let shortText = cleanFullText.substring(0, MAX_VOICE_LENGTH);
             
-            // Cari titik terakhir untuk memotong di akhir kalimat, agar suara lebih natural
+            // Cari titik, koma, atau spasi terakhir untuk memotong di akhir kata/kalimat
             let cutOffPoint = shortText.lastIndexOf('.');
+            if (cutOffPoint <= 0) cutOffPoint = shortText.lastIndexOf(',');
+            if (cutOffPoint <= 0) cutOffPoint = shortText.lastIndexOf(' ');
             
-            // Jika tidak ada titik, cari koma terakhir
-            if (cutOffPoint <= 0) {
-                cutOffPoint = shortText.lastIndexOf(',');
-            }
-            
-            // Jika tidak ada titik atau koma, cari spasi terakhir
-            if (cutOffPoint <= 0) {
-                cutOffPoint = shortText.lastIndexOf(' ');
-            }
-            
-            // Potong teks pada titik yang ditemukan agar tidak terputus di tengah kata
+            // Potong teks pada titik yang ditemukan
             if (cutOffPoint > 0) {
-                shortText = shortText.substring(0, cutOffPoint + 1); // +1 untuk menyertakan tanda baca
+                shortText = shortText.substring(0, cutOffPoint);
             }
-
+            
             // Gabungkan ringkasan dengan instruksi
-            textForApi = shortText.trim() + VOICE_INSTRUCTION;
+            textForApi = shortText.trim() + ". " + VOICE_INSTRUCTION;
         } else {
             textForApi = cleanFullText;
         }
@@ -429,30 +421,35 @@ document.addEventListener('DOMContentLoaded', () => {
         const finalTextForApi = textForApi.replace(/\bAI\b/g, 'E Ai');
 
         if (!finalTextForApi.trim()) {
-            return Promise.resolve(); // Jangan lakukan apa-apa jika tidak ada teks
+            return Promise.resolve();
         }
 
         statusDiv.textContent = "Menyiapkan suara...";
         try {
-            // Log untuk debugging untuk melihat teks apa yang dikirim
-            console.log("Mengirim teks ke API suara:", finalTextForApi); 
+            console.log("Mengirim teks ke API suara (panjang: " + finalTextForApi.length + "):", finalTextForApi); 
             
             const response = await fetch('/api/synthesize', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ text: finalTextForApi })
             });
+
             if (!response.ok) {
-                // Tambahkan detail error dari server jika ada untuk debugging
-                const errData = await response.json().catch(() => null);
-                const detail = errData ? errData.details || errData.error : response.statusText;
-                throw new Error(`Gagal membuat suara: ${detail}`);
+                const errData = await response.json().catch(() => ({}));
+                const detail = errData.details || errData.error || response.statusText;
+                throw new Error(`Gagal membuat suara (${response.status}): ${detail}`);
             }
+
             const data = await response.json();
+            if (!data.audioContent) {
+                throw new Error("Respon audio dari server kosong.");
+            }
+
             const audioBase64 = data.audioContent;
             const audioBlob = new Blob([Uint8Array.from(atob(audioBase64), c => c.charCodeAt(0))], { type: 'audio/mpeg' });
             const audioUrl = URL.createObjectURL(audioBlob);
             currentAudio = new Audio(audioUrl);
+            
             return new Promise((resolve) => {
                 currentAudio.onended = () => {
                     statusDiv.textContent = "";
@@ -461,20 +458,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 currentAudio.onerror = (e) => {
                      statusDiv.textContent = "Gagal memutar suara.";
-                     console.error("Audio playback error:", e)
+                     console.error("Audio playback error:", e);
                      currentAudio = null;
                      resolve();
                 };
-                currentAudio.play();
+                currentAudio.play().catch(e => {
+                    console.error("Error saat mencoba memutar audio:", e);
+                    statusDiv.textContent = "Gagal memulai audio.";
+                    resolve();
+                });
                 statusDiv.textContent = "Memutar suara...";
             });
+
         } catch (error) {
-            console.error("Speech synthesis error:", error);
-            // Menampilkan pesan error yang lebih jelas di UI
+            console.error("Kesalahan pada fungsi speakAsync:", error);
             statusDiv.textContent = `Gagal mengambil data suara.`; 
             return Promise.resolve();
         }
     }
+
 
     function handleSendMessage() {
         if (isRecording || isOnboarding || isTesting) return;
