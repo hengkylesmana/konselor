@@ -392,23 +392,34 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/\*/g, '');
 
         let textForApi;
-        const MAX_VOICE_LENGTH = 180; // Batas karakter yang lebih aman untuk menghindari timeout
-        const VOICE_INSTRUCTION = " Untuk selengkapnya, silakan baca di layar Anda.";
+        // Batas karakter yang lebih aman untuk menghindari timeout Netlify Function (10 detik)
+        const MAX_VOICE_LENGTH = 150; 
+        const VOICE_INSTRUCTION = " Untuk detailnya, silakan baca di layar.";
 
         // Jika teks lebih panjang dari batas, potong untuk dijadikan suara
         if (cleanFullText.length > MAX_VOICE_LENGTH) {
+            // Ambil bagian awal teks
             let shortText = cleanFullText.substring(0, MAX_VOICE_LENGTH);
-            // Cari titik atau spasi terakhir untuk memotong di akhir kalimat/kata agar lebih natural
+            
+            // Cari titik terakhir untuk memotong di akhir kalimat, agar suara lebih natural
             let cutOffPoint = shortText.lastIndexOf('.');
-            if (cutOffPoint <= 0) { // Jika tidak ada titik, cari spasi
+            
+            // Jika tidak ada titik, cari koma terakhir
+            if (cutOffPoint <= 0) {
+                cutOffPoint = shortText.lastIndexOf(',');
+            }
+            
+            // Jika tidak ada titik atau koma, cari spasi terakhir
+            if (cutOffPoint <= 0) {
                 cutOffPoint = shortText.lastIndexOf(' ');
             }
             
-            // Jika ditemukan titik potong yang baik, gunakan itu.
+            // Potong teks pada titik yang ditemukan agar tidak terputus di tengah kata
             if (cutOffPoint > 0) {
-                shortText = shortText.substring(0, cutOffPoint + 1); // +1 untuk menyertakan titik
+                shortText = shortText.substring(0, cutOffPoint + 1); // +1 untuk menyertakan tanda baca
             }
 
+            // Gabungkan ringkasan dengan instruksi
             textForApi = shortText.trim() + VOICE_INSTRUCTION;
         } else {
             textForApi = cleanFullText;
@@ -423,6 +434,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         statusDiv.textContent = "Menyiapkan suara...";
         try {
+            // Log untuk debugging untuk melihat teks apa yang dikirim
+            console.log("Mengirim teks ke API suara:", finalTextForApi); 
+            
             const response = await fetch('/api/synthesize', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -456,7 +470,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } catch (error) {
             console.error("Speech synthesis error:", error);
-            statusDiv.textContent = `Gagal mengambil data suara.`; // Menampilkan pesan error yang lebih jelas di UI
+            // Menampilkan pesan error yang lebih jelas di UI
+            statusDiv.textContent = `Gagal mengambil data suara.`; 
             return Promise.resolve();
         }
     }
