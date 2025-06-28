@@ -486,7 +486,9 @@
             let testScores = {};
             let currentTestQuestionIndex = 0;
             let currentMode = 'psychologist';
-            let currentAudio = null;
+            let speechVoices = [];
+            // PERBAIKAN: Menambahkan timer untuk inactivity
+            let inactivityTimer = null;
 
             // Data lengkap untuk tes kepribadian (tidak berubah)
             const fullTestData = {
@@ -500,7 +502,32 @@
                 }
             };
 
+            // PERBAIKAN: Menambahkan fungsi untuk memuat daftar suara dari browser
+            function loadVoices() {
+                if (!('speechSynthesis' in window)) return;
+                const setVoices = () => { speechVoices = window.speechSynthesis.getVoices(); };
+                setVoices();
+                if (speechSynthesis.onvoiceschanged !== undefined) {
+                    speechSynthesis.onvoiceschanged = setVoices;
+                }
+            }
+
+            // PERBAIKAN: Menambahkan fungsi untuk mereset timer inaktivitas
+            function resetInactivityTimer() {
+                clearTimeout(inactivityTimer);
+                inactivityTimer = setTimeout(() => {
+                    displayMessage("Sesi berakhir karena tidak ada aktivitas selama 5 menit. Riwayat percakapan telah dihapus untuk menjaga privasi Anda.", 'ai-system');
+                    // Menonaktifkan input setelah sesi berakhir
+                    userInput.disabled = true;
+                    voiceBtn.disabled = true;
+                    sendBtn.disabled = true;
+                    // Hapus riwayat
+                    conversationHistory = [];
+                }, 5 * 60 * 1000); // 5 menit
+            }
+
             function init() {
+                loadVoices();
                 if ('serviceWorker' in navigator) {
                     window.addEventListener('load', () => {
                         navigator.serviceWorker.register('/sw.js')
@@ -528,6 +555,7 @@
                     userInput.style.height = 'auto';
                     userInput.style.height = (userInput.scrollHeight) + 'px';
                     updateButtonVisibility();
+                    resetInactivityTimer(); // Reset timer saat pengguna mengetik
                 });
                 userInput.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
@@ -548,6 +576,8 @@
                 }
                 startOverlay.classList.add('hidden');
                 chatContainer.innerHTML = '';
+                conversationHistory = []; // Reset history di awal
+                userInput.disabled = false; // Aktifkan kembali input
                 
                 doctorInfoBox.style.display = 'none';
                 spiritualInfoBox.style.display = 'none';
@@ -570,7 +600,7 @@
                     isOnboarding = false;
                     const welcomeMessage = "Halo, saya Dokter AI RASA. Ada keluhan medis yang bisa saya bantu?";
                     displayMessage(welcomeMessage, 'ai');
-                    speakAsync(welcomeMessage);
+                    speakAsync(welcomeMessage, true, 'doctor');
                 } else if (mode.isSpiritual) {
                     currentMode = 'spiritual';
                     headerTitle.textContent = "Tanya ke Spiritual AI";
@@ -580,7 +610,7 @@
                     isOnboarding = false; 
                     const welcomeMessage = "Assalamualaikum, saya siap membantu Anda menemukan rujukan islami atau literasi jawaban permasalahan seputar islam?";
                     displayMessage(welcomeMessage, 'ai');
-                    speakAsync(welcomeMessage);
+                    speakAsync(welcomeMessage, true, 'spiritual');
                 } else { 
                     currentMode = 'psychologist';
                     headerTitle.textContent = "Tanya ke Psikolog AI";
@@ -588,6 +618,7 @@
                     isTesting = false; 
                     startOnboardingIfNeeded();
                 }
+                resetInactivityTimer(); // Mulai timer saat sesi dimulai
             }
 
             async function startOnboardingIfNeeded() {
@@ -788,7 +819,6 @@
                 updateButtonVisibility();
                 
                 try {
-                    // PERBAIKAN: Menggunakan URL absolut untuk mengatasi error parse URL
                     const apiResponse = await fetch(window.location.origin + '/api/chat', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -809,7 +839,7 @@
                             processedText = processedText.replace(/Assalamualaikum,?\s*/i, "").trim();
                         }
                         displayMessage(processedText, 'ai');
-                        await speakAsync(processedText);
+                        await speakAsync(processedText, true, currentMode);
                     }
 
                 } catch (error) {
@@ -822,74 +852,64 @@
                 }
             }
 
-            async function speakAsync(text) {
-                if (currentAudio) {
-                    currentAudio.pause();
-                    currentAudio.src = '';
-                    currentAudio = null;
-                }
-
-                const cleanedText = text.replace(/\[PILIHAN:.*?\]/g, '').replace(/\[.*?\]\(.*?\)/g, '').replace(/###/g, '').replace(/---/g, '').replace(/\*\*\*/g, '').replace(/\*\*/g, '').replace(/\*/g, '').replace(/\bAI\b/g, 'E Ai');
-                
-                if (!cleanedText.trim()) {
-                    return Promise.resolve();
-                }
-
-                const sentences = cleanedText.match(/[^.!?]+[.!?]+/g) || [];
-                let textToSpeak;
-
-                if (sentences.length > 0) {
-                    textToSpeak = sentences[0];
-                    if (sentences.length > 1 && textToSpeak.length < 70) {
-                        textToSpeak += ' ' + sentences[1];
+            // PERBAIKAN FINAL: Menggunakan window.speechSynthesis dengan batas waktu dan pemotongan kalimat
+            function speakAsync(text, isAIResponse = false, persona = '') {
+                 return new Promise((resolve) => {
+                    if (!('speechSynthesis' in window)) {
+                        console.error("Browser tidak mendukung Speech Synthesis.");
+                        statusDiv.textContent = "Gagal memuat fitur suara.";
+                        resolve();
+                        return;
                     }
-                } else {
-                    textToSpeak = cleanedText;
-                }
-                
-                if (textToSpeak.length > 250) {
-                    textToSpeak = textToSpeak.substring(0, 250);
-                }
-                
-                statusDiv.textContent = "Menyiapkan suara...";
-                try {
-                    // PERBAIKAN: Menggunakan URL absolut untuk mengatasi error parse URL
-                    const response = await fetch(window.location.origin + '/api/synthesize', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ text: textToSpeak })
-                    });
-                    if (!response.ok) {
-                        const errData = await response.json().catch(()=>null);
-                        throw new Error(`Gagal membuat suara: ${errData ? errData.details : response.statusText}`);
+                    window.speechSynthesis.cancel(); 
+
+                    const cleanedText = text.replace(/\[PILIHAN:.*?\]/g, '').replace(/\[.*?\]\(.*?\)/g, '').replace(/###/g, '').replace(/---/g, '').replace(/\*\*\*/g, '').replace(/\*\*/g, '').replace(/\*/g, '');
+                    if (!cleanedText.trim()) {
+                        resolve();
+                        return;
                     }
-                    const data = await response.json();
-                    const audioBase64 = data.audioContent;
                     
-                    const audioBlob = new Blob([Uint8Array.from(atob(audioBase64), c => c.charCodeAt(0))], { type: 'audio/mpeg' });
+                    if (persona === 'doctor') {
+                        cleanedText = cleanedText.replace(/\bAI\b/g, 'E-ay');
+                    }
+
+                    // Logika untuk memotong teks
+                    const sentences = cleanedText.match(/[^.!?]+[.!?]+/g) || [cleanedText];
+                    let textToSpeak = sentences.slice(0, 3).join(' '); // Ambil maksimal 3 kalimat pertama
+
+                    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                    utterance.lang = 'id-ID';
+                    utterance.rate = 0.95;
+                    utterance.pitch = 1;
+
+                    if (isAIResponse) {
+                        let indonesianVoice = speechVoices.find(v => v.lang === 'id-ID');
+                        if (indonesianVoice) {
+                            utterance.voice = indonesianVoice;
+                        }
+                    }
                     
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    currentAudio = new Audio(audioUrl);
-                    return new Promise((resolve) => {
-                        currentAudio.onended = () => {
-                            statusDiv.textContent = "";
-                            currentAudio = null;
-                            resolve();
-                        };
-                        currentAudio.onerror = (e) => {
-                             statusDiv.textContent = "Gagal memutar suara.";
-                             console.error("Audio playback error:", e);
-                             currentAudio = null;
-                             resolve();
-                        };
-                        currentAudio.play();
-                        statusDiv.textContent = "Memutar suara...";
-                    });
-                } catch (error) {
-                    console.error("Speech synthesis error:", error);
-                    statusDiv.textContent = "Gagal mengambil data suara.";
-                    return Promise.resolve();
-                }
+                    const timeoutId = setTimeout(() => {
+                        window.speechSynthesis.cancel(); 
+                        resolve(); 
+                    }, 10000); // Batas waktu maksimal 10 detik
+
+                    utterance.onend = () => {
+                        clearTimeout(timeoutId);
+                        statusDiv.textContent = "";
+                        resolve();
+                    };
+
+                    utterance.onerror = (e) => {
+                        clearTimeout(timeoutId);
+                        console.error("Speech synthesis error:", e);
+                        statusDiv.textContent = "Gagal memutar suara.";
+                        resolve(e);
+                    };
+                    
+                    statusDiv.textContent = "Memutar suara...";
+                    window.speechSynthesis.speak(utterance);
+                });
             }
 
             function handleSendMessage() {
@@ -901,6 +921,7 @@
                 userInput.style.height = 'auto';
                 updateButtonVisibility();
                 getAIResponse(userText, userName, userGender, userAge);
+                resetInactivityTimer();
             }
             
             function handleSendMessageWithChoice(choice) {
@@ -915,6 +936,7 @@
                 } else {
                     getAIResponse(choice, userName, userGender, userAge);
                 }
+                resetInactivityTimer();
             }
 
             function updateButtonVisibility() {
@@ -944,8 +966,8 @@
             
             function handleCancelResponse() {
                 if (abortController) abortController.abort();
-                if (currentAudio) {
-                    currentAudio.pause();
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
                 }
                 if (recognition) recognition.abort();
                 isRecording = false;
@@ -960,6 +982,7 @@
             
             function toggleMainRecording() {
                 if (isTesting || isOnboarding) return;
+                resetInactivityTimer();
                 if (isRecording) stopRecording();
                 else startRecording();
             }
