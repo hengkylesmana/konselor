@@ -373,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // PERBAIKAN: Fungsi speakAsync diperbarui untuk menangani teks panjang
+    // PERBAIKAN: Fungsi speakAsync diperbarui untuk menangani teks panjang dengan lebih baik
     async function speakAsync(fullText) {
         if (currentAudio) {
             currentAudio.pause();
@@ -392,17 +392,23 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/\*/g, '');
 
         let textForApi;
-        const MAX_VOICE_LENGTH = 250; // Batas maksimal karakter untuk diucapkan
+        const MAX_VOICE_LENGTH = 180; // Batas karakter yang lebih aman untuk menghindari timeout
         const VOICE_INSTRUCTION = " Untuk selengkapnya, silakan baca di layar Anda.";
 
         // Jika teks lebih panjang dari batas, potong untuk dijadikan suara
         if (cleanFullText.length > MAX_VOICE_LENGTH) {
             let shortText = cleanFullText.substring(0, MAX_VOICE_LENGTH);
-            // Cari titik atau spasi terakhir untuk memotong di akhir kalimat/kata
-            let cutOffPoint = shortText.lastIndexOf('.') > 0 ? shortText.lastIndexOf('.') + 1 : shortText.lastIndexOf(' ');
-            if (cutOffPoint > 0) {
-                shortText = shortText.substring(0, cutOffPoint);
+            // Cari titik atau spasi terakhir untuk memotong di akhir kalimat/kata agar lebih natural
+            let cutOffPoint = shortText.lastIndexOf('.');
+            if (cutOffPoint <= 0) { // Jika tidak ada titik, cari spasi
+                cutOffPoint = shortText.lastIndexOf(' ');
             }
+            
+            // Jika ditemukan titik potong yang baik, gunakan itu.
+            if (cutOffPoint > 0) {
+                shortText = shortText.substring(0, cutOffPoint + 1); // +1 untuk menyertakan titik
+            }
+
             textForApi = shortText.trim() + VOICE_INSTRUCTION;
         } else {
             textForApi = cleanFullText;
@@ -423,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ text: finalTextForApi })
             });
             if (!response.ok) {
-                // Tambahkan detail error dari server jika ada
+                // Tambahkan detail error dari server jika ada untuk debugging
                 const errData = await response.json().catch(() => null);
                 const detail = errData ? errData.details || errData.error : response.statusText;
                 throw new Error(`Gagal membuat suara: ${detail}`);
@@ -450,7 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } catch (error) {
             console.error("Speech synthesis error:", error);
-            statusDiv.textContent = `Gagal mengambil data suara.`; // Menampilkan pesan error yang lebih jelas
+            statusDiv.textContent = `Gagal mengambil data suara.`; // Menampilkan pesan error yang lebih jelas di UI
             return Promise.resolve();
         }
     }
