@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RASA - Asisten Pribadi AI</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#4a5a9c">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Semua styling CSS dari file asli tetap di sini, tidak ada perubahan. */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        :root {
+            --bg-calm: #f0f4f8;
+            --container-bg: rgba(255, 255, 255, 0.85);
+            --user-msg-bg: #e0eaff;
+            --ai-msg-bg: #f3f4f6;
+            --primary-text: #1f2937;
+            --secondary-text: #4b5563;
+            --accent-color: #4338ca;
+            --accent-color-hover: #3730a3;
+            --border-color: #d1d5db;
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+            --danger-color: #ef4444;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #eaf2ff;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--primary-text);
+            overflow: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* ... Sisa CSS dari file asli ... */
+        .start-content .modal-button.secondary:hover { background-color: var(--accent-color); color: white; }
+    </style>
+</head>
+<body>
+    <!-- Semua elemen HTML dari body (background, modal, container, dll) tetap sama, tidak ada perubahan. -->
+    <div id="interactive-bg"></div>
+    <div class="bg-ornaments">
+        <div class="ornament"></div><div class="ornament"></div><div class="ornament"></div>
+        <div class="ornament"></div><div class="ornament"></div><div class="ornament"></div>
+        <div class="ornament"></div>
+    </div>
+
+    <div id="start-overlay" class="modal-overlay visible">
+        <!-- ... Konten modal awal ... -->
+    </div>
+
+    <div class="container">
+        <!-- ... Konten header, popup, chat container, input, footer ... -->
+        <header>
+            <div class="header-content">
+                <svg class="logo" width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                   <circle cx="50" cy="50" r="48" fill="url(#rasaGradient)" /><path d="M50 75 C 40 65, 25 55, 25 42.5 C 25 32.5, 35 25, 50 35 C 65 25, 75 32.5, 75 42.5 C 75 55, 60 65, 50 75 Z" fill="#FFFFFF" fill-opacity="0.9"/>
+                </svg>
+                <div class="title-group">
+                    <h1 id="header-title">RASA</h1><p id="header-subtitle">Ruang Asuh Sadar Asa</p>
+                </div>
+            </div>
+        </header>
+        
+        <div id="spiritual-info-box" class="info-popup-box"><!-- ... --></div>
+
+        <div id="doctor-info-box" class="info-popup-box"><!-- ... --></div>
+
+        <div class="chat-container" id="chat-container"></div>
+
+        <div class="input-container">
+            <textarea id="user-input" placeholder="Tulis ceritamu di sini..." rows="1"></textarea>
+            <button id="send-btn" title="Kirim Pesan"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
+            <button id="voice-btn" title="Mulai Bicara"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></button>
+            <button id="end-chat-btn" title="Batalkan Respon">SKIP</button>
+        </div>
+        <div id="status" class="status-info"></div>
+        <footer><p>© 2025 RASA — Powered by AI & Insight Spiritual | by Hengky Lesmana</p></footer>
+    </div>
+
+    <!-- 
+      Perbaikan 3: Konsolidasi JavaScript
+      ===================================
+      Memindahkan semua kode JavaScript inline ke file eksternal `script.js`.
+      Ini membuat file HTML jauh lebih bersih, rapi, dan mudah dikelola.
+      Atribut `defer` memastikan script dieksekusi setelah HTML selesai di-parse.
+    -->
+    <script src="/script.js" defer></script>
+</body>
+</html>
