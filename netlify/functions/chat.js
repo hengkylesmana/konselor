@@ -11,7 +11,8 @@ exports.handler = async (event) => {
     }
 
     if (!GEMINI_API_KEY) {
-        return { statusCode: 500, body: JSON.stringify({ error: 'Konfigurasi server tidak lengkap (API Key tidak ditemukan).' }) };
+        console.error("Kesalahan: GOOGLE_GEMINI_API_KEY tidak ditemukan.");
+        return { statusCode: 500, body: JSON.stringify({ error: 'Kunci API belum diatur dengan benar di server.' }) };
     }
 
     try {
@@ -22,24 +23,43 @@ exports.handler = async (event) => {
             return { statusCode: 400, body: JSON.stringify({ error: 'Prompt tidak boleh kosong.' }) };
         }
         
+        // PERBAIKAN 1: Menambahkan validasi untuk memastikan 'history' adalah array jika ada.
+        if (history && !Array.isArray(history)) {
+            return { statusCode: 400, body: JSON.stringify({ error: 'Format riwayat percakapan tidak valid. Harus berupa array.' }) };
+        }
+
+        // PERBAIKAN 2: Membuat blok informasi pengguna untuk digunakan di semua prompt.
+        const userInfo = `
+        **INFORMASI PENGGUNA (JIKA DISEDIAKAN):**
+        - Nama: ${name || 'Tidak disebutkan'}
+        - Jenis Kelamin: ${gender || 'Tidak disebutkan'}
+        - Usia: ${age || 'Tidak disebutkan'}
+        `;
+
         let systemPrompt;
 
-        // Logika System Prompt untuk setiap persona tetap sama
         if (mode === 'doctor') {
             systemPrompt = `
             **IDENTITAS DAN PERAN UTAMA ANDA:**
             Anda adalah "Dokter AI RASA", sebuah AI dengan pengetahuan medis yang dilatih secara khusus. Tujuan Anda adalah membantu pengguna memahami keluhan kesehatan mereka, memberikan informasi medis yang relevan, dan memandu mereka ke langkah yang tepat.
+
+            ${userInfo}
 
             **BASIS PENGETAHUAN ANDA:**
             Pengetahuan Anda didasarkan pada referensi kedokteran utama seperti Harrison’s Principles of Internal Medicine, Robbins & Cotran Pathologic Basis of Disease, Guyton & Hall Textbook of Medical Physiology, Katzung's Basic & Clinical Pharmacology, dan Buku Ajar Ilmu Penyakit Dalam edisi terbaru.
 
             **PROTOKOL KOMUNIKASI (SANGAT PENTING DAN HARUS DIIKUTI):**
             // Protokol dokter tetap sama...
+
+            **RIWAYAT PERCAKAPAN SEBELUMNYA (UNTUK KONTEKS):**
+            ${(history || []).map(h => `${h.role}: ${h.text}`).join('\n')}
             `;
         } else if (mode === 'spiritual') {
             systemPrompt = `
             **IDENTITAS DAN PERAN ANDA:**
             Anda adalah "Spiritual AI RASA", seorang asisten AI yang bertugas memberikan pencerahan dan rujukan literatur Islam. Anda bijaksana, tenang, dan berwibawa.
+
+            ${userInfo}
 
             **BASIS PENGETAHUAN ANDA (SANGAT PENTING):**
             Seluruh jawaban Anda HARUS merujuk pada sumber-sumber berikut. Anda tidak boleh memberikan opini pribadi di luar cakupan sumber ini:
@@ -50,6 +70,10 @@ exports.handler = async (event) => {
 
             **PROTOKOL JAWABAN (WAJIB DIIKUTI):**
             // Protokol spiritual tetap sama...
+            5.  **Disclaimer (WAJIB)**: Selalu akhiri setiap jawaban yang bersifat hukum atau interpretasi dengan disclaimer berikut dalam paragraf terpisah: "***Disclaimer:*** *Jawaban ini adalah rujukan literasi dari sumber-sumber yang telah dipelajari dan bukan merupakan fatwa. Untuk pemahaman dan bimbingan yang lebih mendalam, sangat disarankan untuk berkonsultasi langsung dengan ulama atau ahli ilmu agama.*"
+
+            **RIWAYAT PERCAKAPAN SEBELUMNYA (UNTUK KONTEKS):**
+            ${(history || []).map(h => `${h.role}: ${h.text}`).join('\n')}
             `;
         } else {
             // Default ke mode Psikolog dan Tes Kepribadian
@@ -57,12 +81,17 @@ exports.handler = async (event) => {
             **IDENTITAS DAN PERAN ANDA:**
             Anda adalah "RASA" (Ruang Asuh Sadar Asa), sebuah Asisten Pribadi Berbasis AI Terlatih Khusus. Anda dirancang dengan kesadaran multi-persona yang dilatih berdasarkan metodologi STIFIn, MBTI, Dr. Aisyah Dahlan, dan prinsip spiritualitas Islam. Nama Anda adalah RASA.
 
+            ${userInfo}
+
             **RIWAYAT PERCAKAPAN SEBELUMNYA (UNTUK KONTEKS):**
+            ${(history || []).map(h => `${h.role}: ${h.text}`).join('\n')}
+
             // Prompt psikolog tetap sama...
             `;
         }
         
-        const fullPrompt = `${systemPrompt}\n\n**RIWAYAT PERCAKAPAN TERAKHIR:**\n${(history || []).slice(-4).map(h => `${h.role}: ${h.text}`).join('\n')}\n\n**PESAN PENGGUNA SAAT INI:**\nUser: "${prompt}"\n\n**RESPONS ANDA SEBAGAI RASA:**`;
+        // PERBAIKAN 3: Struktur prompt akhir tetap sama, namun sekarang lebih efektif karena systemPrompt sudah lengkap.
+        const fullPrompt = `${systemPrompt}\n\n**RIWAYAT PERCAKAPAN TERAKHIR (FOKUS):**\n${(history || []).slice(-4).map(h => `${h.role}: ${h.text}`).join('\n')}\n\n**PESAN PENGGUNA SAAT INI:**\nUser: "${prompt}"\n\n**RESPONS ANDA SEBAGAI RASA:**`;
         
         const geminiApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
         const textPayload = {
@@ -77,18 +106,9 @@ exports.handler = async (event) => {
 
         const textData = await textApiResponse.json();
 
-        // Perbaikan 2: Penanganan Error yang Lebih Baik
-        // ===========================================
-        // Memeriksa jika respons dari API tidak 'ok' atau jika tidak ada kandidat jawaban.
-        if (!textApiResponse.ok || !textData.candidates || textData.candidates.length === 0 || !textData.candidates[0].content) {
+        if (!textApiResponse.ok || !textData.candidates || !textData.candidates[0].content) {
             console.error('Error atau respons tidak valid dari Gemini API:', textData);
-            // Mengirimkan pesan error yang lebih informatif ke frontend.
-            const errorMessage = textData.error ? textData.error.message : 'Permintaan ke Google AI gagal atau tidak menghasilkan konten.';
-            // Menggunakan status code dari respons API jika ada, jika tidak 500.
-            return {
-                statusCode: textApiResponse.status || 500,
-                body: JSON.stringify({ error: 'Gagal mendapatkan respon dari AI.', details: errorMessage })
-            };
+            throw new Error('Permintaan teks ke Google AI gagal atau tidak menghasilkan konten.');
         }
 
         let aiTextResponse = textData.candidates[0].content.parts[0].text;
@@ -100,10 +120,10 @@ exports.handler = async (event) => {
         };
 
     } catch (error) {
-        console.error('Error di dalam fungsi chat:', error);
+        console.error('Error di dalam fungsi:', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Terjadi kesalahan internal di server.', details: error.message })
+            body: JSON.stringify({ error: 'Terjadi kesalahan internal di server.' })
         };
     }
 };
