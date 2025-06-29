@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch(err => console.log('ServiceWorker registration failed: ', err));
             });
         }
-        loadVoices(); // Muat suara yang tersedia di browser
+        loadVoices();
         displayInitialMessage();
         updateButtonVisibility();
 
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const welcomeMessage = "Assalamualaikum, saya siap membantu Anda menemukan rujukan islami atau literasi jawaban permasalahan seputar islam?";
             displayMessage(welcomeMessage, 'ai');
             speakAsync(welcomeMessage);
-        } else { 
+        } else { // PERBAIKAN: Mengembalikan logika ke mode Psikolog AI
             currentMode = 'psychologist';
             headerTitle.textContent = "Tanya ke Psikolog AI";
             headerSubtitle.textContent = "Namaku RASA, bersamamu sebagai Psikolog Profesional";
@@ -143,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statusDiv.textContent = "Sesi perkenalan...";
         updateButtonVisibility();
         try {
+             // PERBAIKAN: Mengembalikan sapaan awal untuk Psikolog AI
             const firstGreeting = "Perkenalkan , saya adalah asisten pribadi Anda yang bernama RASA. Saya sebagai seorang Psikolog AI, siap membantu Anda. Mari kita mulai dengan sesi perkenalan, boleh saya tahu nama Anda?";
             displayMessage(firstGreeting, 'ai');
             await speakAsync(firstGreeting);
@@ -215,9 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
             displayMessage(answer, 'user');
             return answer;
         } catch (e) {
-            const errorMessage = (e === 'no-speech' || e === 'audio-capture')
-                ? "Maaf, saya tidak mendengar suaramu. Bisa ulangi lagi?"
-                : "Maaf, terjadi sedikit gangguan. Silakan coba lagi.";
+            const errorMessage = (e === 'no-speech' || e === 'audio-capture') ? "Maaf, saya tidak mendengar suaramu. Bisa ulangi lagi?" : "Maaf, terjadi sedikit gangguan. Silakan coba lagi.";
             console.error("Listen error:", e);
             displayMessage(errorMessage, 'ai-system');
             return "";
@@ -250,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         displayMessage(`Baik, mari kita mulai ${type.toUpperCase()}. Jawablah ${testData.questions.length} pertanyaan berikut.`, 'ai-system');
         setTimeout(displayNextTestQuestion, 1000);
     }
-
+    
     function selectRandomQuestions(questionArray, count) {
         const shuffled = [...questionArray].sort(() => 0.5 - Math.random());
         if (!count || count > shuffled.length) {
@@ -258,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return shuffled.slice(0, count);
     }
-
+    
     function displayNextTestQuestion() {
         if (currentTestQuestionIndex >= testData.questions.length) {
             calculateAndDisplayResult();
@@ -380,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateButtonVisibility();
         }
     }
-
+    
     async function speakAsync(fullText) {
         if (!speechSynth) {
             console.error("Browser tidak mendukung Speech Synthesis.");
@@ -392,11 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const utterance = new SpeechSynthesisUtterance(cleanText);
         const indonesianVoice = voices.find(voice => voice.lang === 'id-ID');
-        if (indonesianVoice) {
-            utterance.voice = indonesianVoice;
-        } else {
-            console.warn("Suara Bahasa Indonesia tidak ditemukan, menggunakan suara default.");
-        }
+        if (indonesianVoice) utterance.voice = indonesianVoice;
         
         utterance.rate = 0.95;
         utterance.pitch = 1;
@@ -620,6 +615,5 @@ document.addEventListener('DOMContentLoaded', () => {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
     
-    // PERBAIKAN: Panggil fungsi init() untuk mengaktifkan semua event listener
     init();
 });
