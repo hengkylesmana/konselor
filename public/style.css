@@ -258,7 +258,11 @@ footer p { margin: 0; font-size: 0.7rem; }
     display: flex; justify-content: center; align-items: center;
     z-index: 1000; opacity: 1; transition: opacity 0.5s ease, visibility 0.5s; visibility: visible;
 }
-.modal-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.modal-overlay.hidden { 
+    opacity: 0; 
+    visibility: hidden; 
+    pointer-events: none;
+}
 .start-content {
     text-align: center; padding: 32px; background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
