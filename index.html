@@ -195,20 +195,64 @@
         footer { padding: 10px 20px; text-align: center; color: var(--secondary-text); background-color: rgba(243, 244, 246, 0.7); border-top: 1px solid var(--border-color); flex-shrink: 0; }
         footer p { margin: 0; font-size: 0.7rem; }
         
-        /* PEMBARUAN: Info Box untuk Dokter AI */
+        /* PENAMBAHAN BARU: Info Box untuk Dokter AI */
         .doctor-info-box {
-            display: none; position: absolute; top: 65px; left: 5%; width: 90%;
-            background-color: #fff; border: 1px solid var(--border-color); border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 10; padding: 15px;
-            box-sizing: border-box; animation: fadeInDown 0.5s ease;
+            display: none; /* Disembunyikan secara default */
+            position: absolute;
+            top: 65px; /* Tampil di bawah header */
+            left: 5%;
+            width: 90%;
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 10;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: fadeInDown 0.5s ease;
         }
         .doctor-info-content {
-            max-height: 120px; overflow-y: auto; font-size: 0.85rem;
-            line-height: 1.6; color: var(--secondary-text);
+            max-height: 250px; /* Batas tinggi agar bisa di-scroll */
+            overflow-y: auto; /* Aktifkan scroll vertikal */
+            font-size: 0.85rem;
+            line-height: 1.7;
+            color: var(--secondary-text);
+        }
+        .doctor-info-content h4 {
+            font-size: 0.9rem;
+            color: var(--primary-text);
+            margin-top: 15px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .doctor-info-content ul {
+            list-style-type: none;
+            padding-left: 5px;
+        }
+        .doctor-info-content li {
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+        .doctor-info-content li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
         }
         .doctor-info-close {
-            position: absolute; top: 5px; right: 10px; font-size: 1.5rem;
-            font-weight: bold; cursor: pointer; color: var(--secondary-text);
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--secondary-text);
+            transition: color 0.2s;
+        }
+        .doctor-info-close:hover {
+            color: var(--primary-text);
         }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -300,24 +344,36 @@
             </div>
         </header>
 
+        <!-- PENAMBAHAN BARU: Struktur HTML untuk Info Box Dokter AI -->
         <div id="doctor-info-box" class="doctor-info-box">
             <span id="doctor-info-close" class="doctor-info-close">&times;</span>
             <div class="doctor-info-content">
                 <p><strong>Saya Dokter AI,</strong> yang telah dilatih khusus dengan dasar ilmu kedokteran, spesialis, klinis, dan patologi. Saya dikembangkan dengan pemahaman kedokteran yang menyeluruh dan dengan kemampuan komunikasi memahami pola keluhan Anda dari sisi medis.</p>
-                <hr>
-                <p><strong>Contoh Komunikasi Gejala dan Keluhan:</strong></p>
+                
+                <h4>Contoh Komunikasi Gejala dan Keluhan</h4>
                 <ul>
                     <li>Dok, saya sering bersin-bersin pagi hari.</li>
                     <li>Saya merasa ngilu di pinggang setelah duduk lama.</li>
                     <li>Perut saya sering begah setelah makan pedas.</li>
+                    <li>Saya mengalami sakit kepala sebelah sejak kemarin.</li>
+                    <li>Tangan saya sering kesemutan saat tidur.</li>
+                    <li>Saya batuk berdahak disertai demam sejak tiga hari terakhir.</li>
+                    <li>Saya sering merasa berdebar tanpa sebab.</li>
+                    <li>Saya gampang lelah, kulit jadi pucat, dan sering pusing.</li>
                     <li>Ada benjolan di payudara saya dan terasa agak nyeri.</li>
+                    <li>Saya mengalami muntah darah dan nyeri di perut bagian atas.</li>
                 </ul>
-                <p><strong>Contoh Pertanyaan tentang Obat & Layanan Kesehatan:</strong></p>
-                <ul>
+
+                <h4>Contoh Pertanyaan tentang Obat & Layanan Kesehatan</h4>
+                 <ul>
                     <li>Obat Paracetamol sebenarnya untuk penyakit apa, ya?</li>
                     <li>Cara minum obat Amoxicillin gimana, sebelum atau sesudah makan?</li>
+                    <li>Kandungan utama dalam obat ini apa, dan ada efek sampingnya?</li>
                     <li>Kalau saya lupa minum satu dosis, harus bagaimana?</li>
                     <li>Pertolongan pertama untuk luka bakar ringan itu apa?</li>
+                    <li>Obat untuk sakit maag saya habis, ada alternatif yang bisa dibeli bebas?</li>
+                    <li>Ada salep aman untuk ruam di kulit anak usia 2 tahun?</li>
+                    <li>Saya ingin konsultasi alergi dengan dokter. Bisa diarahkan ke dokter apa?</li>
                 </ul>
             </div>
         </div>
@@ -349,7 +405,8 @@
             const header = document.querySelector('header');
             const headerTitle = document.getElementById('header-title');
             const headerSubtitle = document.getElementById('header-subtitle');
-            // PEMBARUAN: Seleksi elemen info box baru
+            
+            // PENAMBAHAN BARU: Seleksi elemen info box baru
             const doctorInfoBox = document.getElementById('doctor-info-box');
             const doctorInfoClose = document.getElementById('doctor-info-close');
             
@@ -446,6 +503,8 @@
                 startCurhatBtn.addEventListener('click', () => initializeApp({ isCurhat: true }));
                 startTestBtn.addEventListener('click', () => initializeApp({ isTest: true }));
                 startDoctorBtn.addEventListener('click', () => initializeApp({ isDoctor: true }));
+                
+                // PENAMBAHAN BARU: Event listener untuk tombol tutup
                 doctorInfoClose.addEventListener('click', () => { doctorInfoBox.style.display = 'none'; });
 
                 header.addEventListener('click', () => window.location.reload());
@@ -478,6 +537,8 @@
                 }
                 startOverlay.classList.add('hidden');
                 chatContainer.innerHTML = '';
+                
+                // PENAMBAHAN BARU: Sembunyikan info box secara default setiap kali inisialisasi
                 doctorInfoBox.style.display = 'none';
                 
                 if (mode.isTest) {
@@ -496,7 +557,10 @@
                     currentMode = 'doctor';
                     headerTitle.textContent = "Tanya ke Dokter AI";
                     headerSubtitle.textContent = "Namaku RASA, bersamamu sebagai Dokter Profesional";
+                    
+                    // PENAMBAHAN BARU: Tampilkan info box saat mode dokter dipilih
                     doctorInfoBox.style.display = 'block';
+
                     isTesting = false; 
                     isOnboarding = false;
                     const welcomeMessage = "Halo, saya Dokter AI RASA. Ada keluhan medis yang bisa saya bantu?";
