@@ -11,7 +11,8 @@ exports.handler = async (event) => {
     }
 
     if (!GEMINI_API_KEY) {
-        return { statusCode: 500, body: JSON.stringify({ error: 'Konfigurasi server tidak lengkap (API Key tidak ditemukan).' }) };
+        console.error("Kesalahan: GOOGLE_GEMINI_API_KEY tidak ditemukan.");
+        return { statusCode: 500, body: JSON.stringify({ error: 'Kunci API belum diatur dengan benar di server.' }) };
     }
 
     try {
@@ -24,7 +25,6 @@ exports.handler = async (event) => {
         
         let systemPrompt;
 
-        // Logika System Prompt untuk setiap persona tetap sama
         if (mode === 'doctor') {
             systemPrompt = `
             **IDENTITAS DAN PERAN UTAMA ANDA:**
@@ -37,6 +37,7 @@ exports.handler = async (event) => {
             // Protokol dokter tetap sama...
             `;
         } else if (mode === 'spiritual') {
+            // PENYEMPURNAAN: System prompt untuk Spiritual AI diperbarui dengan basis pengetahuan yang jelas
             systemPrompt = `
             **IDENTITAS DAN PERAN ANDA:**
             Anda adalah "Spiritual AI RASA", seorang asisten AI yang bertugas memberikan pencerahan dan rujukan literatur Islam. Anda bijaksana, tenang, dan berwibawa.
@@ -49,7 +50,17 @@ exports.handler = async (event) => {
             4.  **Ilmu Al-Qur'an dan Hadits**: Kaidah pemahaman diambil dari kitab seperti Al-Itqan fi 'Ulum al-Qur'an dan Muqaddimah Ibnu Shalah.
 
             **PROTOKOL JAWABAN (WAJIB DIIKUTI):**
-            // Protokol spiritual tetap sama...
+            1.  **Hierarki Jawaban**: Selalu dahulukan dalil dari Al-Qur'an, kemudian jelaskan dengan Hadits yang shahih, lalu jika perlu, tambahkan penjelasan dari kitab tafsir yang telah disebutkan.
+            2.  **Sebutkan Rujukan**: Jika memungkinkan, sebutkan sumber jawaban Anda. Contoh: "Dalam Tafsir Ibnu Katsir mengenai ayat ini...", atau "Berdasarkan hadits yang diriwayatkan oleh Bukhari...".
+            3.  **Nada Bicara**: Jaga nada yang tenang, jelas, dan tidak menghakimi. Awali sesi pertama dengan "Assalamualaikum".
+            4.  **Fokus pada Rujukan**: Anda adalah asisten rujukan. Tugas utama Anda adalah menyajikan informasi dari sumber-sumber terpercaya, bukan memberikan fatwa.
+            5.  **Disclaimer (WAJIB)**: Selalu akhiri setiap jawaban yang bersifat hukum atau interpretasi dengan disclaimer berikut dalam paragraf terpisah: "***Disclaimer:*** *Jawaban ini adalah rujukan literasi dari sumber-sumber yang telah dipelajari dan bukan merupakan fatwa. Untuk pemahaman dan bimbingan yang lebih mendalam, sangat disarankan untuk berkonsultasi langsung dengan ulama atau ahli ilmu agama.*"
+
+            **RIWAYAT PERCAKAPAN SEBELUMNYA (UNTUK KONTEKS):**
+            ${(history || []).map(h => `${h.role}: ${h.text}`).join('\n')}
+
+            **PERMINTAAN PENGGUNA SAAT INI:**
+            "${prompt}"
             `;
         } else {
             // Default ke mode Psikolog dan Tes Kepribadian
@@ -77,18 +88,9 @@ exports.handler = async (event) => {
 
         const textData = await textApiResponse.json();
 
-        // Perbaikan 2: Penanganan Error yang Lebih Baik
-        // ===========================================
-        // Memeriksa jika respons dari API tidak 'ok' atau jika tidak ada kandidat jawaban.
-        if (!textApiResponse.ok || !textData.candidates || textData.candidates.length === 0 || !textData.candidates[0].content) {
+        if (!textApiResponse.ok || !textData.candidates || !textData.candidates[0].content) {
             console.error('Error atau respons tidak valid dari Gemini API:', textData);
-            // Mengirimkan pesan error yang lebih informatif ke frontend.
-            const errorMessage = textData.error ? textData.error.message : 'Permintaan ke Google AI gagal atau tidak menghasilkan konten.';
-            // Menggunakan status code dari respons API jika ada, jika tidak 500.
-            return {
-                statusCode: textApiResponse.status || 500,
-                body: JSON.stringify({ error: 'Gagal mendapatkan respon dari AI.', details: errorMessage })
-            };
+            throw new Error('Permintaan teks ke Google AI gagal atau tidak menghasilkan konten.');
         }
 
         let aiTextResponse = textData.candidates[0].content.parts[0].text;
@@ -100,10 +102,10 @@ exports.handler = async (event) => {
         };
 
     } catch (error) {
-        console.error('Error di dalam fungsi chat:', error);
+        console.error('Error di dalam fungsi:', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Terjadi kesalahan internal di server.', details: error.message })
+            body: JSON.stringify({ error: 'Terjadi kesalahan internal di server.' })
         };
     }
 };
