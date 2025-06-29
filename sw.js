@@ -1,5 +1,5 @@
-// PERUBAHAN: Nama cache diubah untuk memaksa pembaruan
-const CACHE_NAME = 'rasa-cache-v3'; 
+// PERUBAHAN: Nama cache diubah untuk memaksa pembaruan total
+const CACHE_NAME = 'rasa-cache-v4'; 
 const urlsToCache = [
   '/',
   '/index.html',
@@ -20,8 +20,11 @@ self.addEventListener('install', event => {
         // Menambahkan file-file penting ke dalam cache
         return cache.addAll(urlsToCache);
       })
+      .then(() => {
+        // PERUBAHAN: Memaksa service worker baru untuk aktif tanpa menunggu
+        return self.skipWaiting();
+      })
   );
-  self.skipWaiting(); // Memaksa service worker baru untuk aktif
 });
 
 // 2. Proses Aktivasi: Membersihkan cache LAMA
@@ -39,28 +42,26 @@ self.addEventListener('activate', event => {
           }
         })
       );
+    }).then(() => {
+      // PERUBAHAN: Mengambil kontrol halaman yang terbuka agar langsung menggunakan service worker baru
+      return self.clients.claim(); 
     })
   );
-  // Mengambil kontrol halaman yang terbuka agar langsung menggunakan service worker baru
-  return self.clients.claim(); 
 });
 
 // 3. Proses Fetch: Mengambil file dari cache (strategi Cache First)
 self.addEventListener('fetch', event => {
   // Selalu coba ambil dari network untuk API calls
   if (event.request.url.includes('/api/')) {
-    return event.respondWith(fetch(event.request));
+    return; // Biarkan browser menanganinya
   }
 
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Jika file ada di cache, sajikan dari cache
-        if (response) {
-          return response;
-        }
-        // Jika tidak ada, ambil dari network
-        return fetch(event.request);
+        // Jika file ada di cache, sajikan dari cache. 
+        // Jika tidak, ambil dari network
+        return response || fetch(event.request);
       }
     )
   );
