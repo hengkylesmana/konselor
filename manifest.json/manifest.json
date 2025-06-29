@@ -1,11 +1,11 @@
 {
-  "name": "RASA - Asisten Pribadi AI",
+  "name": "Teman Curhat RASA",
   "short_name": "RASA",
-  "description": "Namaku RASA (Ruang Asuh Sadar Asa) - Asisten Pribadi Berbasis AI Terlatih Khusus.",
+  "description": "Ruang Asuh Sadar Asa - Teman Curhat Psikis dan Spiritual Berbasis AI Terlatih.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f0f4f8",
-  "theme_color": "#4338ca",
+  "background_color": "#b3e5a3",
+  "theme_color": "#00695c",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
