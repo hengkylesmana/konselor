@@ -1,17 +1,23 @@
+# netlify.toml (Disederhanakan)
+
 # Konfigurasi Build
 [build]
-  # Direktori yang berisi file-file yang akan di-deploy
   publish = "public"
-  # Lokasi direktori untuk Netlify Functions
   functions = "netlify/functions"
 
-# Aturan Redirect untuk API
+# Aturan Redirect untuk API Chat
 [[redirects]]
   from = "/api/chat"
   to = "/.netlify/functions/chat"
   status = 200
-
-[[redirects]]
-  from = "/api/synthesize"
-  to = "/.netlify/functions/synthesize"
-  status = 200
+```json
+// package.json (Disederhanakan)
+{
+  "name": "konselor-netlify-project",
+  "version": "1.2.1",
+  "description": "Aplikasi RASA dengan backend Netlify Functions",
+  "dependencies": {
+    "node-fetch": "^2.6.9",
+    "dotenv": "^16.3.1"
+  }
+}
