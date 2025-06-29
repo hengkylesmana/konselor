@@ -1,0 +1,21 @@
+# Konfigurasi Build
+[build]
+  # Lokasi direktori untuk Netlify Functions
+  functions = "netlify/functions"
+
+# Perbaikan 1: Aturan Redirect yang Lebih Spesifik
+# ===============================================
+# Mengganti aturan `splat (*)` yang umum dengan aturan yang spesifik untuk setiap fungsi.
+# Ini memastikan bahwa setiap endpoint API diarahkan ke fungsi backend yang benar.
+
+# Redirect untuk API chat
+[[redirects]]
+  from = "/api/chat"
+  to = "/.netlify/functions/chat"
+  status = 200
+
+# Redirect untuk API synthesize (Text-to-Speech) yang baru
+[[redirects]]
+  from = "/api/synthesize"
+  to = "/.netlify/functions/synthesize"
+  status = 200
