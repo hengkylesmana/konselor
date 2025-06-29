@@ -1,0 +1,17 @@
+# Konfigurasi Build
+[build]
+  # Direktori yang berisi file-file yang akan di-deploy
+  publish = "public"
+  # Lokasi direktori untuk Netlify Functions
+  functions = "netlify/functions"
+
+# Aturan Redirect untuk API
+[[redirects]]
+  from = "/api/chat"
+  to = "/.netlify/functions/chat"
+  status = 200
+
+[[redirects]]
+  from = "/api/synthesize"
+  to = "/.netlify/functions/synthesize"
+  status = 200
