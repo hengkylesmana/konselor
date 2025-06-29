@@ -1,429 +1,82 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RASA - Asisten Pribadi AI</title>
+    <title>Teman Curhat RASA</title>
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#4a5a9c">
+    <meta name="theme-color" content="#00695c">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- PERBAIKAN: Memanggil file CSS eksternal -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="interactive-bg"></div>
-    <div class="bg-ornaments">
-        <div class="ornament"></div><div class="ornament"></div><div class="ornament"></div>
-        <div class="ornament"></div><div class="ornament"></div><div class="ornament"></div>
-        <div class="ornament"></div>
-    </div>
-
+    <!-- Layar Pembuka / Modal -->
     <div id="start-overlay" class="modal-overlay visible">
         <div class="start-content">
-            <svg class="logo" width="72" height="72" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <defs><linearGradient id="rasaGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#a5b4fc;stop-opacity:1" /><stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" /></linearGradient></defs>
-                <circle cx="50" cy="50" r="48" fill="url(#rasaGradient)" /><path d="M50 75 C 40 65, 25 55, 25 42.5 C 25 32.5, 35 25, 50 35 C 65 25, 75 32.5, 75 42.5 C 75 55, 60 65, 50 75 Z" fill="#FFFFFF" fill-opacity="0.9"/>
+            <svg class="logo" width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <radialGradient id="goldGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                        <stop offset="0%" style="stop-color:#FFDF00;stop-opacity:1" />
+                        <stop offset="60%" style="stop-color:#FFD700;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#B8860B;stop-opacity:1" />
+                    </radialGradient>
+                </defs>
+                <circle cx="50" cy="50" r="48" fill="url(#goldGradient)" stroke="#DAA520" stroke-width="2"/>
+                <path d="M50 75 C 40 65, 25 55, 25 42.5 C 25 32.5, 35 25, 50 35 C 65 25, 75 32.5, 75 42.5 C 75 55, 60 65, 50 75 Z" fill="#FFFFFF" fill-opacity="0.8"/>
             </svg>
-            <div class="start-title-container">
-                <p>RASA</p><p>(Ruang Asuh Sadar Asa)</p>
-                <p>AI yang dilatih menjadi Asisten Pribadi</p>
-            </div>
+            <h2 class="start-title">Teman Curhat RASA</h2>
+            <p class="start-subtitle">Ruang Asuh Sadar Asa</p>
             <div class="info-box">
-                <p>Nama saya RASA, asisten pribadi Anda dengan kemampuan terlatih Profesional.</p>
-                <p>Anda bisa curhat atau sekedar ngobrol dan konsultasi berbagai hal denganku. Ceritakan isi hatimu, sukamu, dukamu, masalahmu atau apa harapanmu. Saya akan berusaha menjadi teman setiamu secara profesional.</p>
-                <p>Anda bisa memilih berbicara dengan saya sebagai Spesialist yang sesuai dengan yang Anda butuhkan.</p>
-                <p><strong>Privasi Anda Terjaga.</strong> Sesi percakapan ini hanya terjadi di browser Anda dan akan hilang saat Anda me-refresh atau menutup halaman ini. Kami tidak menyimpan riwayat chat Anda di server.</p>
-                <p><strong>Ingin lebih kenal diri?</strong></p>
-                <p>Saya juga bisa memandumu untuk lebih mengenali karakter dan potensi yang tersimpan dalam dirimu melalui sesi Tes Kepribadian singkat. Wawasan ini bisa membantumu dalam banyak hal, termasuk menemukan minat atau bahkan pilihan kuliner yang cocok dengan mood-mu!</p>
+                <p>Anda bisa curhat atau sekedar ngobrol berbagai hal dengan Teman Curhat online yang bernama RASA. Ceritakan isi hatimu, sukamu, dukamu, masalahmu atau apa harapanmu. Tenang saja, ini privat dan rahasia. RASA akan berusaha menjadi teman setiamu, pendengar setiamu, bahkan pembantu setiamu.</p>
+                <p><strong>Yuk, Curhat..</strong></p>
+                <p>Anda ingin wisata kuliner? Tapi gak tau apa yang cocok dengan dirimu, seleramu, dan mood-mu. RASA coba bantu memandumu menemukan wisata kuliner yang cocok berdasarkan karakter dan potensimu dari hasil tes kepribadian. </p>
             </div>
             <div class="start-button-group">
-                <!-- PERBAIKAN: Mengembalikan teks tombol ke asli -->
-                <button id="start-curhat-btn" class="modal-button">Tanya ke Psikolog AI</button>
-                <button id="start-spiritual-btn" class="modal-button">Tanya ke Spiritual AI</button>
-                <button id="start-doctor-btn" class="modal-button">Tanya ke Dokter AI</button>
-                <button id="start-test-btn" class="modal-button secondary">Tes Kepribadian dan Potensi Diri</button>
+                <button id="start-curhat-btn" class="modal-button">Mulai Curhat</button>
+                <button id="start-test-btn" class="modal-button secondary">Mulai Tes Kepribadian</button>
             </div>
         </div>
     </div>
 
+    <!-- Konten Aplikasi Utama -->
     <div class="container">
         <header>
             <div class="header-content">
                 <svg class="logo" width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                   <circle cx="50" cy="50" r="48" fill="url(#rasaGradient)" /><path d="M50 75 C 40 65, 25 55, 25 42.5 C 25 32.5, 35 25, 50 35 C 65 25, 75 32.5, 75 42.5 C 75 55, 60 65, 50 75 Z" fill="#FFFFFF" fill-opacity="0.9"/>
+                    <circle cx="50" cy="50" r="48" fill="url(#goldGradient)" stroke="#DAA520" stroke-width="2"/>
+                    <path d="M50 75 C 40 65, 25 55, 25 42.5 C 25 32.5, 35 25, 50 35 C 65 25, 75 32.5, 75 42.5 C 75 55, 60 65, 50 75 Z" fill="#FFFFFF" fill-opacity="0.8"/>
                 </svg>
                 <div class="title-group">
-                    <h1 id="header-title">RASA</h1><p id="header-subtitle">Ruang Asuh Sadar Asa</p>
+                    <h1>Teman Curhat RASA</h1>
+                    <p>Ruang Asuh Sadar Asa - Teman Curhat Psikis dan Spiritual Berbasis AI Terlatih</p>
                 </div>
             </div>
         </header>
-        
-        <div id="spiritual-info-box" class="info-popup-box">
-            <!-- Konten tidak berubah -->
-        </div>
-
-        <div id="doctor-info-box" class="info-popup-box">
-            <!-- Konten tidak berubah -->
-        </div>
 
         <div class="chat-container" id="chat-container"></div>
+
         <div class="input-container">
-            <textarea id="user-input" placeholder="Tulis ceritamu di sini..." rows="1"></textarea>
-            <button id="send-btn" title="Kirim Pesan"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
-            <button id="voice-btn" title="Mulai Bicara"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></button>
+            <textarea id="user-input" placeholder="Tulis curhatmu di sini..." rows="1"></textarea>
+            <button id="send-btn" title="Kirim Pesan">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+            <button id="voice-btn" title="Mulai Bicara">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            </button>
             <button id="end-chat-btn" title="Batalkan Respon">SKIP</button>
         </div>
+        
         <div id="status" class="status-info"></div>
-        <footer><p>© 2025 RASA versi 1.2.1 — Powered by AI & Insight Spiritual | by Hengky Lesmana</p></footer>
+        
+        <footer>
+            <p>© 2025 Teman Curhat RASA versi 1.0 — Powered by AI & Insight Spiritual | by Hengky Lesmana</p>
+        </footer>
     </div>
-    
+
+    <!-- PERBAIKAN: Memanggil file JavaScript eksternal -->
     <script src="script.js" defer></script>
 </body>
 </html>
-```javascript
-// script.js
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Definisi semua variabel DOM
-    const startSpiritualBtn = document.getElementById('start-spiritual-btn');
-    const chatContainer = document.getElementById('chat-container');
-    const userInput = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
-    const voiceBtn = document.getElementById('voice-btn');
-    const endChatBtn = document.getElementById('end-chat-btn');
-    const statusDiv = document.getElementById('status');
-    const startOverlay = document.getElementById('start-overlay');
-    const startCurhatBtn = document.getElementById('start-curhat-btn');
-    const startTestBtn = document.getElementById('start-test-btn');
-    const startDoctorBtn = document.getElementById('start-doctor-btn');
-    const header = document.querySelector('header');
-    const headerTitle = document.getElementById('header-title');
-    const headerSubtitle = document.getElementById('header-subtitle');
-    
-    const doctorInfoBox = document.getElementById('doctor-info-box');
-    const doctorInfoClose = document.getElementById('doctor-info-close');
-    const spiritualInfoBox = document.getElementById('spiritual-info-box');
-    const spiritualInfoClose = document.getElementById('spiritual-info-close');
-    
-    // Definisi semua state aplikasi
-    let conversationHistory = [];
-    let abortController = null;
-    let recognition = null;
-    let isRecording = false;
-    let audioContext = null;
-    let userName = '', userGender = 'Pria', userAge = '';
-    let isOnboarding = false;
-    let isTesting = false;
-    let currentTestType = null;
-    let testData = {};
-    let testScores = {};
-    let currentTestQuestionIndex = 0;
-    let currentMode = 'psychologist';
-    let speechSynth = window.speechSynthesis;
-    let voices = [];
-
-    let fullTestData = {};
-
-    function loadVoices() {
-        voices = speechSynth.getVoices();
-        if (speechSynth.onvoiceschanged !== undefined) {
-            speechSynth.onvoiceschanged = () => voices = speechSynth.getVoices();
-        }
-    }
-
-    // Fungsi Inisialisasi Utama
-    function init() {
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                .then(registration => console.log('ServiceWorker registration successful'))
-                .catch(err => console.log('ServiceWorker registration failed: ', err));
-            });
-        }
-        loadVoices();
-        displayInitialMessage();
-        updateButtonVisibility();
-
-        startCurhatBtn.addEventListener('click', () => initializeApp({ isCurhat: true }));
-        startSpiritualBtn.addEventListener('click', () => initializeApp({ isSpiritual: true }));
-        startTestBtn.addEventListener('click', () => initializeApp({ isTest: true }));
-        startDoctorBtn.addEventListener('click', () => initializeApp({ isDoctor: true }));
-        
-        doctorInfoClose.addEventListener('click', () => { doctorInfoBox.style.display = 'none'; });
-        spiritualInfoClose.addEventListener('click', () => { spiritualInfoBox.style.display = 'none'; });
-
-        header.addEventListener('click', () => window.location.reload());
-        sendBtn.addEventListener('click', handleSendMessage);
-        voiceBtn.addEventListener('click', toggleMainRecording);
-        endChatBtn.addEventListener('click', handleCancelResponse);
-
-        userInput.addEventListener('input', () => {
-            userInput.style.height = 'auto';
-            userInput.style.height = (userInput.scrollHeight) + 'px';
-            updateButtonVisibility();
-        });
-        userInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSendMessage();
-            }
-        });
-    }
-    
-    function initializeApp(mode = {}) {
-        if (!audioContext) {
-            try {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                if(audioContext.state === 'suspended') {
-                    audioContext.resume();
-                }
-            } catch(e) { console.error("Web Audio API tidak didukung."); }
-        }
-        startOverlay.classList.add('hidden');
-        chatContainer.innerHTML = '';
-        
-        doctorInfoBox.style.display = 'none';
-        spiritualInfoBox.style.display = 'none';
-        
-        if (mode.isTest) {
-            currentMode = 'psychologist';
-            headerTitle.textContent = "Tes Kepribadian dan Potensi Diri";
-            headerSubtitle.textContent = "Namaku RASA, bersamamu sebagai Konselor";
-            isTesting = true;
-            currentTestType = 'selection';
-            const introMessage = `Selamat datang di Tes Kepribadian dan Potensi Diri.\n\nTes ini menawarkan dua pendekatan untuk membantu Anda lebih mengenal diri:\n- **Pendekatan STIFIn:** Berbasis 5 Mesin Kecerdasan genetik.\n- **Pendekatan MBTI:** Mengidentifikasi 4 dimensi preferensi Anda.\n\n---\n\n***Disclaimer:*** *Tes ini adalah pengantar. Untuk hasil yang komprehensif, disarankan untuk mengikuti tes di Layanan Psikologi Profesional.*\n\nSilakan pilih pendekatan yang ingin Anda gunakan:\n[PILIHAN:Tes STIFIn|Tes MBTI]`;
-            displayMessage(introMessage, 'ai');
-            speakAsync(introMessage);
-        } else if (mode.isDoctor) {
-            currentMode = 'doctor';
-            headerTitle.textContent = "Tanya ke Dokter AI";
-            headerSubtitle.textContent = "Namaku RASA, bersamamu sebagai Dokter Profesional";
-            doctorInfoBox.style.display = 'block';
-            isTesting = false; 
-            isOnboarding = false;
-            const welcomeMessage = "Halo, saya Dokter AI RASA. Ada keluhan medis yang bisa saya bantu?";
-            displayMessage(welcomeMessage, 'ai');
-            speakAsync(welcomeMessage);
-        } else if (mode.isSpiritual) {
-            currentMode = 'spiritual';
-            headerTitle.textContent = "Tanya ke Spiritual AI";
-            headerSubtitle.textContent = "Namaku RASA, bersamamu sebagai Konselor Spiritual";
-            spiritualInfoBox.style.display = 'block'; 
-            isTesting = false; 
-            isOnboarding = false; 
-            const welcomeMessage = "Assalamualaikum, saya siap membantu Anda menemukan rujukan islami atau literasi jawaban permasalahan seputar islam?";
-            displayMessage(welcomeMessage, 'ai');
-            speakAsync(welcomeMessage);
-        } else { // PERBAIKAN: Mengembalikan logika ke mode Psikolog AI
-            currentMode = 'psychologist';
-            headerTitle.textContent = "Tanya ke Psikolog AI";
-            headerSubtitle.textContent = "Namaku RASA, bersamamu sebagai Psikolog Profesional";
-            isTesting = false; 
-            startOnboardingIfNeeded();
-        }
-    }
-
-    async function startOnboardingIfNeeded() {
-        isOnboarding = true;
-        statusDiv.textContent = "Sesi perkenalan...";
-        updateButtonVisibility();
-        try {
-             // PERBAIKAN: Mengembalikan sapaan awal untuk Psikolog AI
-            const firstGreeting = "Perkenalkan , saya adalah asisten pribadi Anda yang bernama RASA. Saya sebagai seorang Psikolog AI, siap membantu Anda. Mari kita mulai dengan sesi perkenalan, boleh saya tahu nama Anda?";
-            displayMessage(firstGreeting, 'ai');
-            await speakAsync(firstGreeting);
-            const nameAnswer = await listenOnce();
-            displayMessage(nameAnswer, 'user');
-            userName = nameAnswer.trim();
-            const genderAnswer = await askAndListen("Boleh konfirmasi, apakah kamu seorang laki-laki atau wanita?");
-            if (genderAnswer.toLowerCase().includes('wanita') || genderAnswer.toLowerCase().includes('perempuan')) {
-                userGender = 'Wanita';
-            }
-            const ageAnswer = await askAndListen("Kalau usiamu berapa?");
-            const ageMatch = ageAnswer.match(/\d+/);
-            if (ageMatch) userAge = ageMatch[0];
-        } catch (error) {
-            console.log("Onboarding diabaikan:", error);
-        } finally {
-            isOnboarding = false;
-            statusDiv.textContent = "";
-            updateButtonVisibility();
-            const welcomeMessage = `Baik, ${userName || 'temanku'}, terima kasih sudah berkenalan. Sekarang, saya siap mendengarkan. Silakan ceritakan apa yang kamu rasakan.`;
-            displayMessage(welcomeMessage, 'ai');
-            speakAsync(welcomeMessage);
-        }
-    }
-    
-    function listenOnce() {
-        playSound('start'); 
-        return new Promise((resolve, reject) => {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                playSound('stop');
-                reject("Not supported");
-                return;
-            }
-            const rec = new SpeechRecognition();
-            rec.lang = 'id-ID';
-            rec.continuous = false;
-            rec.interimResults = false;
-            let hasResolved = false;
-            rec.onresult = (event) => {
-                if (hasResolved) return;
-                hasResolved = true;
-                playSound('stop');
-                resolve(event.results[0][0].transcript);
-            };
-            rec.onerror = (event) => {
-                if (hasResolved) return;
-                hasResolved = true;
-                playSound('stop');
-                reject(event.error);
-            };
-            rec.onend = () => {
-                if (!hasResolved) { 
-                    hasResolved = true;
-                    playSound('stop');
-                    reject('no-speech');
-                }
-                if (statusDiv.textContent === "Mendengarkan...") statusDiv.textContent = "";
-            };
-            rec.onstart = () => statusDiv.textContent = "Mendengarkan...";
-            rec.start();
-        });
-    }
-
-    async function askAndListen(question) {
-        displayMessage(question, 'ai');
-        await speakAsync(question);
-        try {
-            const answer = await listenOnce();
-            displayMessage(answer, 'user');
-            return answer;
-        } catch (e) {
-            const errorMessage = (e === 'no-speech' || e === 'audio-capture') ? "Maaf, saya tidak mendengar suaramu. Bisa ulangi lagi?" : "Maaf, terjadi sedikit gangguan. Silakan coba lagi.";
-            console.error("Listen error:", e);
-            displayMessage(errorMessage, 'ai-system');
-            return "";
-        }
-    }
-
-    async function initiateTest(type) {
-        if (Object.keys(fullTestData).length === 0) {
-            try {
-                statusDiv.textContent = "Memuat data tes...";
-                const response = await fetch('testData.json');
-                if (!response.ok) throw new Error('Gagal memuat file data tes.');
-                fullTestData = await response.json();
-                statusDiv.textContent = "";
-            } catch (error) {
-                console.error('Gagal memuat testData.json:', error);
-                displayMessage('Maaf, data tes tidak dapat dimuat. Silakan coba lagi nanti.', 'ai-system');
-                statusDiv.textContent = "Gagal memuat data.";
-                isTesting = false;
-                return;
-            }
-        }
-        
-        currentTestType = type;
-        const originalTestData = (type === 'stifin') ? fullTestData.stifin : fullTestData.mbti;
-        let questionsToAsk = selectRandomQuestions(originalTestData.questions);
-        testData = { ...originalTestData, questions: questionsToAsk };
-        testScores = {};
-        currentTestQuestionIndex = 0;
-        displayMessage(`Baik, mari kita mulai ${type.toUpperCase()}. Jawablah ${testData.questions.length} pertanyaan berikut.`, 'ai-system');
-        setTimeout(displayNextTestQuestion, 1000);
-    }
-    
-    function selectRandomQuestions(questionArray, count) {
-        const shuffled = [...questionArray].sort(() => 0.5 - Math.random());
-        if (!count || count > shuffled.length) {
-            return shuffled;
-        }
-        return shuffled.slice(0, count);
-    }
-    
-    function displayNextTestQuestion() { /* ... */ }
-    function processTestAnswer(choice) { /* ... */ }
-    function calculateAndDisplayResult(stifinDrive = null) { /* ... */ }
-    
-    async function getAIResponse(prompt, name, gender, age) {
-        abortController = new AbortController();
-        statusDiv.textContent = "RASA sedang berpikir...";
-        updateButtonVisibility();
-        
-        try {
-            const apiResponse = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt, name, gender, age, history: conversationHistory, mode: currentMode }),
-                signal: abortController.signal
-            });
-            if (!apiResponse.ok) throw new Error(`Server merespon dengan status ${apiResponse.status}`);
-            const result = await apiResponse.json();
-            const responseText = result.aiText || `Terima kasih sudah berbagi, ${name || 'teman'}. Bisa ceritakan lebih lanjut?`;
-            
-            if (responseText) {
-                let processedText = responseText;
-                if (conversationHistory.filter(m => m.role === 'RASA').length > 0 && currentMode !== 'doctor') {
-                    processedText = processedText.replace(/Assalamualaikum,?\s*/i, "").trim();
-                }
-                displayMessage(processedText, 'ai');
-                await speakAsync(processedText);
-            }
-
-        } catch (error) {
-            if (error.name !== 'AbortError') {
-               displayMessage(`Maaf, sepertinya ada sedikit gangguan koneksi. Bisa ceritakan kembali?`, 'ai-system');
-            }
-        } finally {
-            statusDiv.textContent = "";
-            updateButtonVisibility();
-        }
-    }
-    
-    async function speakAsync(fullText) {
-        if (!speechSynth) {
-            console.error("Browser tidak mendukung Speech Synthesis.");
-            return;
-        }
-        speechSynth.cancel();
-        const cleanText = fullText.replace(/\[PILIHAN:.*?\]/g, '').replace(/\[.*?\]\(.*?\)/g, '').replace(/###|---|\*|__/g, '');
-        if (!cleanText.trim()) return;
-
-        const utterance = new SpeechSynthesisUtterance(cleanText);
-        const indonesianVoice = voices.find(voice => voice.lang === 'id-ID');
-        if (indonesianVoice) utterance.voice = indonesianVoice;
-        
-        utterance.rate = 0.95;
-        utterance.pitch = 1;
-
-        return new Promise(resolve => {
-            utterance.onstart = () => { statusDiv.textContent = "Memutar suara..."; };
-            utterance.onend = () => { statusDiv.textContent = ""; resolve(); };
-            utterance.onerror = (event) => {
-                console.error("Speech Synthesis Error:", event.error);
-                statusDiv.textContent = `Gagal memutar suara: ${event.error}`;
-                resolve();
-            };
-            speechSynth.speak(utterance);
-        });
-    }
-
-    function handleSendMessage() { /* ... */ }
-    async function handleSendMessageWithChoice(choice) { /* ... */ }
-    function updateButtonVisibility() { /* ... */ }
-    function handleCancelResponse() { /* ... */ }
-    function toggleMainRecording() { /* ... */ }
-    function startRecording() { /* ... */ }
-    function stopRecording() { /* ... */ }
-    function playSound(type) { /* ... */ }
-    function displayInitialMessage() { /* ... */ }
-    function displayMessage(message, sender) { /* ... */ }
-
-    // Memastikan semua fungsi helper lainnya ada di sini...
-
-    init(); // Memulai aplikasi
-});
