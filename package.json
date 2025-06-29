@@ -1,0 +1,10 @@
+{
+  "name": "konselor-netlify-project",
+  "version": "1.2.1",
+  "description": "Aplikasi RASA dengan backend Netlify Functions",
+  "dependencies": {
+    "node-fetch": "^2.6.9",
+    "dotenv": "^16.3.1",
+    "@google-cloud/text-to-speech": "^5.3.0"
+  }
+}
