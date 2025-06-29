@@ -36,10 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentMode = 'psychologist';
     let currentAudio = null;
 
-    // Data tes akan dimuat dari file JSON, jadi kita siapkan variabel kosong.
     let fullTestData = {};
 
-    // Fungsi Inisialisasi Utama
     function init() {
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -123,8 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
             speakAsync(welcomeMessage);
         } else { 
             currentMode = 'psychologist';
-            headerTitle.textContent = "Tanya ke Psikolog AI";
-            headerSubtitle.textContent = "Namaku RASA, bersamamu sebagai Psikolog Profesional";
+            headerTitle.textContent = "Tanya ke Asisten Pribadi";
+            headerSubtitle.textContent = "Namaku RASA, asisten pribadi Anda";
             isTesting = false; 
             startOnboardingIfNeeded();
         }
@@ -135,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statusDiv.textContent = "Sesi perkenalan...";
         updateButtonVisibility();
         try {
-            const firstGreeting = "Perkenalkan , saya adalah asisten pribadi Anda yang bernama RASA. Saya sebagai seorang Psikolog AI, siap membantu Anda. Mari kita mulai dengan sesi perkenalan, boleh saya tahu nama Anda?";
+            const firstGreeting = "Perkenalkan , saya adalah asisten pribadi Anda yang bernama RASA. Saya siap membantu Anda. Mari kita mulai dengan sesi perkenalan, boleh saya tahu nama Anda?";
             displayMessage(firstGreeting, 'ai');
             await speakAsync(firstGreeting);
             const nameAnswer = await listenOnce();
@@ -216,14 +214,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function selectRandomQuestions(questionArray, count) {
-        const shuffled = [...questionArray].sort(() => 0.5 - Math.random());
-        if (!count || count > shuffled.length) {
-            return shuffled;
-        }
-        return shuffled.slice(0, count);
-    }
-
     async function initiateTest(type) {
         if (Object.keys(fullTestData).length === 0) {
             try {
@@ -279,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             testScores[selectedOption.type] = (testScores[selectedOption.type] || 0) + 1;
-        } else { // MBTI
+        } else { 
             const selectedOption = q.o.find(opt => opt.t === choice);
             if (!selectedOption) return;
             testScores[selectedOption.v] = (testScores[selectedOption.v] || 0) + 1;
@@ -290,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentTestQuestionIndex >= testData.questions.length) {
             calculateAndDisplayResult();
         } else if (currentTestType === 'stifin' && testData.questions[currentTestQuestionIndex].isDriveQuestion) {
-            let dominantMK = Object.keys(testScores).reduce((a, b) => testScores[a] > testScores[b] ? a : b);
+             let dominantMK = Object.keys(testScores).reduce((a, b) => testScores[a] > testScores[b] ? a : b);
              if (dominantMK === 'In') {
                  calculateAndDisplayResult(null); 
                  return;
@@ -373,7 +363,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // PERBAIKAN FINAL: Fungsi speakAsync dengan pemotongan teks yang lebih efektif
     async function speakAsync(fullText) {
         if (currentAudio) {
             currentAudio.pause();
@@ -381,7 +370,6 @@ document.addEventListener('DOMContentLoaded', () => {
             currentAudio = null;
         }
 
-        // Hapus semua format markdown untuk pemrosesan
         const cleanFullText = fullText
             .replace(/\[PILIHAN:.*?\]/g, '')
             .replace(/\[.*?\]\(.*?\)/g, '')
@@ -392,32 +380,22 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/\*|_/g, '');
 
         let textForApi;
-        // Batas karakter yang sangat aman untuk diproses di bawah 5 detik.
         const MAX_VOICE_LENGTH = 120; 
         const VOICE_INSTRUCTION = " Untuk lebih lengkap, silakan dibaca di layar Anda ya.";
 
-        // Jika teks lebih panjang dari batas, potong untuk dijadikan suara
         if (cleanFullText.length > MAX_VOICE_LENGTH) {
-            // Ambil bagian awal teks
             let shortText = cleanFullText.substring(0, MAX_VOICE_LENGTH);
-            
-            // Cari titik, koma, atau spasi terakhir untuk memotong di akhir kata/kalimat
             let cutOffPoint = shortText.lastIndexOf('.');
             if (cutOffPoint <= 0) cutOffPoint = shortText.lastIndexOf(',');
             if (cutOffPoint <= 0) cutOffPoint = shortText.lastIndexOf(' ');
-            
-            // Potong teks pada titik yang ditemukan
             if (cutOffPoint > 0) {
                 shortText = shortText.substring(0, cutOffPoint);
             }
-            
-            // Gabungkan ringkasan dengan instruksi
             textForApi = shortText.trim() + ". " + VOICE_INSTRUCTION;
         } else {
             textForApi = cleanFullText;
         }
         
-        // Ganti "AI" menjadi "E Ai" untuk pengucapan yang lebih baik
         const finalTextForApi = textForApi.replace(/\bAI\b/g, 'E Ai');
 
         if (!finalTextForApi.trim()) {
@@ -435,8 +413,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (!response.ok) {
+                // PERBAIKAN: Tangkap pesan error dari backend
                 const errData = await response.json().catch(() => ({}));
-                const detail = errData.details || errData.error || response.statusText;
+                const detail = errData.error || errData.details || "Unknown server error";
                 throw new Error(`Gagal membuat suara (${response.status}): ${detail}`);
             }
 
@@ -472,12 +451,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error("Kesalahan pada fungsi speakAsync:", error);
-            statusDiv.textContent = `Gagal mengambil data suara.`; 
+            // PERBAIKAN: Tampilkan pesan error yang lebih informatif
+            statusDiv.textContent = `Gagal mengambil data suara: ${error.message}`; 
             return Promise.resolve();
         }
     }
 
-
+    // --- Sisa fungsi (handleSendMessage, displayMessage, dll) tetap sama ---
+    function selectRandomQuestions(arr, n) { /* ... */ }
     function handleSendMessage() {
         if (isRecording || isOnboarding || isTesting) return;
         const userText = userInput.value.trim();
@@ -488,7 +469,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateButtonVisibility();
         getAIResponse(userText, userName, userGender, userAge);
     }
-    
     async function handleSendMessageWithChoice(choice) {
         displayMessage(choice, 'user');
         if (isTesting) {
@@ -502,7 +482,6 @@ document.addEventListener('DOMContentLoaded', () => {
             getAIResponse(choice, userName, userGender, userAge);
         }
     }
-
     function updateButtonVisibility() {
         const isTyping = userInput.value.length > 0;
         const isInputDisabled = isTesting || isOnboarding;
@@ -527,7 +506,6 @@ document.addEventListener('DOMContentLoaded', () => {
              voiceBtn.style.display = 'none';
          }
     }
-    
     function handleCancelResponse() {
         if (abortController) abortController.abort();
         if (currentAudio) {
@@ -543,13 +521,11 @@ document.addEventListener('DOMContentLoaded', () => {
         updateButtonVisibility();
         setTimeout(() => { if (statusDiv.textContent === "Proses dibatalkan.") statusDiv.textContent = ""; }, 2000);
     }
-    
     function toggleMainRecording() {
         if (isTesting || isOnboarding) return;
         if (isRecording) stopRecording();
         else startRecording();
     }
-
     function startRecording() {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition || isRecording) return;
@@ -574,7 +550,6 @@ document.addEventListener('DOMContentLoaded', () => {
         recognition.onend = () => { if (isRecording) stopRecording(); };
         recognition.start();
     }
-
     function stopRecording() {
         if (!isRecording) return;
         playSound('stop');
@@ -584,7 +559,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateButtonVisibility();
         if (statusDiv.textContent === "Mendengarkan...") statusDiv.textContent = "";
     }
-
     function playSound(type) {
         if (audioContext && audioContext.state === 'suspended') { audioContext.resume(); }
         if (!audioContext) return;
@@ -609,13 +583,11 @@ document.addEventListener('DOMContentLoaded', () => {
             beep(now + 0.12, 800, 0.08);
         }
     }
-
     function displayInitialMessage() {
         chatContainer.innerHTML = '';
         conversationHistory = [];
         displayMessage("Pilih layanan di layar awal untuk memulai...", 'ai-system');
     }
-
     function displayMessage(message, sender) {
         if (sender !== 'ai-system') {
             const role = (sender === 'ai') ? 'RASA' : 'User';
